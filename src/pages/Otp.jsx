@@ -1,74 +1,101 @@
-import React from "react";
-import "../styles/common.css";
+// src/pages/Otp.jsx
+import React, { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import '../styles/common.css';
+import '../App.css';
 
-const Otp = () => {
+function Otp() {
+  const [otp, setOtp] = useState('');
+  const location = useLocation();
+  const navigate = useNavigate();
+  const phone = location.state?.phone || '9876543210';
+
+  const verifyOtp = async () => {
+    if (!/^\d{6}$/.test(otp)) {
+      alert('Enter a valid 6-digit OTP');
+      return;
+    }
+
+    try {
+      const res = await fetch(
+        'https://2e6bee57-c137-4144-90f2-64265943227d-00-c6d7jiueybzk.pike.replit.dev/verify-otp',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ phone: '+91' + phone, otp }),
+        }
+      );
+
+      const data = await res.json();
+      if (data.status === 'success') {
+        navigate('/home');
+      } else {
+        alert('❌ ' + (data.message || 'Incorrect OTP'));
+      }
+    } catch (error) {
+      alert('Something went wrong while verifying OTP');
+    }
+  };
+
   return (
-    <div className="mobile-screen" id="screen-3">
+    <div className="mobile-screen fade-in">
       <div className="status-bar">
         <span className="time">9:41</span>
         <span className="battery">🔋</span>
       </div>
 
       <div className="screen-content">
-        <div className="screen-header">
-          <button className="back-button" onClick={() => window.history.back()}>←</button>
-          <span></span>
-          <span></span>
-        </div>
-
-        <div className="text-center mb-lg">
+        <div className="text-center mb-lg" style={{ paddingTop: '40px' }}>
           <div
             style={{
-              background: "linear-gradient(135deg, #1A237E 0%, #3F51B5 100%)",
-              width: "80px",
-              height: "80px",
-              borderRadius: "50%",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              margin: "0 auto 24px",
+              background: 'var(--primary-gradient)',
+              width: '72px',
+              height: '72px',
+              borderRadius: '18px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: '0 auto 20px',
+              boxShadow: '0 6px 16px rgba(90, 79, 255, 0.3)',
             }}
           >
-            <span style={{ fontSize: "32px", color: "white" }}>🔐</span>
+            <span style={{ fontSize: '30px', color: 'white' }}>🔐</span>
           </div>
-          <h2 className="title">Verify Phone Number</h2>
-          <p className="subtitle">
-            Enter the 6-digit code sent to
-            <br />
-            <strong>+91 98765 43210</strong>
-          </p>
+          <h2 className="title">Enter OTP</h2>
+          <p className="subtitle">Sent to +91 {phone}</p>
         </div>
 
-        <div className="otp-container">
-          <div className="otp-inputs">
-            <input type="text" className="otp-input" maxLength={1} />
-            <input type="text" className="otp-input filled" maxLength={1} defaultValue="1" />
-            <input type="text" className="otp-input filled" maxLength={1} defaultValue="2" />
-            <input type="text" className="otp-input filled" maxLength={1} defaultValue="3" />
-            <input type="text" className="otp-input" maxLength={1} />
-            <input type="text" className="otp-input" maxLength={1} />
-          </div>
-
-          <div className="text-center">
-            <p style={{ fontSize: "14px", color: "var(--text-secondary)" }}>
-              Didn’t receive code?
-            </p>
-            <p
-              style={{
-                fontSize: "14px",
-                color: "var(--primary-color)",
-                fontWeight: 600,
-              }}
-            >
-              Resend in 0:45
-            </p>
-          </div>
+        <div className="form-group mb-md">
+          <input
+            type="tel"
+            className="otp-input"
+            placeholder="Enter 6-digit code"
+            maxLength="6"
+            value={otp}
+            onChange={(e) => setOtp(e.target.value)}
+          />
         </div>
 
-        <button className="btn btn-primary btn-full btn-large">Verify</button>
+        <button className="btn btn-primary btn-full" onClick={verifyOtp}>
+          Verify OTP
+        </button>
+
+        <p
+          style={{
+            fontSize: '12px',
+            color: 'var(--text-secondary)',
+            textAlign: 'center',
+            marginTop: '20px',
+          }}
+        >
+          Didn’t receive the code?{' '}
+          <a href="#" style={{ color: 'var(--primary-color)' }}>
+            Resend
+          </a>
+        </p>
       </div>
     </div>
   );
-};
+}
 
 export default Otp;

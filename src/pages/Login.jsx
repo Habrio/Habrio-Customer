@@ -1,16 +1,15 @@
+// src/pages/Login.jsx
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/common.css';
+import '../App.css';
 
 function Login() {
   const [phone, setPhone] = useState('');
   const navigate = useNavigate();
 
   const sendOtp = async () => {
-    console.log('📲 sendOtp triggered');
-    console.log('Phone number entered:', phone);
-
-    if (!phone || phone.length !== 10 || !/^\d{10}$/.test(phone)) {
+    if (!/^\d{10}$/.test(phone)) {
       alert('Please enter a valid 10-digit phone number');
       return;
     }
@@ -26,82 +25,80 @@ function Login() {
       );
 
       const data = await res.json();
-      console.log('🔁 API Response:', data);
-
       if (data.status === 'success') {
-        navigate('/otp');
+        navigate('/otp', { state: { phone } });
       } else {
-        alert('❌ Failed to send OTP: ' + (data.message || 'Unknown error'));
+        alert('❌ ' + (data.message || 'Failed to send OTP'));
       }
     } catch (error) {
-      console.error('❌ Error while sending OTP:', error);
       alert('Something went wrong while sending OTP');
     }
   };
 
   return (
-    <div className="mobile-screen" id="screen-2">
+    <div className="mobile-screen fade-in">
       <div className="status-bar">
         <span className="time">9:41</span>
         <span className="battery">🔋</span>
       </div>
+
       <div className="screen-content">
-        <div style={{ paddingTop: '60px' }}>
-          <div className="text-center mb-lg">
-            <div
-              style={{
-                background: 'linear-gradient(135deg, #1A237E 0%, #3F51B5 100%)',
-                width: '80px',
-                height: '80px',
-                borderRadius: '50%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                margin: '0 auto 24px',
-              }}
-            >
-              <span style={{ fontSize: '32px', color: 'white' }}>📱</span>
-            </div>
-            <h2 className="title">Welcome to Habrio</h2>
-            <p className="subtitle">Enter your mobile number to get started</p>
-          </div>
-
-          <div className="form-group">
-            <div className="phone-input-group">
-              <div className="country-code">+91</div>
-              <input
-                type="tel"
-                className="phone-input"
-                placeholder="9876543210"
-                maxLength="10"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-              />
-            </div>
-          </div>
-
-          <button className="btn btn-primary btn-full btn-large mb-lg" onClick={sendOtp}>
-            Send OTP
-          </button>
-
-          <p
+        <div className="text-center mb-lg" style={{ paddingTop: '40px' }}>
+          <div
             style={{
-              fontSize: '12px',
-              color: 'var(--text-secondary)',
-              textAlign: 'center',
-              lineHeight: '1.4',
+              background: 'var(--primary-gradient)',
+              width: '72px',
+              height: '72px',
+              borderRadius: '18px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: '0 auto 20px',
+              boxShadow: '0 6px 16px rgba(90, 79, 255, 0.3)',
             }}
           >
-            By continuing, you agree to our{' '}
-            <a href="#" style={{ color: 'var(--primary-color)' }}>
-              Terms & Conditions
-            </a>{' '}
-            and{' '}
-            <a href="#" style={{ color: 'var(--primary-color)' }}>
-              Privacy Policy
-            </a>
-          </p>
+            <span style={{ fontSize: '30px', color: 'white' }}>📲</span>
+          </div>
+          <h2 className="title">Log in to Habrio</h2>
+          <p className="subtitle">Enter your mobile number</p>
         </div>
+
+        <div className="form-group mb-md">
+          <div className="phone-input-group">
+            <div className="country-code">+91</div>
+            <input
+              type="tel"
+              className="phone-input"
+              placeholder="9876543210"
+              maxLength="10"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+            />
+          </div>
+        </div>
+
+        <button className="btn btn-primary btn-full" onClick={sendOtp}>
+          Send OTP
+        </button>
+
+        <p
+          style={{
+            fontSize: '12px',
+            color: 'var(--text-secondary)',
+            textAlign: 'center',
+            lineHeight: '1.4',
+            marginTop: '24px',
+          }}
+        >
+          By continuing, you agree to our{' '}
+          <a href="#" style={{ color: 'var(--primary-color)' }}>
+            Terms & Conditions
+          </a>{' '}
+          and{' '}
+          <a href="#" style={{ color: 'var(--primary-color)' }}>
+            Privacy Policy
+          </a>
+        </p>
       </div>
     </div>
   );

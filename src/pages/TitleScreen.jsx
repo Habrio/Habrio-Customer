@@ -1,84 +1,58 @@
-import React from "react";
-import "../styles/common.css";
+// src/pages/TitleScreen.jsx
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import '../styles/common.css';
+import '../App.css';
 
-const TitleScreen = () => {
+function TitleScreen() {
+  const navigate = useNavigate();
+
   return (
-    <div className="mobile-screen" id="screen-1">
+    <div className="mobile-screen fade-in">
       <div className="status-bar">
         <span className="time">9:41</span>
         <span className="battery">🔋</span>
       </div>
 
-      <div className="screen-content">
+      <div className="screen-content text-center">
         <div
-          className="flex flex-column flex-center"
-          style={{ height: "100%", textAlign: "center" }}
+          style={{
+            background: 'var(--primary-gradient)',
+            width: '100px',
+            height: '100px',
+            borderRadius: '20px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            margin: '40px auto 24px',
+            boxShadow: '0 6px 20px rgba(90, 79, 255, 0.25)',
+          }}
         >
-          <div
-            style={{
-              background: "linear-gradient(135deg, #1A237E 0%, #3F51B5 100%)",
-              width: "120px",
-              height: "120px",
-              borderRadius: "16px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              marginBottom: "24px",
-              boxShadow: "var(--shadow-lg)",
-            }}
-          >
-            <span style={{ fontSize: "48px", color: "white" }}>H</span>
-          </div>
-
-          <h1
-            style={{
-              fontSize: "32px",
-              background: "linear-gradient(135deg, #1A237E 0%, #3F51B5 100%)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              marginBottom: "8px",
-            }}
-          >
-            Habrio
-          </h1>
-
-          <p className="subtitle">Complete Mobile Commerce Experience</p>
-
-          <div className="grid grid-2 gap-md" style={{ marginTop: "32px" }}>
-            {[
-              ["🔒", "Secure Authentication"],
-              ["🏪", "Local Shop Discovery"],
-              ["💳", "Digital Wallet"],
-              ["📍", "Real-time Tracking"],
-            ].map(([icon, label], i) => (
-              <div key={i} className="card text-center">
-                <span
-                  style={{
-                    fontSize: "24px",
-                    marginBottom: "8px",
-                    display: "block",
-                  }}
-                >
-                  {icon}
-                </span>
-                <span style={{ fontSize: "12px", fontWeight: "600" }}>
-                  {label}
-                </span>
-              </div>
-            ))}
-          </div>
-
-          <button
-            className="btn btn-primary btn-full btn-large"
-            style={{ marginTop: "40px" }}
-            onClick={() => window.location.href = "/login"}
-          >
-            Get Started
-          </button>
+          <span style={{ fontSize: '42px', color: 'white' }}>🏘️</span>
         </div>
+
+        <h1 className="title">Welcome to Habrio</h1>
+        <p className="subtitle mb-lg">Your society’s very own super app</p>
+
+        <button
+          className="btn btn-primary btn-full"
+          onClick={() => navigate('/login')}
+        >
+          Get Started
+        </button>
+
+        <p
+          style={{
+            fontSize: '12px',
+            color: 'var(--text-secondary)',
+            marginTop: '20px',
+          }}
+        >
+          Built with ❤️ for your neighbourhood
+        </p>
       </div>
     </div>
   );
-};
+}
 
 export default TitleScreen;
