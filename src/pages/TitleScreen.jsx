@@ -1,8 +1,7 @@
 // src/pages/TitleScreen.jsx
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/common.css';
-import '../App.css';
+import '../styles/App.css';
 
 function TitleScreen() {
   const navigate = useNavigate();
@@ -20,22 +19,41 @@ function TitleScreen() {
             background: 'var(--primary-gradient)',
             width: '100px',
             height: '100px',
-            borderRadius: '20px',
+            borderRadius: '24px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            margin: '40px auto 24px',
-            boxShadow: '0 6px 20px rgba(90, 79, 255, 0.25)',
+            margin: '48px auto 28px',
+            boxShadow: '0 10px 24px rgba(90, 79, 255, 0.25)',
           }}
         >
-          <span style={{ fontSize: '42px', color: 'white' }}>🏘️</span>
+          <span style={{ fontSize: '44px', color: '#fff' }}>🏘️</span>
         </div>
 
-        <h1 className="title">Welcome to Habrio</h1>
-        <p className="subtitle mb-lg">Your society’s very own super app</p>
+        <h1
+          className="title"
+          style={{
+            fontSize: '24px',
+            fontWeight: '600',
+            color: 'var(--text-primary)',
+            marginBottom: '8px',
+          }}
+        >
+          Welcome to Habrio
+        </h1>
+        <p
+          className="subtitle"
+          style={{
+            fontSize: '14px',
+            color: 'var(--text-secondary)',
+            marginBottom: '32px',
+          }}
+        >
+          Your society’s very own super app
+        </p>
 
         <button
-          className="btn btn-primary btn-full"
+          className="btn btn-primary btn-full btn-large"
           onClick={() => navigate('/login')}
         >
           Get Started
@@ -44,8 +62,8 @@ function TitleScreen() {
         <p
           style={{
             fontSize: '12px',
-            color: 'var(--text-secondary)',
-            marginTop: '20px',
+            color: 'var(--text-tertiary)',
+            marginTop: '24px',
           }}
         >
           Built with ❤️ for your neighbourhood

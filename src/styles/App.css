@@ -1,0 +1,33 @@
+/* src/styles/App.css */
+
+body {
+  background-color: var(--background);
+}
+
+/* Optional mobile mockup container for visual testing */
+.mobile-screen {
+  max-width: 375px;
+  margin: 0 auto;
+  min-height: 100vh;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+  background-color: var(--background);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Used inside pages to wrap status bar + content */
+.screen-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Fade/slide transitions */
+.fade-in {
+  animation: fadeIn 0.4s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}

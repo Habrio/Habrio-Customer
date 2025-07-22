@@ -1,8 +1,7 @@
-// src/pages/Login.jsx
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/common.css';
-import '../App.css';
+import '../styles/App.css';
 
 function Login() {
   const [phone, setPhone] = useState('');
@@ -43,24 +42,25 @@ function Login() {
       </div>
 
       <div className="screen-content">
-        <div className="text-center mb-lg" style={{ paddingTop: '40px' }}>
+        <div className="text-center mb-lg" style={{ paddingTop: '48px' }}>
           <div
             style={{
               background: 'var(--primary-gradient)',
-              width: '72px',
-              height: '72px',
-              borderRadius: '18px',
+              width: '80px',
+              height: '80px',
+              borderRadius: '20px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              margin: '0 auto 20px',
-              boxShadow: '0 6px 16px rgba(90, 79, 255, 0.3)',
+              margin: '0 auto 24px',
+              boxShadow: '0 8px 18px rgba(90, 79, 255, 0.35)',
             }}
           >
-            <span style={{ fontSize: '30px', color: 'white' }}>📲</span>
+            <span style={{ fontSize: '36px', color: 'white' }}>📲</span>
           </div>
-          <h2 className="title">Log in to Habrio</h2>
-          <p className="subtitle">Enter your mobile number</p>
+
+          <h2 className="title" style={{ fontSize: '22px' }}>Log in to Habrio</h2>
+          <p className="subtitle">Enter your mobile number to continue</p>
         </div>
 
         <div className="form-group mb-md">
@@ -77,7 +77,7 @@ function Login() {
           </div>
         </div>
 
-        <button className="btn btn-primary btn-full" onClick={sendOtp}>
+        <button className="btn btn-primary btn-full btn-large" onClick={sendOtp}>
           Send OTP
         </button>
 
@@ -86,18 +86,13 @@ function Login() {
             fontSize: '12px',
             color: 'var(--text-secondary)',
             textAlign: 'center',
-            lineHeight: '1.4',
+            lineHeight: '1.5',
             marginTop: '24px',
           }}
         >
           By continuing, you agree to our{' '}
-          <a href="#" style={{ color: 'var(--primary-color)' }}>
-            Terms & Conditions
-          </a>{' '}
-          and{' '}
-          <a href="#" style={{ color: 'var(--primary-color)' }}>
-            Privacy Policy
-          </a>
+          <a href="#" className="link">Terms & Conditions</a> and{' '}
+          <a href="#" className="link">Privacy Policy</a>
         </p>
       </div>
     </div>
