@@ -1,8 +1,9 @@
-import { Routes, Route } from "react-router-dom";
-import Login from "./pages/Login";
-import Home from "./pages/Home";
-import TitleScreen from "./pages/TitleScreen";
-import Otp from "./pages/Otp";
+// src/router.jsx
+import { Routes, Route } from 'react-router-dom';
+import Login from './pages/Login';
+import Home from './pages/Home';
+import TitleScreen from './pages/TitleScreen';
+import Otp from './pages/Otp';
 
 export default function AppRoutes() {
   return (
