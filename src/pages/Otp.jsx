@@ -44,8 +44,8 @@ function Otp() {
         <span className="battery">🔋</span>
       </div>
 
-      <div className="screen-content">
-        <div className="text-center mb-lg" style={{ paddingTop: '48px' }}>
+      <div className="screen-content full-screen text-center">
+        <div className="mb-lg">
           <div
             style={{
               background: 'var(--primary-gradient)',
@@ -69,20 +69,25 @@ function Otp() {
         <div className="form-group mb-md">
           <input
             type="tel"
-            className="otp-input"
+            className="otp-full-input"
             placeholder="Enter 6-digit code"
             maxLength="6"
             value={otp}
             onChange={(e) => setOtp(e.target.value)}
             style={{
               textAlign: 'center',
-              fontSize: '20px',
-              letterSpacing: '4px',
+              fontSize: '22px',
+              padding: '12px 16px',
+              borderRadius: '10px',
+              border: '1px solid #ccc',
+              width: '100%',
+              boxSizing: 'border-box',
+              letterSpacing: '6px',
             }}
           />
         </div>
 
-        <button className="btn btn-primary btn-full btn-large" onClick={verifyOtp}>
+        <button className="btn btn-primary btn-full btn-large mb-md" onClick={verifyOtp}>
           Verify OTP
         </button>
 
@@ -91,7 +96,6 @@ function Otp() {
             fontSize: '12px',
             color: 'var(--text-secondary)',
             textAlign: 'center',
-            marginTop: '20px',
           }}
         >
           Didn’t receive the code?{' '}

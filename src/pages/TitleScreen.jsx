@@ -14,58 +14,26 @@ function TitleScreen() {
       </div>
 
       <div className="screen-content text-center">
-        <div
-          style={{
-            background: 'var(--primary-gradient)',
-            width: '100px',
-            height: '100px',
-            borderRadius: '24px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            margin: '48px auto 28px',
-            boxShadow: '0 10px 24px rgba(90, 79, 255, 0.25)',
-          }}
-        >
-          <span style={{ fontSize: '44px', color: '#fff' }}>🏘️</span>
+        <div className="logo-box">
+          <span className="logo-icon">🏘️</span>
         </div>
 
-        <h1
-          className="title"
-          style={{
-            fontSize: '24px',
-            fontWeight: '600',
-            color: 'var(--text-primary)',
-            marginBottom: '8px',
-          }}
-        >
+        <h1 className="title mb-xs" style={{ fontSize: '24px' }}>
           Welcome to Habrio
         </h1>
-        <p
-          className="subtitle"
-          style={{
-            fontSize: '14px',
-            color: 'var(--text-secondary)',
-            marginBottom: '32px',
-          }}
-        >
+        <p className="subtitle mb-lg" style={{ fontSize: '14px' }}>
           Your society’s very own super app
         </p>
 
         <button
           className="btn btn-primary btn-full btn-large"
+          style={{ marginBottom: '24px' }}
           onClick={() => navigate('/login')}
         >
           Get Started
         </button>
 
-        <p
-          style={{
-            fontSize: '12px',
-            color: 'var(--text-tertiary)',
-            marginTop: '24px',
-          }}
-        >
+        <p className="text-center" style={{ fontSize: '12px', color: 'var(--text-tertiary)' }}>
           Built with ❤️ for your neighbourhood
         </p>
       </div>
