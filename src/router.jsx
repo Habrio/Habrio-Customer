@@ -5,6 +5,8 @@ import Home from './pages/Home';
 import TitleScreen from './pages/TitleScreen';
 import Otp from './pages/Otp';
 import BasicOnboarding from './pages/BasicOnboarding';
+import ConsumerOnboarding from './pages/ConsumerOnboarding';
+
 
 
 
@@ -15,6 +17,7 @@ export default function AppRoutes() {
       <Route path="/login" element={<Login />} />
       <Route path="/otp" element={<Otp />} />
        <Route path="/onboard" element={<BasicOnboarding />} />
+       <Route path="/onboarding/consumer" element={<ConsumerOnboarding />} />
       <Route path="/home" element={<Home />} />
     </Routes>
   );

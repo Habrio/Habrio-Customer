@@ -4,22 +4,19 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import '../styles/common.css';
 import '../styles/App.css';
 
-export default function Otp() {
+function Otp() {
   const [otp, setOtp] = useState('');
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
   const location = useLocation();
-  const phone = location.state?.phone || '';
+  const navigate = useNavigate();
+  const phone = location.state?.phone || '9876543210';
 
   const verifyOtp = async () => {
     if (!/^\d{6}$/.test(otp)) {
-      alert('Please enter a valid 6-digit OTP');
+      alert('Enter a valid 6-digit OTP');
       return;
     }
 
-    setLoading(true);
     try {
-      // 1) Verify OTP
       const res = await fetch(
         'https://2e6bee57-c137-4144-90f2-64265943227d-00-c6d7jiueybzk.pike.replit.dev/verify-otp',
         {
@@ -28,36 +25,36 @@ export default function Otp() {
           body: JSON.stringify({ phone: '+91' + phone, otp }),
         }
       );
+
       const data = await res.json();
-      if (data.status !== 'success') {
-        alert('❌ ' + (data.message || 'Incorrect OTP'));
-        setLoading(false);
-        return;
-      }
 
-      // 2) Store token (verify-otp returns { status, token })
-      const token = data.token || data.auth_token;
-      localStorage.setItem('auth_token', token);
+      if (data.status === 'success' && data.auth_token) {
+        // Save token to local storage
+        localStorage.setItem('auth_token', data.auth_token);
 
-      // 3) Check onboarding status
-      const profileRes = await fetch(
-        'https://2e6bee57-c137-4144-90f2-64265943227d-00-c6d7jiueybzk.pike.replit.dev/onboarding/status',
-        {
-          headers: {
-            Authorization: token
+        // Check onboarding status
+        const statusRes = await fetch(
+          'https://2e6bee57-c137-4144-90f2-64265943227d-00-c6d7jiueybzk.pike.replit.dev/onboarding/status',
+          {
+            headers: {
+              'Authorization': `Bearer ${data.auth_token}`,
+            },
           }
-        }
-      );
-      const profileData = await profileRes.json();
-      const done = profileData.basic_onboarding_done;
+        );
 
-      // 4) Navigate accordingly
-      navigate(done ? '/home' : '/onboard');
+        const status = await statusRes.json();
+
+        if (status.status === 'success' && status.basic_onboarding_done) {
+          navigate('/home');
+        } else {
+          navigate('/onboarding/basic');
+        }
+      } else {
+        alert('❌ ' + (data.message || 'Incorrect OTP'));
+      }
     } catch (error) {
-      console.error(error);
       alert('Something went wrong while verifying OTP');
-    } finally {
-      setLoading(false);
+      console.error(error);
     }
   };
 
@@ -68,58 +65,63 @@ export default function Otp() {
         <span className="battery">🔋</span>
       </div>
 
-      <div className="screen-content text-center">
-        <div className="mb-lg">
+      <div className="screen-content">
+        <div className="text-center mb-lg" style={{ paddingTop: '40px' }}>
           <div
             style={{
               background: 'var(--primary-gradient)',
-              width: '80px',
-              height: '80px',
-              borderRadius: '20px',
+              width: '72px',
+              height: '72px',
+              borderRadius: '18px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              margin: '0 auto 24px',
-              boxShadow: '0 8px 18px rgba(252, 100, 79, 0.35)',
+              margin: '0 auto 20px',
+              boxShadow: '0 6px 16px rgba(255, 125, 30, 0.3)',
             }}
           >
-            <span style={{ fontSize: '32px', color: 'white' }}>🔐</span>
+            <span style={{ fontSize: '30px', color: 'white' }}>🔐</span>
           </div>
-          <h2 className="title" style={{ fontSize: '22px' }}>Enter OTP</h2>
-          <p className="subtitle">Code sent to +91 {phone}</p>
+          <h2 className="title">Enter OTP</h2>
+          <p className="subtitle">Sent to +91 {phone}</p>
         </div>
 
         <div className="form-group mb-md">
           <input
             type="tel"
-            maxLength={6}
-            className="otp-full-input"
-            placeholder="______"
+            className="otp-input"
+            placeholder="Enter 6-digit code"
+            maxLength="6"
             value={otp}
-            onChange={e => setOtp(e.target.value)}
-            disabled={loading}
+            onChange={(e) => setOtp(e.target.value)}
+            style={{
+              textAlign: 'center',
+              fontSize: '20px',
+              letterSpacing: '4px',
+            }}
           />
         </div>
 
-        <button
-          className="btn btn-primary btn-full btn-large mb-lg"
-          onClick={verifyOtp}
-          disabled={loading}
-        >
-          {loading ? 'Verifying...' : 'Verify OTP'}
+        <button className="btn btn-primary btn-full btn-large" onClick={verifyOtp}>
+          Verify OTP
         </button>
 
-        <p style={{ fontSize: '12px', color: 'var(--text-secondary)', textAlign: 'center' }}>
+        <p
+          style={{
+            fontSize: '12px',
+            color: 'var(--text-secondary)',
+            textAlign: 'center',
+            marginTop: '20px',
+          }}
+        >
           Didn’t receive the code?{' '}
-          <button
-            className="link"
-            onClick={() => alert('Resend OTP coming soon')}
-            disabled={loading}
-          >
+          <a href="#" className="link">
             Resend
-          </button>
+          </a>
         </p>
       </div>
     </div>
   );
 }
+
+export default Otp;
