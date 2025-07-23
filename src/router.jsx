@@ -73,9 +73,6 @@ export default function AppRoutes() {
       {/* Support & Info Routes */}
       <Route path="/support" element={<Support />} />
       <Route path="/about" element={<AboutHabrio />} />
-
-      {/* Fallback Route */}
-      <Route path="*" element={<Home />} />
     </Routes>
   );
 }
