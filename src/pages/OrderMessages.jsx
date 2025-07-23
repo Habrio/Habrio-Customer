@@ -206,8 +206,10 @@ export default function OrderMessages() {
       <div style={{
         position: 'fixed',
         bottom: 0,
-        left: 0,
-        right: 0,
+        left: '50%',
+        transform: 'translateX(-50%)',
+        width: '100%',
+        maxWidth: '375px',
         background: 'white',
         borderTop: '1px solid var(--divider)',
         padding: '16px 20px',
@@ -273,8 +275,10 @@ export default function OrderMessages() {
         <div style={{
           position: 'fixed',
           bottom: '80px', // Above the input area
-          left: '20px',
-          right: '20px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          width: 'calc(100% - 40px)',
+          maxWidth: '375px',
           background: 'white',
           borderRadius: '12px',
           border: '1px solid var(--divider)',
