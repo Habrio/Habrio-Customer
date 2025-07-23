@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import '../styles/common.css';
 import '../styles/App.css';
 
-function Otp() {
+export default function Otp() {
   const [otp, setOtp] = useState('');
   const location = useLocation();
   const navigate = useNavigate();
@@ -15,20 +15,15 @@ function Otp() {
       alert('Enter a valid 6-digit OTP');
       return;
     }
-
     try {
       const res = await fetch(`${backendUrl}/verify-otp`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ phone: '+91' + phone, otp }),
       });
-
       const data = await res.json();
-
       if (data.status === 'success' && data.auth_token) {
         localStorage.setItem('auth_token', data.auth_token);
-
-        // Use basic_onboarding_done directly from response
         if (data.basic_onboarding_done) {
           navigate('/home');
         } else {
@@ -37,9 +32,8 @@ function Otp() {
       } else {
         alert('❌ ' + (data.message || 'Incorrect OTP'));
       }
-    } catch (error) {
+    } catch {
       alert('Something went wrong while verifying OTP');
-      console.error(error);
     }
   };
 
@@ -49,15 +43,14 @@ function Otp() {
         <span className="time">9:41</span>
         <span className="battery">🔋</span>
       </div>
-
       <div className="screen-content">
-        <div className="text-center mb-lg" style={{ paddingTop: '40px' }}>
+        <div className="text-center mb-lg" style={{ paddingTop: 40 }}>
           <div
             style={{
               background: 'var(--primary-gradient)',
-              width: '72px',
-              height: '72px',
-              borderRadius: '18px',
+              width: 72,
+              height: 72,
+              borderRadius: 18,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -65,12 +58,11 @@ function Otp() {
               boxShadow: '0 6px 16px rgba(255, 125, 30, 0.3)',
             }}
           >
-            <span style={{ fontSize: '30px', color: 'white' }}>🔐</span>
+            <span style={{ fontSize: 30, color: 'white' }}>🔐</span>
           </div>
           <h2 className="title">Enter OTP</h2>
           <p className="subtitle">Sent to +91 {phone}</p>
         </div>
-
         <div className="form-group mb-md">
           <input
             type="tel"
@@ -78,39 +70,33 @@ function Otp() {
             placeholder="Enter 6-digit code"
             maxLength="6"
             value={otp}
-            onChange={(e) => setOtp(e.target.value)}
+            onChange={e => setOtp(e.target.value)}
             style={{
               width: '100%',
               textAlign: 'center',
-              fontSize: '20px',
+              fontSize: 20,
               letterSpacing: '4px',
-              padding: '12px',
+              padding: 12,
               border: '1px solid #ccc',
-              borderRadius: '8px',
+              borderRadius: 8,
             }}
           />
         </div>
-
         <button className="btn btn-primary btn-full btn-large" onClick={verifyOtp}>
           Verify OTP
         </button>
-
         <p
           style={{
-            fontSize: '12px',
+            fontSize: 12,
             color: 'var(--text-secondary)',
             textAlign: 'center',
-            marginTop: '20px',
+            marginTop: 20,
           }}
         >
           Didn’t receive the code?{' '}
-          <a href="#" className="link">
-            Resend
-          </a>
+          <a href="#" className="link">Resend</a>
         </p>
       </div>
     </div>
   );
 }
-
-export default Otp;

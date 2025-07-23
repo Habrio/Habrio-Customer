@@ -1,4 +1,3 @@
-// src/pages/Home.jsx
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/common.css';
@@ -82,12 +81,12 @@ function Home() {
     return (
       <div className="screen-content">
         <div style={{ textAlign: 'center', marginTop: '40px' }}>
-          <div style={{ 
-            width: '40px', 
-            height: '40px', 
-            border: '3px solid var(--divider)', 
-            borderTop: '3px solid var(--primary-color)', 
-            borderRadius: '50%', 
+          <div style={{
+            width: '40px',
+            height: '40px',
+            border: '3px solid var(--divider)',
+            borderTop: '3px solid var(--primary-color)',
+            borderRadius: '50%',
             animation: 'spin 1s linear infinite',
             margin: '0 auto 20px'
           }}></div>
@@ -109,7 +108,7 @@ function Home() {
             {userProfile?.society}, {userProfile?.city}
           </p>
         </div>
-        <button 
+        <button
           onClick={() => navigate('/profile')}
           style={{
             width: '40px',
@@ -127,7 +126,7 @@ function Home() {
       </div>
 
       {/* Wallet Card */}
-      <div 
+      <div
         onClick={() => navigate('/wallet')}
         style={{
           background: 'var(--primary-gradient)',
@@ -150,7 +149,7 @@ function Home() {
       </div>
 
       {/* Search Bar */}
-      <div 
+      <div
         onClick={() => navigate('/shops/search')}
         style={{
           background: 'var(--background-soft)',
@@ -215,10 +214,10 @@ function Home() {
                   cursor: 'pointer'
                 }}
               >
-                <div style={{ 
-                  width: '40px', 
-                  height: '40px', 
-                  background: 'var(--primary-gradient)', 
+                <div style={{
+                  width: '40px',
+                  height: '40px',
+                  background: 'var(--primary-gradient)',
                   borderRadius: '20px',
                   display: 'flex',
                   alignItems: 'center',
@@ -234,9 +233,9 @@ function Home() {
                 <p style={{ margin: 0, fontSize: '12px', color: 'var(--text-secondary)' }}>
                   {shop.shop_type}
                 </p>
-                <div style={{ 
-                  marginTop: '8px', 
-                  fontSize: '10px', 
+                <div style={{
+                  marginTop: '8px',
+                  fontSize: '10px',
                   color: 'var(--success-color)',
                   fontWeight: '500'
                 }}>
@@ -252,7 +251,7 @@ function Home() {
       <div style={{ marginBottom: '24px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
           <h3 style={{ margin: 0, fontSize: '18px', fontWeight: '600' }}>Nearby Shops</h3>
-          <button 
+          <button
             onClick={() => navigate('/shops')}
             style={{
               background: 'none',
@@ -266,7 +265,7 @@ function Home() {
             View All
           </button>
         </div>
-        
+
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
           {nearbyShops.map((shop) => (
             <div
@@ -283,10 +282,10 @@ function Home() {
                 gap: '12px'
               }}
             >
-              <div style={{ 
-                width: '48px', 
-                height: '48px', 
-                background: 'var(--primary-gradient)', 
+              <div style={{
+                width: '48px',
+                height: '48px',
+                background: 'var(--primary-gradient)',
                 borderRadius: '24px',
                 display: 'flex',
                 alignItems: 'center',
@@ -303,16 +302,16 @@ function Home() {
                   {shop.shop_type} • {shop.description}
                 </p>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <span style={{ 
-                    fontSize: '12px', 
+                  <span style={{
+                    fontSize: '12px',
                     color: shop.is_open ? 'var(--success-color)' : 'var(--error-color)',
                     fontWeight: '500'
                   }}>
                     {shop.is_open ? '• Open' : '• Closed'}
                   </span>
                   {shop.delivers && (
-                    <span style={{ 
-                      fontSize: '12px', 
+                    <span style={{
+                      fontSize: '12px',
                       color: 'var(--primary-color)',
                       fontWeight: '500'
                     }}>
@@ -343,7 +342,7 @@ function Home() {
         padding: '12px 0',
         zIndex: 1000
       }}>
-        <button 
+        <button
           onClick={() => navigate('/home')}
           style={{
             background: 'none',
@@ -360,7 +359,7 @@ function Home() {
           <span style={{ fontSize: '20px' }}>🏠</span>
           Home
         </button>
-        <button 
+        <button
           onClick={() => navigate('/shops')}
           style={{
             background: 'none',
@@ -377,7 +376,7 @@ function Home() {
           <span style={{ fontSize: '20px' }}>🏪</span>
           Shops
         </button>
-        <button 
+        <button
           onClick={() => navigate('/cart')}
           style={{
             background: 'none',
@@ -394,7 +393,7 @@ function Home() {
           <span style={{ fontSize: '20px' }}>🛒</span>
           Cart
         </button>
-        <button 
+        <button
           onClick={() => navigate('/orders')}
           style={{
             background: 'none',
@@ -411,7 +410,7 @@ function Home() {
           <span style={{ fontSize: '20px' }}>📦</span>
           Orders
         </button>
-        <button 
+        <button
           onClick={() => navigate('/profile')}
           style={{
             background: 'none',

@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import '../styles/common.css';
 import '../styles/App.css';
 
-function TitleScreen() {
+export default function TitleScreen() {
   const navigate = useNavigate();
 
   return (
@@ -11,44 +11,40 @@ function TitleScreen() {
         <span className="time">9:41</span>
         <span className="battery">🔋</span>
       </div>
-
       <div className="screen-content text-center">
         <div
           className="logo-box"
           style={{
             background: 'var(--primary-gradient)',
-            width: '84px',
-            height: '84px',
-            borderRadius: '24px',
+            width: 84,
+            height: 84,
+            borderRadius: 24,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             margin: '0 auto 24px',
-            boxShadow: '0 6px 14px rgba(255, 125, 30, 0.3)',
+            boxShadow: '0 6px 14px rgba(255, 125, 30, 0.3)'
           }}
         >
-          <span className="logo-icon" style={{ fontSize: '36px', color: '#fff' }}>🏘️</span>
+          <span className="logo-icon" style={{ fontSize: 36, color: '#fff' }}>🏘️</span>
         </div>
-
-        <h1 className="title mb-xs" style={{ fontSize: '24px' }}>
+        <h1 className="title mb-xs" style={{ fontSize: 24 }}>
           Welcome to Habrio
         </h1>
-        <p className="subtitle mb-lg" style={{ fontSize: '14px' }}>
+        <p className="subtitle mb-lg" style={{ fontSize: 14 }}>
           Your society’s very own super app
         </p>
-
         <button
           className="btn btn-primary btn-full btn-large"
-          style={{ marginBottom: '24px' }}
+          style={{ marginBottom: 24 }}
           onClick={() => navigate('/login')}
         >
           Get Started
         </button>
-
         <p
           className="text-center"
           style={{
-            fontSize: '12px',
+            fontSize: 12,
             color: 'var(--text-tertiary)',
           }}
         >
@@ -58,5 +54,3 @@ function TitleScreen() {
     </div>
   );
 }
-
-export default TitleScreen;
