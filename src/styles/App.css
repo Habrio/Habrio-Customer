@@ -7,27 +7,40 @@ html, body, #root {
   box-sizing: border-box;
   font-family: 'Inter', sans-serif;
   background-color: var(--background);
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
 }
 
-/* Mobile screen container */
+/* Full mobile wrapper */
 .mobile-screen {
   width: 100%;
   max-width: 375px;
-  min-height: 100vh;
+  height: 100vh; /* Fixed height instead of min-height */
   margin: 0 auto;
   background-color: var(--background);
   display: flex;
   flex-direction: column;
-  position: relative; /* crucial for fixed navbar inside */
+  position: relative;
+  overflow: hidden;
 }
 
-/* Optional container inside screen (status + content) */
+/* Scrollable area */
 .screen-container {
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: auto;
-  padding-bottom: 80px; /* reserve space for bottom nav */
+  overflow-y: auto;
+  padding-bottom: 80px; /* leaves space for fixed bottom nav */
+}
+
+/* Hide scrollbar visually but keep scrolling */
+.screen-container {
+  /* existing styles... */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+ */
+}
+
+.screen-container::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
 }
 
 /* Page entrance animation */
@@ -47,22 +60,11 @@ html, body, #root {
 }
 
 /* Common layout fixes */
-.full-width {
-  width: 100%;
-  box-sizing: border-box;
-}
+.full-width { width: 100%; box-sizing: border-box; }
+.full-height { height: 100%; }
+.centered { display: flex; align-items: center; justify-content: center; }
 
-.full-height {
-  height: 100%;
-}
-
-.centered {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Utility spacing */
+/* Spacing */
 .mt-xxs { margin-top: 4px; }
 .mt-xs  { margin-top: 8px; }
 .mt-sm  { margin-top: 12px; }

@@ -16,11 +16,18 @@ export default function BottomNav() {
   return (
     <div
       style={{
+        position: 'fixed',
+        bottom: 0,
+        left: '50%',
+        transform: 'translateX(-50%)',
+        width: '100%',
+        maxWidth: '375px',
         background: 'white',
         borderTop: '1px solid var(--divider)',
         display: 'flex',
         justifyContent: 'space-around',
         padding: '12px 0',
+        zIndex: 1000
       }}
     >
       {navItems.map(item => (
@@ -39,7 +46,7 @@ export default function BottomNav() {
               location.pathname === item.path
                 ? 'var(--primary-color)'
                 : 'var(--text-secondary)',
-            cursor: 'pointer',
+            cursor: 'pointer'
           }}
         >
           <span style={{ fontSize: '20px' }}>{item.icon}</span>
