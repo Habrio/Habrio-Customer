@@ -18,7 +18,7 @@ import ShopDetail from './pages/ShopDetail';
 import SearchShops from './pages/SearchShops';
 
 // Cart & Checkout
-import q from './pages/Cart';
+import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 
 // Orders
