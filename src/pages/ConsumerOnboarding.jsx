@@ -1,4 +1,3 @@
-// src/pages/ConsumerOnboarding.jsx
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/common.css';
@@ -6,13 +5,15 @@ import '../styles/App.css';
 
 export default function ConsumerOnboarding() {
   const navigate = useNavigate();
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
   const [flatNumber, setFlatNumber] = useState('');
 
   const submit = async () => {
     const token = localStorage.getItem('auth_token');
     if (!token) return alert('Missing auth token');
 
-    const res = await fetch('https://2e6bee57-c137-4144-90f2-64265943227d-00-c6d7jiueybzk.pike.replit.dev/onboarding/consumer', {
+    const res = await fetch(`${backendUrl}/onboarding/consumer`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

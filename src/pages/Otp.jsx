@@ -1,4 +1,3 @@
-// src/pages/Otp.jsx
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import '../styles/common.css';
@@ -8,6 +7,7 @@ function Otp() {
   const [otp, setOtp] = useState('');
   const location = useLocation();
   const navigate = useNavigate();
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
   const phone = location.state?.phone || '9876543210';
 
   const verifyOtp = async () => {
@@ -17,30 +17,30 @@ function Otp() {
     }
 
     try {
-      const res = await fetch(
-        'https://2e6bee57-c137-4144-90f2-64265943227d-00-c6d7jiueybzk.pike.replit.dev/verify-otp',
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ phone: '+91' + phone, otp }),
-        }
-      );
+      const res = await fetch(`${backendUrl}/verify-otp`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone: '+91' + phone, otp }),
+      });
 
       const data = await res.json();
 
       if (data.status === 'success' && data.auth_token) {
-        // Save token to local storage
         localStorage.setItem('auth_token', data.auth_token);
 
-        // Check onboarding status
-        const statusRes = await fetch(
-          'https://2e6bee57-c137-4144-90f2-64265943227d-00-c6d7jiueybzk.pike.replit.dev/onboarding/status',
-          {
-            headers: {
-              'Authorization': `Bearer ${data.auth_token}`,
-            },
-          }
-        );
+        // 🔍 Debug: Confirm token stored correctly
+        const savedToken = localStorage.getItem('auth_token');
+        if (!savedToken) {
+          alert('Login token not stored. Try again.');
+          return;
+        }
+
+        // Fetch onboarding status
+        const statusRes = await fetch(`${backendUrl}/onboarding/status`, {
+          headers: {
+            Authorization: `Bearer ${savedToken}`,
+          },
+        });
 
         const status = await statusRes.json();
 
@@ -95,9 +95,13 @@ function Otp() {
             value={otp}
             onChange={(e) => setOtp(e.target.value)}
             style={{
+              width: '100%',
               textAlign: 'center',
               fontSize: '20px',
               letterSpacing: '4px',
+              padding: '12px',
+              border: '1px solid #ccc',
+              borderRadius: '8px',
             }}
           />
         </div>

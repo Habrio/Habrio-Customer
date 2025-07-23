@@ -6,6 +6,7 @@ import '../styles/App.css';
 function Login() {
   const [phone, setPhone] = useState('');
   const navigate = useNavigate();
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   const sendOtp = async () => {
     if (!/^\d{10}$/.test(phone)) {
@@ -14,14 +15,11 @@ function Login() {
     }
 
     try {
-      const res = await fetch(
-        'https://2e6bee57-c137-4144-90f2-64265943227d-00-c6d7jiueybzk.pike.replit.dev/send-otp',
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ phone: '+91' + phone }),
-        }
-      );
+      const res = await fetch(`${backendUrl}/send-otp`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone: '+91' + phone }),
+      });
 
       const data = await res.json();
       if (data.status === 'success') {
@@ -53,7 +51,7 @@ function Login() {
               alignItems: 'center',
               justifyContent: 'center',
               margin: '0 auto 24px',
-              boxShadow: '0 8px 18px rgba(90, 79, 255, 0.35)',
+              boxShadow: '0 8px 18px rgba(255, 145, 0, 0.35)',
             }}
           >
             <span style={{ fontSize: '36px', color: 'white' }}>📲</span>

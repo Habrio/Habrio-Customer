@@ -1,4 +1,3 @@
-// src/pages/TitleScreen.jsx
 import { useNavigate } from 'react-router-dom';
 import '../styles/common.css';
 import '../styles/App.css';
@@ -14,8 +13,21 @@ function TitleScreen() {
       </div>
 
       <div className="screen-content text-center">
-        <div className="logo-box">
-          <span className="logo-icon">🏘️</span>
+        <div
+          className="logo-box"
+          style={{
+            background: 'var(--primary-gradient)',
+            width: '84px',
+            height: '84px',
+            borderRadius: '24px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            margin: '0 auto 24px',
+            boxShadow: '0 6px 14px rgba(255, 125, 30, 0.3)',
+          }}
+        >
+          <span className="logo-icon" style={{ fontSize: '36px', color: '#fff' }}>🏘️</span>
         </div>
 
         <h1 className="title mb-xs" style={{ fontSize: '24px' }}>
@@ -33,7 +45,13 @@ function TitleScreen() {
           Get Started
         </button>
 
-        <p className="text-center" style={{ fontSize: '12px', color: 'var(--text-tertiary)' }}>
+        <p
+          className="text-center"
+          style={{
+            fontSize: '12px',
+            color: 'var(--text-tertiary)',
+          }}
+        >
           Built with ❤️ for your neighbourhood
         </p>
       </div>

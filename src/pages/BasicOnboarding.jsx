@@ -6,8 +6,10 @@ import '../styles/App.css';
 
 export default function BasicOnboarding() {
   const navigate = useNavigate();
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
   const [data, setData] = useState({
-    name: '', city: '', society: '', role: 'consumer'
+    name: '', city: '', society: ''
   });
 
   const handleChange = e => {
@@ -16,19 +18,25 @@ export default function BasicOnboarding() {
 
   const submit = async () => {
     const token = localStorage.getItem('auth_token');
-    const res = await fetch('https://<your-backend>/onboarding/basic', {
-      method: 'POST',
-      headers: {
-        'Content-Type':'application/json',
-        'Authorization': `Bearer ${token}`
-      },
-      body: JSON.stringify(data)
-    });
-    const result = await res.json();
-    if (result.status === 'success') {
-      navigate('/home');
-    } else {
-      alert(result.message || 'Onboarding failed');
+    try {
+      const res = await fetch(`${backendUrl}/onboarding/basic`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ ...data, role: 'consumer' }) // role still sent from frontend
+      });
+
+      const result = await res.json();
+      if (result.status === 'success') {
+        navigate('/onboarding/consumer');
+      } else {
+        alert(result.message || 'Onboarding failed');
+      }
+    } catch (err) {
+      console.error('Error:', err);
+      alert('Something went wrong. Please try again.');
     }
   };
 
@@ -71,16 +79,6 @@ export default function BasicOnboarding() {
             placeholder="Hyde Park"
             value={data.society}
             onChange={handleChange}
-          />
-        </div>
-
-        <div className="form-group">
-          <label className="form-label">Role</label>
-          <input
-            name="role"
-            className="form-input"
-            value="consumer"
-            disabled
           />
         </div>
 
