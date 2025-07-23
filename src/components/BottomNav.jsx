@@ -1,0 +1,53 @@
+import { useNavigate, useLocation } from 'react-router-dom';
+
+export default function BottomNav() {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const navItems = [
+    { icon: '🏠', label: 'Home', path: '/home' },
+    { icon: '🏪', label: 'Shops', path: '/shops' },
+    { icon: '🛒', label: 'Cart', path: '/cart' },
+    { icon: '📦', label: 'Orders', path: '/orders' },
+    { icon: '👤', label: 'Profile', path: '/profile' },
+  ];
+
+  return (
+    <>
+      <div style={{ height: '80px' }}></div> {/* Reserve space above navbar */}
+      <div style={{
+        position: 'fixed',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        background: 'white',
+        borderTop: '1px solid var(--divider)',
+        display: 'flex',
+        justifyContent: 'space-around',
+        padding: '12px 0',
+        zIndex: 1000
+      }}>
+        {navItems.map(item => (
+          <button
+            key={item.path}
+            onClick={() => navigate(item.path)}
+            style={{
+              background: 'none',
+              border: 'none',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '4px',
+              fontSize: '12px',
+              color: location.pathname === item.path ? 'var(--primary-color)' : 'var(--text-secondary)',
+              cursor: 'pointer'
+            }}
+          >
+            <span style={{ fontSize: '20px' }}>{item.icon}</span>
+            {item.label}
+          </button>
+        ))}
+      </div>
+    </>
+  );
+}

@@ -37,6 +37,583 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 );
 
 
+===== FILE: src/pages/AboutHabrio.jsx =====
+
+import { useNavigate } from 'react-router-dom';
+import '../styles/common.css';
+import '../styles/App.css';
+
+export default function AboutHabrio() {
+  const navigate = useNavigate();
+
+  return (
+    <div className="screen-content">
+      {/* Header */}
+      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
+        <button
+          onClick={() => navigate(-1)}
+          style={{
+            background: 'none',
+            border: 'none',
+            fontSize: '24px',
+            marginRight: '16px',
+            cursor: 'pointer'
+          }}
+        >
+          ←
+        </button>
+        <h2 style={{ margin: 0, fontSize: '20px', fontWeight: '600' }}>
+          About Habrio
+        </h2>
+      </div>
+
+      {/* App Logo & Info */}
+      <div style={{
+        background: 'var(--primary-gradient)',
+        borderRadius: '16px',
+        padding: '32px 24px',
+        marginBottom: '24px',
+        color: 'white',
+        textAlign: 'center'
+      }}>
+        <div style={{
+          width: '80px',
+          height: '80px',
+          background: 'rgba(255, 255, 255, 0.2)',
+          borderRadius: '20px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          margin: '0 auto 20px',
+          fontSize: '36px'
+        }}>
+          🏘️
+        </div>
+        <h1 style={{ margin: '0 0 8px 0', fontSize: '24px', fontWeight: '700' }}>
+          Habrio
+        </h1>
+        <p style={{ margin: '0 0 16px 0', fontSize: '16px', opacity: 0.9 }}>
+          Your society's very own super app
+        </p>
+        <p style={{ margin: 0, fontSize: '14px', opacity: 0.8 }}>
+          Version 1.0.0
+        </p>
+      </div>
+
+      {/* What is Habrio */}
+      <div style={{
+        background: 'var(--background-soft)',
+        border: '1px solid var(--divider)',
+        borderRadius: '12px',
+        padding: '20px',
+        marginBottom: '20px'
+      }}>
+        <h3 style={{ margin: '0 0 16px 0', fontSize: '18px', fontWeight: '600' }}>
+          What is Habrio?
+        </h3>
+        <p style={{ margin: '0 0 16px 0', fontSize: '14px', lineHeight: '1.5', color: 'var(--text-secondary)' }}>
+          Habrio is a hyperlocal commerce platform that connects residents with local shops and services within their society. 
+          We make it easy to discover, order, and get things delivered right to your doorstep from trusted local vendors.
+        </p>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ fontSize: '20px' }}>🏪</span>
+            <p style={{ margin: 0, fontSize: '14px' }}>
+              Browse local shops and services in your society
+            </p>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ fontSize: '20px' }}>🛒</span>
+            <p style={{ margin: 0, fontSize: '14px' }}>
+              Order groceries, medicines, and daily essentials
+            </p>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ fontSize: '20px' }}>🚚</span>
+            <p style={{ margin: 0, fontSize: '14px' }}>
+              Get fast delivery right to your door
+            </p>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ fontSize: '20px' }}>💳</span>
+            <p style={{ margin: 0, fontSize: '14px' }}>
+              Pay securely using wallet or cash on delivery
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Our Mission */}
+      <div style={{
+        background: 'var(--background-soft)',
+        border: '1px solid var(--divider)',
+        borderRadius: '12px',
+        padding: '20px',
+        marginBottom: '20px'
+      }}>
+        <h3 style={{ margin: '0 0 16px 0', fontSize: '18px', fontWeight: '600' }}>
+          Our Mission
+        </h3>
+        <p style={{ margin: 0, fontSize: '14px', lineHeight: '1.5', color: 'var(--text-secondary)' }}>
+          To empower local communities by creating a thriving ecosystem where residents can easily access 
+          local products and services while supporting neighborhood businesses. We believe in building 
+          stronger communities through convenient, reliable, and personalized local commerce.
+        </p>
+      </div>
+
+      {/* Key Features */}
+      <div style={{
+        background: 'var(--background-soft)',
+        border: '1px solid var(--divider)',
+        borderRadius: '12px',
+        padding: '20px',
+        marginBottom: '20px'
+      }}>
+        <h3 style={{ margin: '0 0 16px 0', fontSize: '18px', fontWeight: '600' }}>
+          Key Features
+        </h3>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px' }}>
+          <div style={{ textAlign: 'center' }}>
+            <div style={{ fontSize: '32px', marginBottom: '8px' }}>⚡</div>
+            <h4 style={{ margin: '0 0 4px 0', fontSize: '14px', fontWeight: '600' }}>
+              Fast Delivery
+            </h4>
+            <p style={{ margin: 0, fontSize: '12px', color: 'var(--text-secondary)' }}>
+              Quick delivery within your society
+            </p>
+          </div>
+          <div style={{ textAlign: 'center' }}>
+            <div style={{ fontSize: '32px', marginBottom: '8px' }}>🔒</div>
+            <h4 style={{ margin: '0 0 4px 0', fontSize: '14px', fontWeight: '600' }}>
+              Secure Payment
+            </h4>
+            <p style={{ margin: 0, fontSize: '12px', color: 'var(--text-secondary)' }}>
+              Safe and encrypted transactions
+            </p>
+          </div>
+          <div style={{ textAlign: 'center' }}>
+            <div style={{ fontSize: '32px', marginBottom: '8px' }}>📱</div>
+            <h4 style={{ margin: '0 0 4px 0', fontSize: '14px', fontWeight: '600' }}>
+              Real-time Tracking
+            </h4>
+            <p style={{ margin: 0, fontSize: '12px', color: 'var(--text-secondary)' }}>
+              Track your orders live
+            </p>
+          </div>
+          <div style={{ textAlign: 'center' }}>
+            <div style={{ fontSize: '32px', marginBottom: '8px' }}>🤝</div>
+            <h4 style={{ margin: '0 0 4px 0', fontSize: '14px', fontWeight: '600' }}>
+              24/7 Support
+            </h4>
+            <p style={{ margin: 0, fontSize: '12px', color: 'var(--text-secondary)' }}>
+              Always here to help
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Contact Information */}
+      <div style={{
+        background: 'var(--background-soft)',
+        border: '1px solid var(--divider)',
+        borderRadius: '12px',
+        padding: '20px',
+        marginBottom: '20px'
+      }}>
+        <h3 style={{ margin: '0 0 16px 0', fontSize: '18px', fontWeight: '600' }}>
+          Contact Us
+        </h3>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ fontSize: '16px' }}>📧</span>
+            <span style={{ fontSize: '14px', color: 'var(--primary-color)' }}>
+              support@habrio.com
+            </span>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ fontSize: '16px' }}>📞</span>
+            <span style={{ fontSize: '14px', color: 'var(--primary-color)' }}>
+              +91 88000 00000
+            </span>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ fontSize: '16px' }}>🌐</span>
+            <span style={{ fontSize: '14px', color: 'var(--primary-color)' }}>
+              www.habrio.com
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Legal Links */}
+      <div style={{
+        background: 'var(--background-soft)',
+        border: '1px solid var(--divider)',
+        borderRadius: '12px',
+        padding: '20px',
+        marginBottom: '20px'
+      }}>
+        <h3 style={{ margin: '0 0 16px 0', fontSize: '18px', fontWeight: '600' }}>
+          Legal
+        </h3>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <button
+            onClick={() => alert('Terms & Conditions will be shown here')}
+            style={{
+              background: 'none',
+              border: 'none',
+              color: 'var(--primary-color)',
+              fontSize: '14px',
+              textAlign: 'left',
+              cursor: 'pointer',
+              padding: 0
+            }}
+          >
+            Terms & Conditions
+          </button>
+          <button
+            onClick={() => alert('Privacy Policy will be shown here')}
+            style={{
+              background: 'none',
+              border: 'none',
+              color: 'var(--primary-color)',
+              fontSize: '14px',
+              textAlign: 'left',
+              cursor: 'pointer',
+              padding: 0
+            }}
+          >
+            Privacy Policy
+          </button>
+          <button
+            onClick={() => alert('Refund Policy will be shown here')}
+            style={{
+              background: 'none',
+              border: 'none',
+              color: 'var(--primary-color)',
+              fontSize: '14px',
+              textAlign: 'left',
+              cursor: 'pointer',
+              padding: 0
+            }}
+          >
+            Refund & Cancellation Policy
+          </button>
+        </div>
+      </div>
+
+      {/* App Credits */}
+      <div style={{
+        background: 'var(--background-soft)',
+        border: '1px solid var(--divider)',
+        borderRadius: '12px',
+        padding: '20px',
+        marginBottom: '20px',
+        textAlign: 'center'
+      }}>
+        <p style={{ margin: '0 0 8px 0', fontSize: '14px', fontWeight: '600' }}>
+          Made with ❤️ for your neighbourhood
+        </p>
+        <p style={{ margin: 0, fontSize: '12px', color: 'var(--text-secondary)' }}>
+          © 2024 Habrio. All rights reserved.
+        </p>
+      </div>
+
+      {/* Bottom Navigation Placeholder */}
+      <div style={{ height: '80px' }}></div>
+    </div>
+  );
+}
+
+===== FILE: src/pages/AddMoney.jsx =====
+
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import '../styles/common.css';
+import '../styles/App.css';
+
+export default function AddMoney() {
+  const navigate = useNavigate();
+  const [amount, setAmount] = useState('');
+  const [loading, setLoading] = useState(false);
+  
+  const quickAmounts = [100, 200, 500, 1000, 2000, 5000];
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+  const token = localStorage.getItem('auth_token');
+
+  const handleQuickAmount = (quickAmount) => {
+    setAmount(quickAmount.toString());
+  };
+
+  const addMoney = async () => {
+    const amountNum = parseFloat(amount);
+    if (!amountNum || amountNum < 1) {
+      alert('Please enter a valid amount (minimum ₹1)');
+      return;
+    }
+    
+    if (amountNum > 50000) {
+      alert('Maximum amount allowed is ₹50,000');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const res = await fetch(`${backendUrl}/wallet/load`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': token
+        },
+        body: JSON.stringify({ 
+          amount: amountNum,
+          reference: 'Manual wallet top-up'
+        })
+      });
+
+      const data = await res.json();
+      if (data.status === 'success') {
+        alert(`₹${amountNum} added successfully to your wallet!`);
+        navigate('/wallet');
+      } else {
+        alert(data.message || 'Failed to add money');
+      }
+    } catch (error) {
+      console.error('Error adding money:', error);
+      alert('Something went wrong. Please try again.');
+    }
+    setLoading(false);
+  };
+
+  return (
+    <div className="screen-content">
+      {/* Header */}
+      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
+        <button
+          onClick={() => navigate(-1)}
+          style={{
+            background: 'none',
+            border: 'none',
+            fontSize: '24px',
+            marginRight: '16px',
+            cursor: 'pointer'
+          }}
+        >
+          ←
+        </button>
+        <h2 style={{ margin: 0, fontSize: '20px', fontWeight: '600' }}>
+          Add Money
+        </h2>
+      </div>
+
+      {/* Add Money Card */}
+      <div style={{
+        background: 'var(--primary-gradient)',
+        borderRadius: '16px',
+        padding: '24px',
+        marginBottom: '24px',
+        color: 'white',
+        textAlign: 'center'
+      }}>
+        <div style={{ fontSize: '48px', marginBottom: '16px' }}>💰</div>
+        <h3 style={{ margin: '0 0 8px 0', fontSize: '18px', fontWeight: '600' }}>
+          Add Money to Wallet
+        </h3>
+        <p style={{ margin: 0, fontSize: '14px', opacity: 0.9 }}>
+          Secure and instant wallet recharge
+        </p>
+      </div>
+
+      {/* Amount Input */}
+      <div style={{
+        background: 'var(--background-soft)',
+        border: '1px solid var(--divider)',
+        borderRadius: '12px',
+        padding: '20px',
+        marginBottom: '24px'
+      }}>
+        <h3 style={{ margin: '0 0 16px 0', fontSize: '16px', fontWeight: '600' }}>
+          Enter Amount
+        </h3>
+        
+        <div style={{ position: 'relative', marginBottom: '16px' }}>
+          <span style={{
+            position: 'absolute',
+            left: '16px',
+            top: '50%',
+            transform: 'translateY(-50%)',
+            fontSize: '18px',
+            fontWeight: '600',
+            color: 'var(--text-secondary)'
+          }}>
+            ₹
+          </span>
+          <input
+            type="number"
+            placeholder="0"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+            style={{
+              width: '100%',
+              padding: '16px 16px 16px 40px',
+              border: '1px solid var(--divider)',
+              borderRadius: '12px',
+              fontSize: '20px',
+              fontWeight: '600',
+              textAlign: 'center',
+              background: 'white'
+            }}
+          />
+        </div>
+
+        {/* Quick Amount Buttons */}
+        <div>
+          <p style={{ margin: '0 0 12px 0', fontSize: '14px', fontWeight: '500', color: 'var(--text-secondary)' }}>
+            Quick Select
+          </p>
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(3, 1fr)', 
+            gap: '8px'
+          }}>
+            {quickAmounts.map((quickAmount) => (
+              <button
+                key={quickAmount}
+                onClick={() => handleQuickAmount(quickAmount)}
+                style={{
+                  background: amount === quickAmount.toString() ? 'var(--primary-gradient)' : 'white',
+                  color: amount === quickAmount.toString() ? 'white' : 'var(--text-primary)',
+                  border: amount === quickAmount.toString() ? 'none' : '1px solid var(--divider)',
+                  borderRadius: '8px',
+                  padding: '12px 8px',
+                  fontSize: '14px',
+                  fontWeight: '500',
+                  cursor: 'pointer'
+                }}
+              >
+                ₹{quickAmount}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Payment Methods */}
+      <div style={{
+        background: 'var(--background-soft)',
+        border: '1px solid var(--divider)',
+        borderRadius: '12px',
+        padding: '20px',
+        marginBottom: '24px'
+      }}>
+        <h3 style={{ margin: '0 0 16px 0', fontSize: '16px', fontWeight: '600' }}>
+          Payment Method
+        </h3>
+        
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <div style={{
+            background: 'white',
+            border: '2px solid var(--primary-color)',
+            borderRadius: '8px',
+            padding: '16px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px'
+          }}>
+            <div style={{
+              width: '20px',
+              height: '20px',
+              borderRadius: '50%',
+              background: 'var(--primary-color)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}>
+              <div style={{
+                width: '8px',
+                height: '8px',
+                borderRadius: '50%',
+                background: 'white'
+              }}></div>
+            </div>
+            <div style={{ flex: 1 }}>
+              <p style={{ margin: '0 0 2px 0', fontSize: '14px', fontWeight: '600' }}>
+                💳 UPI / Cards / NetBanking
+              </p>
+              <p style={{ margin: 0, fontSize: '12px', color: 'var(--text-secondary)' }}>
+                Pay securely using UPI, Debit/Credit cards or NetBanking
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Security Notice */}
+      <div style={{
+        background: 'rgba(0, 199, 117, 0.1)',
+        border: '1px solid rgba(0, 199, 117, 0.2)',
+        borderRadius: '12px',
+        padding: '16px',
+        marginBottom: '24px'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+          <span style={{ fontSize: '16px', marginTop: '2px' }}>🔒</span>
+          <div>
+            <h4 style={{ margin: '0 0 4px 0', fontSize: '14px', fontWeight: '600', color: 'var(--success-color)' }}>
+              100% Secure Payment
+            </h4>
+            <ul style={{ margin: 0, paddingLeft: '16px', fontSize: '12px', color: 'var(--text-secondary)', lineHeight: '1.4' }}>
+              <li>All transactions are encrypted and secure</li>
+              <li>Money will be instantly added to your wallet</li>
+              <li>No additional charges or hidden fees</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      {/* Add Money Button */}
+      <button
+        onClick={addMoney}
+        disabled={loading || !amount || parseFloat(amount) < 1}
+        style={{
+          background: loading || !amount || parseFloat(amount) < 1 
+            ? 'var(--text-disabled)' 
+            : 'var(--primary-gradient)',
+          color: 'white',
+          border: 'none',
+          borderRadius: '12px',
+          padding: '16px',
+          fontSize: '18px',
+          fontWeight: '600',
+          cursor: loading || !amount || parseFloat(amount) < 1 ? 'not-allowed' : 'pointer',
+          width: '100%',
+          marginBottom: '20px',
+          opacity: loading || !amount || parseFloat(amount) < 1 ? 0.6 : 1
+        }}
+      >
+        {loading ? 'Processing...' : `Add ₹${amount || '0'} to Wallet`}
+      </button>
+
+      {/* Terms */}
+      <p style={{ 
+        margin: '0 0 20px 0', 
+        fontSize: '11px', 
+        color: 'var(--text-secondary)', 
+        textAlign: 'center',
+        lineHeight: '1.4'
+      }}>
+        By proceeding, you agree to our{' '}
+        <span style={{ color: 'var(--primary-color)', fontWeight: '500' }}>Terms & Conditions</span>
+        {' '}and{' '}
+        <span style={{ color: 'var(--primary-color)', fontWeight: '500' }}>Refund Policy</span>
+      </p>
+
+      {/* Bottom Navigation Placeholder */}
+      <div style={{ height: '80px' }}></div>
+    </div>
+  );
+}
+
 ===== FILE: src/pages/BasicOnboarding.jsx =====
 
 import { useState } from 'react';
@@ -47,10 +624,7 @@ import '../styles/App.css';
 export default function BasicOnboarding() {
   const navigate = useNavigate();
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
-
-  const [data, setData] = useState({
-    name: '', city: '', society: ''
-  });
+  const [data, setData] = useState({ name: '', city: '', society: '' });
 
   const handleChange = e => {
     setData(prev => ({ ...prev, [e.target.name]: e.target.value.trimStart() }));
@@ -62,13 +636,11 @@ export default function BasicOnboarding() {
       alert('Missing login token. Please login again.');
       return;
     }
-
     const { name, city, society } = data;
     if (!name || !city || !society) {
       alert('All fields are required');
       return;
     }
-
     try {
       const res = await fetch(`${backendUrl}/onboarding/basic`, {
         method: 'POST',
@@ -83,15 +655,13 @@ export default function BasicOnboarding() {
           role: 'consumer'
         })
       });
-
       const result = await res.json();
       if (result.status === 'success') {
         navigate('/onboarding/consumer');
       } else {
         alert(result.message || 'Onboarding failed');
       }
-    } catch (err) {
-      console.error('Error:', err);
+    } catch {
       alert('Something went wrong. Please try again.');
     }
   };
@@ -104,7 +674,6 @@ export default function BasicOnboarding() {
       </div>
       <div className="screen-content">
         <h2 className="title text-center mb-lg">Tell us about yourself</h2>
-
         <div className="form-group">
           <label className="form-label">Full Name</label>
           <input
@@ -115,7 +684,6 @@ export default function BasicOnboarding() {
             onChange={handleChange}
           />
         </div>
-
         <div className="form-group">
           <label className="form-label">City</label>
           <input
@@ -126,7 +694,6 @@ export default function BasicOnboarding() {
             onChange={handleChange}
           />
         </div>
-
         <div className="form-group">
           <label className="form-label">Society</label>
           <input
@@ -137,11 +704,7 @@ export default function BasicOnboarding() {
             onChange={handleChange}
           />
         </div>
-
-        <button
-          className="btn btn-primary btn-full btn-large"
-          onClick={submit}
-        >
+        <button className="btn btn-primary btn-full btn-large" onClick={submit}>
           Complete
         </button>
       </div>
@@ -149,6 +712,866 @@ export default function BasicOnboarding() {
   );
 }
 
+
+===== FILE: src/pages/Cart.jsx =====
+
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import '../styles/common.css';
+import '../styles/App.css';
+
+export default function Cart() {
+  const navigate = useNavigate();
+  const [cartItems, setCartItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [totalSavings, setTotalSavings] = useState(0);
+
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+  const token = localStorage.getItem('auth_token');
+
+  useEffect(() => {
+    if (!token) {
+      navigate('/login');
+      return;
+    }
+    fetchCart();
+  }, []);
+
+  const fetchCart = async () => {
+    try {
+      const res = await fetch(`${backendUrl}/cart/view`, {
+        headers: { 'Authorization': token }
+      });
+      const data = await res.json();
+      
+      if (data.status === 'success') {
+        setCartItems(data.cart);
+        setTotalPrice(data.total_price);
+        setTotalSavings(data.total_savings);
+      }
+    } catch (error) {
+      console.error('Error fetching cart:', error);
+    }
+    setLoading(false);
+  };
+
+  const updateQuantity = async (itemId, newQuantity) => {
+    if (newQuantity < 1) return;
+    
+    try {
+      const res = await fetch(`${backendUrl}/cart/update`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': token
+        },
+        body: JSON.stringify({ item_id: itemId, quantity: newQuantity })
+      });
+
+      const data = await res.json();
+      if (data.status === 'success') {
+        fetchCart();
+      } else {
+        alert(data.message || 'Failed to update quantity');
+      }
+    } catch (error) {
+      console.error('Error updating quantity:', error);
+    }
+  };
+
+  const removeItem = async (itemId) => {
+    try {
+      const res = await fetch(`${backendUrl}/cart/remove`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': token
+        },
+        body: JSON.stringify({ item_id: itemId })
+      });
+
+      const data = await res.json();
+      if (data.status === 'success') {
+        fetchCart();
+      } else {
+        alert(data.message || 'Failed to remove item');
+      }
+    } catch (error) {
+      console.error('Error removing item:', error);
+    }
+  };
+
+  const clearCart = async () => {
+    if (!confirm('Are you sure you want to clear the cart?')) return;
+    
+    try {
+      const res = await fetch(`${backendUrl}/cart/clear`, {
+        method: 'POST',
+        headers: { 'Authorization': token }
+      });
+
+      const data = await res.json();
+      if (data.status === 'success') {
+        fetchCart();
+      } else {
+        alert(data.message || 'Failed to clear cart');
+      }
+    } catch (error) {
+      console.error('Error clearing cart:', error);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="screen-content">
+        <div style={{ textAlign: 'center', marginTop: '40px' }}>
+          <div style={{ 
+            width: '40px', 
+            height: '40px', 
+            border: '3px solid var(--divider)', 
+            borderTop: '3px solid var(--primary-color)', 
+            borderRadius: '50%', 
+            animation: 'spin 1s linear infinite',
+            margin: '0 auto 20px'
+          }}></div>
+          <p>Loading cart...</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="screen-content">
+      {/* Header */}
+      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
+        <button
+          onClick={() => navigate(-1)}
+          style={{
+            background: 'none',
+            border: 'none',
+            fontSize: '24px',
+            marginRight: '16px',
+            cursor: 'pointer'
+          }}
+        >
+          ←
+        </button>
+        <h2 style={{ margin: 0, fontSize: '20px', fontWeight: '600', flex: 1 }}>
+          My Cart ({cartItems.length})
+        </h2>
+        {cartItems.length > 0 && (
+          <button
+            onClick={clearCart}
+            style={{
+              background: 'none',
+              border: 'none',
+              color: 'var(--error-color)',
+              fontSize: '14px',
+              fontWeight: '500',
+              cursor: 'pointer'
+            }}
+          >
+            Clear All
+          </button>
+        )}
+      </div>
+
+      {cartItems.length === 0 ? (
+        <div style={{ textAlign: 'center', padding: '40px 20px' }}>
+          <div style={{ fontSize: '64px', marginBottom: '20px' }}>🛒</div>
+          <h3 style={{ margin: '0 0 8px 0', fontSize: '18px', fontWeight: '600' }}>
+            Your cart is empty
+          </h3>
+          <p style={{ margin: '0 0 24px 0', color: 'var(--text-secondary)', fontSize: '14px' }}>
+            Add items from shops to get started
+          </p>
+          <button
+            onClick={() => navigate('/shops')}
+            style={{
+              background: 'var(--primary-gradient)',
+              color: 'white',
+              border: 'none',
+              borderRadius: '8px',
+              padding: '12px 24px',
+              fontSize: '16px',
+              fontWeight: '500',
+              cursor: 'pointer'
+            }}
+          >
+            Browse Shops
+          </button>
+        </div>
+      ) : (
+        <>
+          {/* Shop Info */}
+          {cartItems.length > 0 && (
+            <div style={{
+              background: 'var(--background-soft)',
+              border: '1px solid var(--divider)',
+              borderRadius: '12px',
+              padding: '16px',
+              marginBottom: '20px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '12px'
+            }}>
+              <div style={{ 
+                width: '40px', 
+                height: '40px', 
+                background: 'var(--primary-gradient)', 
+                borderRadius: '20px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '16px'
+              }}>
+                🏪
+              </div>
+              <div>
+                <h4 style={{ margin: '0 0 2px 0', fontSize: '16px', fontWeight: '600' }}>
+                  {cartItems[0]?.shop_name}
+                </h4>
+                <p style={{ margin: 0, fontSize: '12px', color: 'var(--text-secondary)' }}>
+                  Items will be delivered together
+                </p>
+              </div>
+            </div>
+          )}
+
+          {/* Cart Items */}
+          <div style={{ marginBottom: '20px' }}>
+            {cartItems.map((item) => (
+              <div
+                key={item.id}
+                style={{
+                  background: 'var(--background-soft)',
+                  border: '1px solid var(--divider)',
+                  borderRadius: '12px',
+                  padding: '16px',
+                  marginBottom: '12px'
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+                  <div style={{ 
+                    width: '60px', 
+                    height: '60px', 
+                    background: 'var(--divider)',
+                    borderRadius: '8px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '24px'
+                  }}>
+                    📦
+                  </div>
+                  
+                  <div style={{ flex: 1 }}>
+                    <h4 style={{ margin: '0 0 4px 0', fontSize: '16px', fontWeight: '600' }}>
+                      {item.item_name}
+                    </h4>
+                    <p style={{ margin: '0 0 8px 0', fontSize: '14px', color: 'var(--text-secondary)' }}>
+                      {item.pack_size} {item.unit}
+                    </p>
+                    
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+                      <span style={{ fontSize: '16px', fontWeight: '600', color: 'var(--primary-color)' }}>
+                        ₹{item.price}
+                      </span>
+                      {item.mrp && item.mrp > item.price && (
+                        <>
+                          <span style={{ 
+                            fontSize: '14px', 
+                            color: 'var(--text-secondary)',
+                            textDecoration: 'line-through'
+                          }}>
+                            ₹{item.mrp}
+                          </span>
+                          <span style={{ 
+                            fontSize: '12px', 
+                            color: 'var(--success-color)',
+                            fontWeight: '500'
+                          }}>
+                            You save ₹{item.savings}
+                          </span>
+                        </>
+                      )}
+                    </div>
+
+                    {/* Quantity Controls */}
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        <button
+                          onClick={() => updateQuantity(item.item_id, item.quantity - 1)}
+                          style={{
+                            background: 'white',
+                            border: '1px solid var(--divider)',
+                            borderRadius: '6px',
+                            width: '32px',
+                            height: '32px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            cursor: 'pointer',
+                            fontSize: '16px'
+                          }}
+                        >
+                          −
+                        </button>
+                        <span style={{ fontSize: '16px', fontWeight: '600', minWidth: '20px', textAlign: 'center' }}>
+                          {item.quantity}
+                        </span>
+                        <button
+                          onClick={() => updateQuantity(item.item_id, item.quantity + 1)}
+                          style={{
+                            background: 'white',
+                            border: '1px solid var(--divider)',
+                            borderRadius: '6px',
+                            width: '32px',
+                            height: '32px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            cursor: 'pointer',
+                            fontSize: '16px'
+                          }}
+                        >
+                          +
+                        </button>
+                      </div>
+                      
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        <span style={{ fontSize: '16px', fontWeight: '600' }}>
+                          ₹{item.subtotal}
+                        </span>
+                        <button
+                          onClick={() => removeItem(item.item_id)}
+                          style={{
+                            background: 'none',
+                            border: 'none',
+                            color: 'var(--error-color)',
+                            fontSize: '16px',
+                            cursor: 'pointer'
+                          }}
+                        >
+                          🗑️
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Bill Summary */}
+          <div style={{
+            background: 'var(--background-soft)',
+            border: '1px solid var(--divider)',
+            borderRadius: '12px',
+            padding: '20px',
+            marginBottom: '20px'
+          }}>
+            <h3 style={{ margin: '0 0 16px 0', fontSize: '18px', fontWeight: '600' }}>
+              Bill Summary
+            </h3>
+            
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
+              <span>Subtotal</span>
+              <span>₹{totalPrice + totalSavings}</span>
+            </div>
+            
+            {totalSavings > 0 && (
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', color: 'var(--success-color)' }}>
+                <span>Savings</span>
+                <span>-₹{totalSavings}</span>
+              </div>
+            )}
+            
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px' }}>
+              <span>Delivery Fee</span>
+              <span style={{ color: 'var(--success-color)' }}>FREE</span>
+            </div>
+            
+            <div style={{ borderTop: '1px solid var(--divider)', paddingTop: '12px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '18px', fontWeight: '600' }}>
+                <span>Total</span>
+                <span style={{ color: 'var(--primary-color)' }}>₹{totalPrice}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Checkout Button */}
+          <button
+            onClick={() => navigate('/checkout')}
+            style={{
+              background: 'var(--primary-gradient)',
+              color: 'white',
+              border: 'none',
+              borderRadius: '12px',
+              padding: '16px',
+              fontSize: '18px',
+              fontWeight: '600',
+              cursor: 'pointer',
+              width: '100%',
+              marginBottom: '20px'
+            }}
+          >
+            Proceed to Checkout • ₹{totalPrice}
+          </button>
+        </>
+      )}
+
+      {/* Bottom Navigation Placeholder */}
+      <div style={{ height: '80px' }}></div>
+    </div>
+  );
+}
+
+===== FILE: src/pages/Checkout.jsx =====
+
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import '../styles/common.css';
+import '../styles/App.css';
+
+export default function Checkout() {
+  const navigate = useNavigate();
+  const [cartItems, setCartItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [totalSavings, setTotalSavings] = useState(0);
+  const [walletBalance, setWalletBalance] = useState(0);
+  const [paymentMode, setPaymentMode] = useState('wallet');
+  const [deliveryNotes, setDeliveryNotes] = useState('');
+  const [placing, setPlacing] = useState(false);
+
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+  const token = localStorage.getItem('auth_token');
+
+  useEffect(() => {
+    if (!token) {
+      navigate('/login');
+      return;
+    }
+    fetchCart();
+    fetchWallet();
+  }, []);
+
+  const fetchCart = async () => {
+    try {
+      const res = await fetch(`${backendUrl}/cart/view`, {
+        headers: { 'Authorization': token }
+      });
+      const data = await res.json();
+      
+      if (data.status === 'success') {
+        setCartItems(data.cart);
+        setTotalPrice(data.total_price);
+        setTotalSavings(data.total_savings);
+        
+        if (data.cart.length === 0) {
+          navigate('/cart');
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching cart:', error);
+    }
+    setLoading(false);
+  };
+
+  const fetchWallet = async () => {
+    try {
+      const res = await fetch(`${backendUrl}/wallet`, {
+        headers: { 'Authorization': token }
+      });
+      const data = await res.json();
+      if (data.status === 'success') {
+        setWalletBalance(data.balance);
+      }
+    } catch (error) {
+      console.error('Error fetching wallet:', error);
+    }
+  };
+
+  const placeOrder = async () => {
+    if (paymentMode === 'wallet' && walletBalance < totalPrice) {
+      alert('Insufficient wallet balance. Please add money to your wallet.');
+      return;
+    }
+
+    setPlacing(true);
+    try {
+      const res = await fetch(`${backendUrl}/order/confirm`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': token
+        },
+        body: JSON.stringify({
+          payment_mode: paymentMode,
+          delivery_notes: deliveryNotes
+        })
+      });
+
+      const data = await res.json();
+      if (data.status === 'success') {
+        alert('Order placed successfully!');
+        navigate(`/order/${data.order_id}`);
+      } else {
+        alert(data.message || 'Failed to place order');
+      }
+    } catch (error) {
+      console.error('Error placing order:', error);
+      alert('Something went wrong. Please try again.');
+    }
+    setPlacing(false);
+  };
+
+  if (loading) {
+    return (
+      <div className="screen-content">
+        <div style={{ textAlign: 'center', marginTop: '40px' }}>
+          <div style={{ 
+            width: '40px', 
+            height: '40px', 
+            border: '3px solid var(--divider)', 
+            borderTop: '3px solid var(--primary-color)', 
+            borderRadius: '50%', 
+            animation: 'spin 1s linear infinite',
+            margin: '0 auto 20px'
+          }}></div>
+          <p>Loading checkout...</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="screen-content">
+      {/* Header */}
+      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
+        <button
+          onClick={() => navigate(-1)}
+          style={{
+            background: 'none',
+            border: 'none',
+            fontSize: '24px',
+            marginRight: '16px',
+            cursor: 'pointer'
+          }}
+        >
+          ←
+        </button>
+        <h2 style={{ margin: 0, fontSize: '20px', fontWeight: '600' }}>
+          Checkout
+        </h2>
+      </div>
+
+      {/* Delivery Address */}
+      <div style={{
+        background: 'var(--background-soft)',
+        border: '1px solid var(--divider)',
+        borderRadius: '12px',
+        padding: '16px',
+        marginBottom: '20px'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
+          <span style={{ fontSize: '16px' }}>📍</span>
+          <h3 style={{ margin: 0, fontSize: '16px', fontWeight: '600' }}>Delivery Address</h3>
+        </div>
+        <p style={{ margin: '0 0 4px 28px', fontSize: '14px', fontWeight: '500' }}>
+          Home Address
+        </p>
+        <p style={{ margin: '0 0 8px 28px', fontSize: '14px', color: 'var(--text-secondary)' }}>
+          Your registered address will be used for delivery
+        </p>
+      </div>
+
+      {/* Order Items */}
+      <div style={{
+        background: 'var(--background-soft)',
+        border: '1px solid var(--divider)',
+        borderRadius: '12px',
+        padding: '16px',
+        marginBottom: '20px'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+          <h3 style={{ margin: 0, fontSize: '16px', fontWeight: '600' }}>
+            Order Items ({cartItems.length})
+          </h3>
+          <button
+            onClick={() => navigate('/cart')}
+            style={{
+              background: 'none',
+              border: 'none',
+              color: 'var(--primary-color)',
+              fontSize: '14px',
+              fontWeight: '500',
+              cursor: 'pointer'
+            }}
+          >
+            Edit
+          </button>
+        </div>
+        
+        {cartItems.slice(0, 3).map((item, index) => (
+          <div
+            key={item.id}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '12px',
+              padding: '8px 0',
+              borderBottom: index < Math.min(cartItems.length, 3) - 1 ? '1px solid var(--divider)' : 'none'
+            }}
+          >
+            <div style={{ 
+              width: '40px', 
+              height: '40px', 
+              background: 'var(--divider)',
+              borderRadius: '6px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '16px'
+            }}>
+              📦
+            </div>
+            <div style={{ flex: 1 }}>
+              <p style={{ margin: '0 0 2px 0', fontSize: '14px', fontWeight: '500' }}>
+                {item.item_name}
+              </p>
+              <p style={{ margin: 0, fontSize: '12px', color: 'var(--text-secondary)' }}>
+                Qty: {item.quantity} • ₹{item.price} each
+              </p>
+            </div>
+            <span style={{ fontSize: '14px', fontWeight: '600' }}>
+              ₹{item.subtotal}
+            </span>
+          </div>
+        ))}
+        
+        {cartItems.length > 3 && (
+          <p style={{ margin: '8px 0 0 52px', fontSize: '12px', color: 'var(--text-secondary)' }}>
+            +{cartItems.length - 3} more items
+          </p>
+        )}
+      </div>
+
+      {/* Payment Method */}
+      <div style={{
+        background: 'var(--background-soft)',
+        border: '1px solid var(--divider)',
+        borderRadius: '12px',
+        padding: '16px',
+        marginBottom: '20px'
+      }}>
+        <h3 style={{ margin: '0 0 16px 0', fontSize: '16px', fontWeight: '600' }}>
+          Payment Method
+        </h3>
+        
+        {/* Wallet Option */}
+        <div
+          onClick={() => setPaymentMode('wallet')}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px',
+            padding: '12px',
+            borderRadius: '8px',
+            border: paymentMode === 'wallet' ? '2px solid var(--primary-color)' : '1px solid var(--divider)',
+            background: paymentMode === 'wallet' ? 'rgba(252, 100, 79, 0.1)' : 'white',
+            cursor: 'pointer',
+            marginBottom: '8px'
+          }}
+        >
+          <div style={{
+            width: '20px',
+            height: '20px',
+            borderRadius: '50%',
+            border: '2px solid var(--primary-color)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}>
+            {paymentMode === 'wallet' && (
+              <div style={{
+                width: '10px',
+                height: '10px',
+                borderRadius: '50%',
+                background: 'var(--primary-color)'
+              }}></div>
+            )}
+          </div>
+          <div style={{ flex: 1 }}>
+            <p style={{ margin: '0 0 2px 0', fontSize: '14px', fontWeight: '500' }}>
+              💳 Wallet
+            </p>
+            <p style={{ margin: 0, fontSize: '12px', color: walletBalance >= totalPrice ? 'var(--success-color)' : 'var(--error-color)' }}>
+              Balance: ₹{walletBalance.toFixed(2)}
+              {walletBalance < totalPrice && ' (Insufficient balance)'}
+            </p>
+          </div>
+        </div>
+
+        {/* Cash on Delivery Option */}
+        <div
+          onClick={() => setPaymentMode('cash')}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px',
+            padding: '12px',
+            borderRadius: '8px',
+            border: paymentMode === 'cash' ? '2px solid var(--primary-color)' : '1px solid var(--divider)',
+            background: paymentMode === 'cash' ? 'rgba(252, 100, 79, 0.1)' : 'white',
+            cursor: 'pointer'
+          }}
+        >
+          <div style={{
+            width: '20px',
+            height: '20px',
+            borderRadius: '50%',
+            border: '2px solid var(--primary-color)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}>
+            {paymentMode === 'cash' && (
+              <div style={{
+                width: '10px',
+                height: '10px',
+                borderRadius: '50%',
+                background: 'var(--primary-color)'
+              }}></div>
+            )}
+          </div>
+          <div>
+            <p style={{ margin: '0 0 2px 0', fontSize: '14px', fontWeight: '500' }}>
+              💵 Cash on Delivery
+            </p>
+            <p style={{ margin: 0, fontSize: '12px', color: 'var(--text-secondary)' }}>
+              Pay when you receive your order
+            </p>
+          </div>
+        </div>
+
+        {/* Add Money to Wallet */}
+        {paymentMode === 'wallet' && walletBalance < totalPrice && (
+          <button
+            onClick={() => navigate('/wallet/add')}
+            style={{
+              background: 'var(--primary-gradient)',
+              color: 'white',
+              border: 'none',
+              borderRadius: '8px',
+              padding: '8px 16px',
+              fontSize: '14px',
+              fontWeight: '500',
+              cursor: 'pointer',
+              marginTop: '12px',
+              width: '100%'
+            }}
+          >
+            Add Money to Wallet
+          </button>
+        )}
+      </div>
+
+      {/* Delivery Instructions */}
+      <div style={{
+        background: 'var(--background-soft)',
+        border: '1px solid var(--divider)',
+        borderRadius: '12px',
+        padding: '16px',
+        marginBottom: '20px'
+      }}>
+        <h3 style={{ margin: '0 0 12px 0', fontSize: '16px', fontWeight: '600' }}>
+          Delivery Instructions (Optional)
+        </h3>
+        <textarea
+          placeholder="Add any special instructions for delivery..."
+          value={deliveryNotes}
+          onChange={(e) => setDeliveryNotes(e.target.value)}
+          style={{
+            width: '100%',
+            minHeight: '80px',
+            padding: '12px',
+            border: '1px solid var(--divider)',
+            borderRadius: '8px',
+            fontSize: '14px',
+            resize: 'vertical',
+            fontFamily: 'inherit'
+          }}
+        />
+      </div>
+
+      {/* Bill Summary */}
+      <div style={{
+        background: 'var(--background-soft)',
+        border: '1px solid var(--divider)',
+        borderRadius: '12px',
+        padding: '20px',
+        marginBottom: '20px'
+      }}>
+        <h3 style={{ margin: '0 0 16px 0', fontSize: '18px', fontWeight: '600' }}>
+          Bill Summary
+        </h3>
+        
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
+          <span>Subtotal</span>
+          <span>₹{totalPrice + totalSavings}</span>
+        </div>
+        
+        {totalSavings > 0 && (
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', color: 'var(--success-color)' }}>
+            <span>Savings</span>
+            <span>-₹{totalSavings}</span>
+          </div>
+        )}
+        
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px' }}>
+          <span>Delivery Fee</span>
+          <span style={{ color: 'var(--success-color)' }}>FREE</span>
+        </div>
+        
+        <div style={{ borderTop: '1px solid var(--divider)', paddingTop: '12px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '18px', fontWeight: '600' }}>
+            <span>Total Amount</span>
+            <span style={{ color: 'var(--primary-color)' }}>₹{totalPrice}</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Place Order Button */}
+      <button
+        onClick={placeOrder}
+        disabled={placing || (paymentMode === 'wallet' && walletBalance < totalPrice)}
+        style={{
+          background: placing || (paymentMode === 'wallet' && walletBalance < totalPrice) 
+            ? 'var(--text-disabled)' 
+            : 'var(--primary-gradient)',
+          color: 'white',
+          border: 'none',
+          borderRadius: '12px',
+          padding: '16px',
+          fontSize: '18px',
+          fontWeight: '600',
+          cursor: placing || (paymentMode === 'wallet' && walletBalance < totalPrice) ? 'not-allowed' : 'pointer',
+          width: '100%',
+          marginBottom: '20px',
+          opacity: placing || (paymentMode === 'wallet' && walletBalance < totalPrice) ? 0.6 : 1
+        }}
+      >
+        {placing ? 'Placing Order...' : `Place Order • ₹${totalPrice}`}
+      </button>
+
+      {/* Bottom Navigation Placeholder */}
+      <div style={{ height: '80px' }}></div>
+    </div>
+  );
+}
 
 ===== FILE: src/pages/ConsumerOnboarding.jsx =====
 
@@ -160,36 +1583,31 @@ import '../styles/App.css';
 export default function ConsumerOnboarding() {
   const navigate = useNavigate();
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
-
   const [flatNumber, setFlatNumber] = useState('');
 
   const submit = async () => {
     const token = localStorage.getItem('auth_token');
     if (!token) return alert('Missing login token. Please login again.');
-
     if (!flatNumber.trim()) {
       alert('Please enter your flat or house number');
       return;
     }
-
     try {
       const res = await fetch(`${backendUrl}/onboarding/consumer`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization':  token
+          'Authorization': token
         },
         body: JSON.stringify({ flat_number: flatNumber.trim() })
       });
-
       const result = await res.json();
       if (result.status === 'success') {
         navigate('/home');
       } else {
         alert(result.message || 'Consumer onboarding failed');
       }
-    } catch (err) {
-      console.error('Error submitting consumer onboarding:', err);
+    } catch {
       alert('Something went wrong. Please try again.');
     }
   };
@@ -202,21 +1620,16 @@ export default function ConsumerOnboarding() {
       </div>
       <div className="screen-content">
         <h2 className="title text-center mb-lg">Your Home Address</h2>
-
         <div className="form-group">
           <label className="form-label">Flat / House Number</label>
           <input
             className="form-input"
             placeholder="e.g., A-302"
             value={flatNumber}
-            onChange={(e) => setFlatNumber(e.target.value.trimStart())}
+            onChange={e => setFlatNumber(e.target.value.trimStart())}
           />
         </div>
-
-        <button
-          className="btn btn-primary btn-full btn-large"
-          onClick={submit}
-        >
+        <button className="btn btn-primary btn-full btn-large" onClick={submit}>
           Complete
         </button>
       </div>
@@ -227,7 +1640,6 @@ export default function ConsumerOnboarding() {
 
 ===== FILE: src/pages/Home.jsx =====
 
-// src/pages/Home.jsx
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/common.css';
@@ -311,12 +1723,12 @@ function Home() {
     return (
       <div className="screen-content">
         <div style={{ textAlign: 'center', marginTop: '40px' }}>
-          <div style={{ 
-            width: '40px', 
-            height: '40px', 
-            border: '3px solid var(--divider)', 
-            borderTop: '3px solid var(--primary-color)', 
-            borderRadius: '50%', 
+          <div style={{
+            width: '40px',
+            height: '40px',
+            border: '3px solid var(--divider)',
+            borderTop: '3px solid var(--primary-color)',
+            borderRadius: '50%',
             animation: 'spin 1s linear infinite',
             margin: '0 auto 20px'
           }}></div>
@@ -338,7 +1750,7 @@ function Home() {
             {userProfile?.society}, {userProfile?.city}
           </p>
         </div>
-        <button 
+        <button
           onClick={() => navigate('/profile')}
           style={{
             width: '40px',
@@ -356,7 +1768,7 @@ function Home() {
       </div>
 
       {/* Wallet Card */}
-      <div 
+      <div
         onClick={() => navigate('/wallet')}
         style={{
           background: 'var(--primary-gradient)',
@@ -379,7 +1791,7 @@ function Home() {
       </div>
 
       {/* Search Bar */}
-      <div 
+      <div
         onClick={() => navigate('/shops/search')}
         style={{
           background: 'var(--background-soft)',
@@ -444,10 +1856,10 @@ function Home() {
                   cursor: 'pointer'
                 }}
               >
-                <div style={{ 
-                  width: '40px', 
-                  height: '40px', 
-                  background: 'var(--primary-gradient)', 
+                <div style={{
+                  width: '40px',
+                  height: '40px',
+                  background: 'var(--primary-gradient)',
                   borderRadius: '20px',
                   display: 'flex',
                   alignItems: 'center',
@@ -463,9 +1875,9 @@ function Home() {
                 <p style={{ margin: 0, fontSize: '12px', color: 'var(--text-secondary)' }}>
                   {shop.shop_type}
                 </p>
-                <div style={{ 
-                  marginTop: '8px', 
-                  fontSize: '10px', 
+                <div style={{
+                  marginTop: '8px',
+                  fontSize: '10px',
                   color: 'var(--success-color)',
                   fontWeight: '500'
                 }}>
@@ -481,7 +1893,7 @@ function Home() {
       <div style={{ marginBottom: '24px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
           <h3 style={{ margin: 0, fontSize: '18px', fontWeight: '600' }}>Nearby Shops</h3>
-          <button 
+          <button
             onClick={() => navigate('/shops')}
             style={{
               background: 'none',
@@ -495,7 +1907,7 @@ function Home() {
             View All
           </button>
         </div>
-        
+
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
           {nearbyShops.map((shop) => (
             <div
@@ -512,10 +1924,10 @@ function Home() {
                 gap: '12px'
               }}
             >
-              <div style={{ 
-                width: '48px', 
-                height: '48px', 
-                background: 'var(--primary-gradient)', 
+              <div style={{
+                width: '48px',
+                height: '48px',
+                background: 'var(--primary-gradient)',
                 borderRadius: '24px',
                 display: 'flex',
                 alignItems: 'center',
@@ -532,16 +1944,16 @@ function Home() {
                   {shop.shop_type} • {shop.description}
                 </p>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <span style={{ 
-                    fontSize: '12px', 
+                  <span style={{
+                    fontSize: '12px',
                     color: shop.is_open ? 'var(--success-color)' : 'var(--error-color)',
                     fontWeight: '500'
                   }}>
                     {shop.is_open ? '• Open' : '• Closed'}
                   </span>
                   {shop.delivers && (
-                    <span style={{ 
-                      fontSize: '12px', 
+                    <span style={{
+                      fontSize: '12px',
                       color: 'var(--primary-color)',
                       fontWeight: '500'
                     }}>
@@ -572,7 +1984,7 @@ function Home() {
         padding: '12px 0',
         zIndex: 1000
       }}>
-        <button 
+        <button
           onClick={() => navigate('/home')}
           style={{
             background: 'none',
@@ -589,7 +2001,7 @@ function Home() {
           <span style={{ fontSize: '20px' }}>🏠</span>
           Home
         </button>
-        <button 
+        <button
           onClick={() => navigate('/shops')}
           style={{
             background: 'none',
@@ -606,7 +2018,7 @@ function Home() {
           <span style={{ fontSize: '20px' }}>🏪</span>
           Shops
         </button>
-        <button 
+        <button
           onClick={() => navigate('/cart')}
           style={{
             background: 'none',
@@ -623,7 +2035,7 @@ function Home() {
           <span style={{ fontSize: '20px' }}>🛒</span>
           Cart
         </button>
-        <button 
+        <button
           onClick={() => navigate('/orders')}
           style={{
             background: 'none',
@@ -640,7 +2052,7 @@ function Home() {
           <span style={{ fontSize: '20px' }}>📦</span>
           Orders
         </button>
-        <button 
+        <button
           onClick={() => navigate('/profile')}
           style={{
             background: 'none',
@@ -664,6 +2076,7 @@ function Home() {
 
 export default Home;
 
+
 ===== FILE: src/pages/Login.jsx =====
 
 import { useState } from 'react';
@@ -671,7 +2084,7 @@ import { useNavigate } from 'react-router-dom';
 import '../styles/common.css';
 import '../styles/App.css';
 
-function Login() {
+export default function Login() {
   const [phone, setPhone] = useState('');
   const navigate = useNavigate();
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
@@ -681,21 +2094,19 @@ function Login() {
       alert('Please enter a valid 10-digit phone number');
       return;
     }
-
     try {
       const res = await fetch(`${backendUrl}/send-otp`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ phone: '+91' + phone }),
       });
-
       const data = await res.json();
       if (data.status === 'success') {
         navigate('/otp', { state: { phone } });
       } else {
         alert('❌ ' + (data.message || 'Failed to send OTP'));
       }
-    } catch (error) {
+    } catch {
       alert('Something went wrong while sending OTP');
     }
   };
@@ -706,15 +2117,14 @@ function Login() {
         <span className="time">9:41</span>
         <span className="battery">🔋</span>
       </div>
-
       <div className="screen-content">
-        <div className="text-center mb-lg" style={{ paddingTop: '48px' }}>
+        <div className="text-center mb-lg" style={{ paddingTop: 48 }}>
           <div
             style={{
               background: 'var(--primary-gradient)',
-              width: '80px',
-              height: '80px',
-              borderRadius: '20px',
+              width: 80,
+              height: 80,
+              borderRadius: 20,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -722,13 +2132,11 @@ function Login() {
               boxShadow: '0 8px 18px rgba(255, 145, 0, 0.35)',
             }}
           >
-            <span style={{ fontSize: '36px', color: 'white' }}>📲</span>
+            <span style={{ fontSize: 36, color: 'white' }}>📲</span>
           </div>
-
-          <h2 className="title" style={{ fontSize: '22px' }}>Log in to Habrio</h2>
+          <h2 className="title" style={{ fontSize: 22 }}>Log in to Habrio</h2>
           <p className="subtitle">Enter your mobile number to continue</p>
         </div>
-
         <div className="form-group mb-md">
           <div className="phone-input-group">
             <div className="country-code">+91</div>
@@ -738,22 +2146,20 @@ function Login() {
               placeholder="9876543210"
               maxLength="10"
               value={phone}
-              onChange={(e) => setPhone(e.target.value)}
+              onChange={e => setPhone(e.target.value)}
             />
           </div>
         </div>
-
         <button className="btn btn-primary btn-full btn-large" onClick={sendOtp}>
           Send OTP
         </button>
-
         <p
           style={{
-            fontSize: '12px',
+            fontSize: 12,
             color: 'var(--text-secondary)',
             textAlign: 'center',
-            lineHeight: '1.5',
-            marginTop: '24px',
+            lineHeight: 1.5,
+            marginTop: 24,
           }}
         >
           By continuing, you agree to our{' '}
@@ -765,8 +2171,1146 @@ function Login() {
   );
 }
 
-export default Login;
 
+===== FILE: src/pages/OrderDetail.jsx =====
+
+import { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import '../styles/common.css';
+import '../styles/App.css';
+
+export default function OrderDetail() {
+  const { orderId } = useParams();
+  const navigate = useNavigate();
+  const [order, setOrder] = useState(null);
+  const [messages, setMessages] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+  const token = localStorage.getItem('auth_token');
+
+  useEffect(() => {
+    if (!token) {
+      navigate('/login');
+      return;
+    }
+    fetchOrderDetails();
+    fetchMessages();
+  }, [orderId]);
+
+  const fetchOrderDetails = async () => {
+    try {
+      // Get order from history
+      const res = await fetch(`${backendUrl}/order/history`, {
+        headers: { 'Authorization': token }
+      });
+      const data = await res.json();
+      
+      if (data.status === 'success') {
+        const orderDetail = data.orders.find(o => o.order_id === parseInt(orderId));
+        if (orderDetail) {
+          setOrder(orderDetail);
+        } else {
+          alert('Order not found');
+          navigate('/orders');
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching order details:', error);
+    }
+    setLoading(false);
+  };
+
+  const fetchMessages = async () => {
+    try {
+      const res = await fetch(`${backendUrl}/order/consumer/messages/${orderId}`, {
+        headers: { 'Authorization': token }
+      });
+      const data = await res.json();
+      if (data.status === 'success') {
+        setMessages(data.messages);
+      }
+    } catch (error) {
+      console.error('Error fetching messages:', error);
+    }
+  };
+
+  const cancelOrder = async () => {
+    if (!confirm('Are you sure you want to cancel this order?')) return;
+    
+    try {
+      const res = await fetch(`${backendUrl}/order/consumer/cancel/${orderId}`, {
+        method: 'POST',
+        headers: { 'Authorization': token }
+      });
+
+      const data = await res.json();
+      if (data.status === 'success') {
+        alert('Order cancelled successfully');
+        fetchOrderDetails();
+      } else {
+        alert(data.message || 'Failed to cancel order');
+      }
+    } catch (error) {
+      console.error('Error cancelling order:', error);
+      alert('Something went wrong. Please try again.');
+    }
+  };
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'pending': return 'var(--warning-color)';
+      case 'accepted': return 'var(--info-color)';
+      case 'confirmed': return 'var(--info-color)';
+      case 'delivered': return 'var(--success-color)';
+      case 'cancelled': return 'var(--error-color)';
+      default: return 'var(--text-secondary)';
+    }
+  };
+
+  const getStatusIcon = (status) => {
+    switch (status) {
+      case 'pending': return '⏳';
+      case 'accepted': return '✅';
+      case 'confirmed': return '📦';
+      case 'delivered': return '🎉';
+      case 'cancelled': return '❌';
+      default: return '📋';
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="screen-content">
+        <div style={{ textAlign: 'center', marginTop: '40px' }}>
+          <div style={{ 
+            width: '40px', 
+            height: '40px', 
+            border: '3px solid var(--divider)', 
+            borderTop: '3px solid var(--primary-color)', 
+            borderRadius: '50%', 
+            animation: 'spin 1s linear infinite',
+            margin: '0 auto 20px'
+          }}></div>
+          <p>Loading order details...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!order) {
+    return (
+      <div className="screen-content">
+        <div style={{ textAlign: 'center', padding: '40px 20px' }}>
+          <div style={{ fontSize: '64px', marginBottom: '20px' }}>📦</div>
+          <h3 style={{ margin: '0 0 8px 0', fontSize: '18px', fontWeight: '600' }}>
+            Order not found
+          </h3>
+          <p style={{ margin: '0 0 24px 0', color: 'var(--text-secondary)', fontSize: '14px' }}>
+            The order you're looking for doesn't exist
+          </p>
+          <button
+            onClick={() => navigate('/orders')}
+            style={{
+              background: 'var(--primary-gradient)',
+              color: 'white',
+              border: 'none',
+              borderRadius: '8px',
+              padding: '12px 24px',
+              fontSize: '16px',
+              fontWeight: '500',
+              cursor: 'pointer'
+            }}
+          >
+            Back to Orders
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="screen-content">
+      {/* Header */}
+      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
+        <button
+          onClick={() => navigate(-1)}
+          style={{
+            background: 'none',
+            border: 'none',
+            fontSize: '24px',
+            marginRight: '16px',
+            cursor: 'pointer'
+          }}
+        >
+          ←
+        </button>
+        <h2 style={{ margin: 0, fontSize: '20px', fontWeight: '600', flex: 1 }}>
+          Order #{order.order_id}
+        </h2>
+      </div>
+
+      {/* Order Status */}
+      <div style={{
+        background: 'var(--background-soft)',
+        border: '1px solid var(--divider)',
+        borderRadius: '12px',
+        padding: '20px',
+        marginBottom: '20px',
+        textAlign: 'center'
+      }}>
+        <div style={{ fontSize: '48px', marginBottom: '12px' }}>
+          {getStatusIcon(order.status)}
+        </div>
+        <h3 style={{ 
+          margin: '0 0 4px 0', 
+          fontSize: '18px', 
+          fontWeight: '600',
+          color: getStatusColor(order.status),
+          textTransform: 'capitalize'
+        }}>
+          {order.status}
+        </h3>
+        <p style={{ margin: '0 0 12px 0', fontSize: '14px', color: 'var(--text-secondary)' }}>
+          Order placed on {new Date(order.created_at).toLocaleDateString('en-IN', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+          })}
+        </p>
+        
+        {/* Status Timeline */}
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', marginTop: '16px' }}>
+          {['pending', 'accepted', 'confirmed', 'delivered'].map((status, index) => {
+            const isActive = ['pending', 'accepted', 'confirmed', 'delivered'].indexOf(order.status) >= index;
+            const isCancelled = order.status === 'cancelled';
+            
+            return (
+              <div
+                key={status}
+                style={{
+                  width: '12px',
+                  height: '12px',
+                  borderRadius: '50%',
+                  background: isCancelled 
+                    ? 'var(--error-color)' 
+                    : isActive 
+                      ? 'var(--primary-color)' 
+                      : 'var(--divider)'
+                }}
+              />
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Order Items */}
+      <div style={{
+        background: 'var(--background-soft)',
+        border: '1px solid var(--divider)',
+        borderRadius: '12px',
+        padding: '16px',
+        marginBottom: '20px'
+      }}>
+        <h3 style={{ margin: '0 0 16px 0', fontSize: '16px', fontWeight: '600' }}>
+          Order Items ({order.items.length})
+        </h3>
+        
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
+          <div style={{ 
+            width: '40px', 
+            height: '40px', 
+            background: 'var(--primary-gradient)', 
+            borderRadius: '20px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '16px'
+          }}>
+            🏪
+          </div>
+          <div>
+            <p style={{ margin: '0 0 2px 0', fontSize: '14px', fontWeight: '600' }}>
+              Shop #{order.shop_id}
+            </p>
+            <p style={{ margin: 0, fontSize: '12px', color: 'var(--text-secondary)' }}>
+              Items delivered together
+            </p>
+          </div>
+        </div>
+
+        {order.items.map((item, index) => (
+          <div
+            key={index}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '12px',
+              padding: '12px 0',
+              borderBottom: index < order.items.length - 1 ? '1px solid var(--divider)' : 'none'
+            }}
+          >
+            <div style={{ 
+              width: '48px', 
+              height: '48px', 
+              background: 'var(--divider)',
+              borderRadius: '8px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '20px'
+            }}>
+              📦
+            </div>
+            <div style={{ flex: 1 }}>
+              <h4 style={{ margin: '0 0 4px 0', fontSize: '14px', fontWeight: '600' }}>
+                {item.name}
+              </h4>
+              <p style={{ margin: 0, fontSize: '12px', color: 'var(--text-secondary)' }}>
+                Qty: {item.quantity} × ₹{item.unit_price}
+              </p>
+            </div>
+            <span style={{ fontSize: '14px', fontWeight: '600' }}>
+              ₹{item.subtotal}
+            </span>
+          </div>
+        ))}
+      </div>
+
+      {/* Payment & Delivery */}
+      <div style={{
+        background: 'var(--background-soft)',
+        border: '1px solid var(--divider)',
+        borderRadius: '12px',
+        padding: '16px',
+        marginBottom: '20px'
+      }}>
+        <h3 style={{ margin: '0 0 16px 0', fontSize: '16px', fontWeight: '600' }}>
+          Payment & Delivery
+        </h3>
+        
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px' }}>
+          <span style={{ fontSize: '14px' }}>Payment Method</span>
+          <span style={{ fontSize: '14px', fontWeight: '500' }}>
+            {order.payment_mode === 'wallet' ? '💳 Wallet' : '💵 Cash on Delivery'}
+          </span>
+        </div>
+        
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px' }}>
+          <span style={{ fontSize: '14px' }}>Payment Status</span>
+          <span style={{ 
+            fontSize: '12px', 
+            padding: '2px 8px',
+            borderRadius: '4px',
+            background: order.payment_status === 'paid' ? 'var(--success-color)' : 'var(--warning-color)',
+            color: 'white',
+            textTransform: 'capitalize'
+          }}>
+            {order.payment_status}
+          </span>
+        </div>
+        
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px' }}>
+          <span style={{ fontSize: '14px' }}>Total Amount</span>
+          <span style={{ fontSize: '16px', fontWeight: '600', color: 'var(--primary-color)' }}>
+            ₹{order.final_amount || order.total_amount}
+          </span>
+        </div>
+        
+        {order.delivery_notes && (
+          <div style={{ marginTop: '12px', paddingTop: '12px', borderTop: '1px solid var(--divider)' }}>
+            <p style={{ margin: '0 0 4px 0', fontSize: '14px', fontWeight: '500' }}>
+              Delivery Notes:
+            </p>
+            <p style={{ margin: 0, fontSize: '14px', color: 'var(--text-secondary)' }}>
+              {order.delivery_notes}
+            </p>
+          </div>
+        )}
+      </div>
+
+      {/* Action Buttons */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '20px' }}>
+        {order.status === 'pending' && (
+          <button
+            onClick={cancelOrder}
+            style={{
+              background: 'none',
+              border: '1px solid var(--error-color)',
+              color: 'var(--error-color)',
+              borderRadius: '8px',
+              padding: '12px',
+              fontSize: '16px',
+              fontWeight: '500',
+              cursor: 'pointer'
+            }}
+          >
+            Cancel Order
+          </button>
+        )}
+        
+        {order.status === 'delivered' && (
+          <div style={{ display: 'flex', gap: '12px' }}>
+            <button
+              onClick={() => navigate(`/order/${order.order_id}/rate`)}
+              style={{
+                flex: 1,
+                background: 'var(--primary-gradient)',
+                color: 'white',
+                border: 'none',
+                borderRadius: '8px',
+                padding: '12px',
+                fontSize: '16px',
+                fontWeight: '500',
+                cursor: 'pointer'
+              }}
+            >
+              Rate Order
+            </button>
+            <button
+              onClick={() => navigate(`/order/${order.order_id}/return`)}
+              style={{
+                flex: 1,
+                background: 'none',
+                border: '1px solid var(--primary-color)',
+                color: 'var(--primary-color)',
+                borderRadius: '8px',
+                padding: '12px',
+                fontSize: '16px',
+                fontWeight: '500',
+                cursor: 'pointer'
+              }}
+            >
+              Return Items
+            </button>
+          </div>
+        )}
+        
+        <button
+          onClick={() => navigate(`/order/${order.order_id}/messages`)}
+          style={{
+            background: 'none',
+            border: '1px solid var(--divider)',
+            color: 'var(--text-primary)',
+            borderRadius: '8px',
+            padding: '12px',
+            fontSize: '16px',
+            fontWeight: '500',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '8px'
+          }}
+        >
+          💬 View Messages
+          {messages.length > 0 && (
+            <span style={{
+              background: 'var(--primary-color)',
+              color: 'white',
+              borderRadius: '50%',
+              width: '20px',
+              height: '20px',
+              fontSize: '12px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}>
+              {messages.length}
+            </span>
+          )}
+        </button>
+      </div>
+
+      {/* Help Section */}
+      <div style={{
+        background: 'rgba(252, 100, 79, 0.1)',
+        border: '1px solid rgba(252, 100, 79, 0.2)',
+        borderRadius: '12px',
+        padding: '16px',
+        marginBottom: '20px'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <span style={{ fontSize: '20px' }}>🤝</span>
+          <div>
+            <h4 style={{ margin: '0 0 4px 0', fontSize: '14px', fontWeight: '600' }}>
+              Need Help with this Order?
+            </h4>
+            <p style={{ margin: 0, fontSize: '12px', color: 'var(--text-secondary)' }}>
+              Our support team is here to help with any questions or issues
+            </p>
+          </div>
+        </div>
+        <button
+          onClick={() => navigate('/support')}
+          style={{
+            background: 'var(--primary-color)',
+            color: 'white',
+            border: 'none',
+            borderRadius: '6px',
+            padding: '8px 16px',
+            fontSize: '12px',
+            fontWeight: '500',
+            cursor: 'pointer',
+            marginTop: '12px'
+          }}
+        >
+          Contact Support
+        </button>
+      </div>
+
+      {/* Bottom Navigation Placeholder */}
+      <div style={{ height: '80px' }}></div>
+    </div>
+  );
+}
+
+===== FILE: src/pages/OrderHistory.jsx =====
+
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import '../styles/common.css';
+import '../styles/App.css';
+
+export default function OrderHistory() {
+  const navigate = useNavigate();
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [filter, setFilter] = useState('all');
+
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+  const token = localStorage.getItem('auth_token');
+
+  useEffect(() => {
+    if (!token) {
+      navigate('/login');
+      return;
+    }
+    fetchOrders();
+  }, []);
+
+  const fetchOrders = async () => {
+    try {
+      const res = await fetch(`${backendUrl}/order/history`, {
+        headers: { 'Authorization': token }
+      });
+      const data = await res.json();
+      
+      if (data.status === 'success') {
+        setOrders(data.orders);
+      }
+    } catch (error) {
+      console.error('Error fetching orders:', error);
+    }
+    setLoading(false);
+  };
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'pending': return 'var(--warning-color)';
+      case 'accepted': return 'var(--info-color)';
+      case 'confirmed': return 'var(--info-color)';
+      case 'delivered': return 'var(--success-color)';
+      case 'cancelled': return 'var(--error-color)';
+      default: return 'var(--text-secondary)';
+    }
+  };
+
+  const getStatusIcon = (status) => {
+    switch (status) {
+      case 'pending': return '⏳';
+      case 'accepted': return '✅';
+      case 'confirmed': return '📦';
+      case 'delivered': return '🎉';
+      case 'cancelled': return '❌';
+      default: return '📋';
+    }
+  };
+
+  const filteredOrders = orders.filter(order => {
+    if (filter === 'all') return true;
+    if (filter === 'active') return ['pending', 'accepted', 'confirmed'].includes(order.status);
+    if (filter === 'completed') return order.status === 'delivered';
+    if (filter === 'cancelled') return order.status === 'cancelled';
+    return true;
+  });
+
+  if (loading) {
+    return (
+      <div className="screen-content">
+        <div style={{ textAlign: 'center', marginTop: '40px' }}>
+          <div style={{ 
+            width: '40px', 
+            height: '40px', 
+            border: '3px solid var(--divider)', 
+            borderTop: '3px solid var(--primary-color)', 
+            borderRadius: '50%', 
+            animation: 'spin 1s linear infinite',
+            margin: '0 auto 20px'
+          }}></div>
+          <p>Loading orders...</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="screen-content">
+      {/* Header */}
+      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
+        <button
+          onClick={() => navigate(-1)}
+          style={{
+            background: 'none',
+            border: 'none',
+            fontSize: '24px',
+            marginRight: '16px',
+            cursor: 'pointer'
+          }}
+        >
+          ←
+        </button>
+        <h2 style={{ margin: 0, fontSize: '20px', fontWeight: '600' }}>
+          My Orders
+        </h2>
+      </div>
+
+      {/* Filter Tabs */}
+      <div style={{ 
+        display: 'flex', 
+        gap: '8px', 
+        marginBottom: '20px',
+        overflowX: 'auto',
+        paddingBottom: '8px'
+      }}>
+        {[
+          { key: 'all', label: 'All' },
+          { key: 'active', label: 'Active' },
+          { key: 'completed', label: 'Completed' },
+          { key: 'cancelled', label: 'Cancelled' }
+        ].map((tab) => (
+          <button
+            key={tab.key}
+            onClick={() => setFilter(tab.key)}
+            style={{
+              background: filter === tab.key ? 'var(--primary-gradient)' : 'var(--background-soft)',
+              color: filter === tab.key ? 'white' : 'var(--text-primary)',
+              border: filter === tab.key ? 'none' : '1px solid var(--divider)',
+              borderRadius: '20px',
+              padding: '8px 16px',
+              fontSize: '14px',
+              fontWeight: '500',
+              cursor: 'pointer',
+              whiteSpace: 'nowrap',
+              minWidth: 'fit-content'
+            }}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Orders List */}
+      {filteredOrders.length === 0 ? (
+        <div style={{ textAlign: 'center', padding: '40px 20px' }}>
+          <div style={{ fontSize: '64px', marginBottom: '20px' }}>📦</div>
+          <h3 style={{ margin: '0 0 8px 0', fontSize: '18px', fontWeight: '600' }}>
+            {filter === 'all' ? 'No orders yet' : `No ${filter} orders`}
+          </h3>
+          <p style={{ margin: '0 0 24px 0', color: 'var(--text-secondary)', fontSize: '14px' }}>
+            {filter === 'all' 
+              ? 'Start shopping to place your first order'
+              : `You don't have any ${filter} orders at the moment`
+            }
+          </p>
+          {filter === 'all' && (
+            <button
+              onClick={() => navigate('/shops')}
+              style={{
+                background: 'var(--primary-gradient)',
+                color: 'white',
+                border: 'none',
+                borderRadius: '8px',
+                padding: '12px 24px',
+                fontSize: '16px',
+                fontWeight: '500',
+                cursor: 'pointer'
+              }}
+            >
+              Start Shopping
+            </button>
+          )}
+        </div>
+      ) : (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          {filteredOrders.map((order) => (
+            <div
+              key={order.order_id}
+              onClick={() => navigate(`/order/${order.order_id}`)}
+              style={{
+                background: 'var(--background-soft)',
+                border: '1px solid var(--divider)',
+                borderRadius: '12px',
+                padding: '16px',
+                cursor: 'pointer'
+              }}
+            >
+              {/* Order Header */}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
+                <div>
+                  <h4 style={{ margin: '0 0 4px 0', fontSize: '16px', fontWeight: '600' }}>
+                    Order #{order.order_id}
+                  </h4>
+                  <p style={{ margin: '0 0 4px 0', fontSize: '14px', color: 'var(--text-secondary)' }}>
+                    {new Date(order.created_at).toLocaleDateString('en-IN', {
+                      day: 'numeric',
+                      month: 'short',
+                      year: 'numeric',
+                      hour: '2-digit',
+                      minute: '2-digit'
+                    })}
+                  </p>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <span style={{ fontSize: '14px' }}>{getStatusIcon(order.status)}</span>
+                  <span style={{ 
+                    fontSize: '12px', 
+                    fontWeight: '500',
+                    color: getStatusColor(order.status),
+                    textTransform: 'capitalize'
+                  }}>
+                    {order.status}
+                  </span>
+                </div>
+              </div>
+
+              {/* Order Items Preview */}
+              <div style={{ marginBottom: '12px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+                  <span style={{ fontSize: '14px' }}>🏪</span>
+                  <span style={{ fontSize: '14px', fontWeight: '500' }}>
+                    Shop #{order.shop_id}
+                  </span>
+                </div>
+                <div style={{ paddingLeft: '22px' }}>
+                  {order.items.slice(0, 2).map((item, index) => (
+                    <p key={index} style={{ margin: '0 0 2px 0', fontSize: '13px', color: 'var(--text-secondary)' }}>
+                      {item.name} × {item.quantity}
+                    </p>
+                  ))}
+                  {order.items.length > 2 && (
+                    <p style={{ margin: '2px 0 0 0', fontSize: '12px', color: 'var(--text-secondary)' }}>
+                      +{order.items.length - 2} more items
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              {/* Order Summary */}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
+                    {order.payment_mode === 'wallet' ? '💳' : '💵'} {order.payment_mode === 'wallet' ? 'Wallet' : 'Cash'}
+                  </span>
+                  <span style={{ 
+                    fontSize: '10px', 
+                    padding: '2px 6px',
+                    borderRadius: '4px',
+                    background: order.payment_status === 'paid' ? 'var(--success-color)' : 'var(--warning-color)',
+                    color: 'white'
+                  }}>
+                    {order.payment_status}
+                  </span>
+                </div>
+                <div style={{ textAlign: 'right' }}>
+                  <p style={{ margin: '0 0 2px 0', fontSize: '16px', fontWeight: '600', color: 'var(--primary-color)' }}>
+                    ₹{order.final_amount || order.total_amount}
+                  </p>
+                  <p style={{ margin: 0, fontSize: '12px', color: 'var(--text-secondary)' }}>
+                    {order.items.length} items
+                  </p>
+                </div>
+              </div>
+
+              {/* Quick Actions */}
+              {order.status === 'delivered' && (
+                <div style={{ 
+                  display: 'flex', 
+                  gap: '8px', 
+                  marginTop: '12px',
+                  paddingTop: '12px',
+                  borderTop: '1px solid var(--divider)'
+                }}>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigate(`/order/${order.order_id}/rate`);
+                    }}
+                    style={{
+                      background: 'none',
+                      border: '1px solid var(--primary-color)',
+                      color: 'var(--primary-color)',
+                      borderRadius: '6px',
+                      padding: '6px 12px',
+                      fontSize: '12px',
+                      fontWeight: '500',
+                      cursor: 'pointer',
+                      flex: 1
+                    }}
+                  >
+                    Rate Order
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigate(`/order/${order.order_id}/return`);
+                    }}
+                    style={{
+                      background: 'none',
+                      border: '1px solid var(--divider)',
+                      color: 'var(--text-secondary)',
+                      borderRadius: '6px',
+                      padding: '6px 12px',
+                      fontSize: '12px',
+                      fontWeight: '500',
+                      cursor: 'pointer',
+                      flex: 1
+                    }}
+                  >
+                    Return
+                  </button>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Bottom Navigation Placeholder */}
+      <div style={{ height: '80px' }}></div>
+    </div>
+  );
+}
+
+===== FILE: src/pages/OrderMessages.jsx =====
+
+import { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import '../styles/common.css';
+import '../styles/App.css';
+
+export default function OrderMessages() {
+  const { orderId } = useParams();
+  const navigate = useNavigate();
+  const [messages, setMessages] = useState([]);
+  const [newMessage, setNewMessage] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [sending, setSending] = useState(false);
+  const [userPhone, setUserPhone] = useState('');
+
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+  const token = localStorage.getItem('auth_token');
+
+  useEffect(() => {
+    if (!token) {
+      navigate('/login');
+      return;
+    }
+    fetchMessages();
+    fetchUserPhone();
+  }, [orderId]);
+
+  const fetchUserPhone = async () => {
+    try {
+      const res = await fetch(`${backendUrl}/profile/me`, {
+        headers: { 'Authorization': token }
+      });
+      const data = await res.json();
+      if (data.status === 'success') {
+        setUserPhone(data.data.phone);
+      }
+    } catch (error) {
+      console.error('Error fetching user phone:', error);
+    }
+  };
+
+  const fetchMessages = async () => {
+    try {
+      const res = await fetch(`${backendUrl}/order/consumer/messages/${orderId}`, {
+        headers: { 'Authorization': token }
+      });
+      const data = await res.json();
+      if (data.status === 'success') {
+        setMessages(data.messages);
+      }
+    } catch (error) {
+      console.error('Error fetching messages:', error);
+    }
+    setLoading(false);
+  };
+
+  const sendMessage = async () => {
+    if (!newMessage.trim()) return;
+    
+    setSending(true);
+    try {
+      const res = await fetch(`${backendUrl}/order/consumer/message/send/${orderId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': token
+        },
+        body: JSON.stringify({ message: newMessage.trim() })
+      });
+
+      const data = await res.json();
+      if (data.status === 'success') {
+        setNewMessage('');
+        fetchMessages(); // Refresh messages
+      } else {
+        alert(data.message || 'Failed to send message');
+      }
+    } catch (error) {
+      console.error('Error sending message:', error);
+      alert('Something went wrong. Please try again.');
+    }
+    setSending(false);
+  };
+
+  if (loading) {
+    return (
+      <div className="screen-content">
+        <div style={{ textAlign: 'center', marginTop: '40px' }}>
+          <div style={{ 
+            width: '40px', 
+            height: '40px', 
+            border: '3px solid var(--divider)', 
+            borderTop: '3px solid var(--primary-color)', 
+            borderRadius: '50%', 
+            animation: 'spin 1s linear infinite',
+            margin: '0 auto 20px'
+          }}></div>
+          <p>Loading messages...</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="screen-content" style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+      {/* Header */}
+      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px', background: 'white', padding: '20px 0' }}>
+        <button
+          onClick={() => navigate(-1)}
+          style={{
+            background: 'none',
+            border: 'none',
+            fontSize: '24px',
+            marginRight: '16px',
+            cursor: 'pointer'
+          }}
+        >
+          ←
+        </button>
+        <div style={{ flex: 1 }}>
+          <h2 style={{ margin: '0 0 4px 0', fontSize: '18px', fontWeight: '600' }}>
+            Order #{orderId}
+          </h2>
+          <p style={{ margin: 0, fontSize: '14px', color: 'var(--text-secondary)' }}>
+            Chat with vendor
+          </p>
+        </div>
+        <div style={{
+          width: '40px',
+          height: '40px',
+          background: 'var(--primary-gradient)',
+          borderRadius: '20px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          fontSize: '16px'
+        }}>
+          🏪
+        </div>
+      </div>
+
+      {/* Messages Container */}
+      <div style={{ 
+        flex: 1, 
+        overflowY: 'auto', 
+        padding: '0 0 20px 0',
+        marginBottom: '80px' // Space for input area
+      }}>
+        {messages.length === 0 ? (
+          <div style={{ textAlign: 'center', padding: '40px 20px' }}>
+            <div style={{ fontSize: '64px', marginBottom: '20px' }}>💬</div>
+            <h3 style={{ margin: '0 0 8px 0', fontSize: '18px', fontWeight: '600' }}>
+              No messages yet
+            </h3>
+            <p style={{ margin: '0 0 24px 0', color: 'var(--text-secondary)', fontSize: '14px' }}>
+              Start a conversation with the vendor about your order
+            </p>
+          </div>
+        ) : (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            {messages.map((message, index) => {
+              const isMyMessage = message.sender_phone === userPhone;
+              return (
+                <div
+                  key={message.id}
+                  style={{
+                    display: 'flex',
+                    justifyContent: isMyMessage ? 'flex-end' : 'flex-start',
+                    marginBottom: '8px'
+                  }}
+                >
+                  <div style={{
+                      maxWidth: '75%',
+                      padding: '12px 16px',
+                      borderRadius: isMyMessage 
+                        ? '18px 18px 4px 18px' 
+                        : '18px 18px 18px 4px',
+                      background: isMyMessage 
+                        ? 'var(--primary-gradient)'
+                        : 'var(--background-soft)',
+                      color: isMyMessage ? 'white' : 'var(--text-primary)',
+                      border: isMyMessage ? 'none' : '1px solid var(--divider)'
+                    }}>
+                    <p style={{ margin: '0 0 6px 0', fontSize: '14px', lineHeight: '1.4' }}>
+                      {message.message}
+                    </p>
+                    <p style={{ 
+                      margin: 0, 
+                      fontSize: '11px', 
+                      opacity: isMyMessage ? 0.8 : 0.6,
+                      textAlign: 'right'
+                    }}>
+                      {new Date(message.timestamp).toLocaleTimeString('en-IN', {
+                        hour: '2-digit',
+                        minute: '2-digit'
+                      })}
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </div>
+
+      {/* Message Input Area */}
+      <div style={{
+        position: 'fixed',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        background: 'white',
+        borderTop: '1px solid var(--divider)',
+        padding: '16px 20px',
+        display: 'flex',
+        alignItems: 'flex-end',
+        gap: '12px',
+        zIndex: 1000
+      }}>
+        <div style={{ flex: 1 }}>
+          <textarea
+            placeholder="Type your message..."
+            value={newMessage}
+            onChange={(e) => setNewMessage(e.target.value)}
+            onKeyPress={(e) => {
+              if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+              }
+            }}
+            style={{
+              width: '100%',
+              minHeight: '40px',
+              maxHeight: '120px',
+              padding: '10px 16px',
+              border: '1px solid var(--divider)',
+              borderRadius: '20px',
+              fontSize: '14px',
+              resize: 'none',
+              fontFamily: 'inherit',
+              outline: 'none'
+            }}
+            rows={1}
+          />
+        </div>
+        
+        <button
+          onClick={sendMessage}
+          disabled={sending || !newMessage.trim()}
+          style={{
+            width: '44px',
+            height: '44px',
+            background: sending || !newMessage.trim() 
+              ? 'var(--text-disabled)' 
+              : 'var(--primary-gradient)',
+            color: 'white',
+            border: 'none',
+            borderRadius: '22px',
+            cursor: sending || !newMessage.trim() ? 'not-allowed' : 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '16px',
+            opacity: sending || !newMessage.trim() ? 0.6 : 1,
+            flexShrink: 0
+          }}
+        >
+          {sending ? '⏳' : '➤'}
+        </button>
+      </div>
+
+      {/* Quick Replies */}
+      {messages.length === 0 && (
+        <div style={{
+          position: 'fixed',
+          bottom: '80px', // Above the input area
+          left: '20px',
+          right: '20px',
+          background: 'white',
+          borderRadius: '12px',
+          border: '1px solid var(--divider)',
+          padding: '16px',
+          zIndex: 999
+        }}>
+          <h4 style={{ margin: '0 0 12px 0', fontSize: '14px', fontWeight: '600' }}>
+            Quick messages:
+          </h4>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            {[
+              'Can you deliver earlier?',
+              'Please call before delivery',
+              'Is this item fresh?',
+              'Can you provide a substitute?'
+            ].map((quickMessage, index) => (
+              <button
+                key={index}
+                onClick={() => setNewMessage(quickMessage)}
+                style={{
+                  background: 'var(--background-soft)',
+                  border: '1px solid var(--divider)',
+                  borderRadius: '8px',
+                  padding: '8px 12px',
+                  fontSize: '13px',
+                  cursor: 'pointer',
+                  textAlign: 'left'
+                }}
+              >
+                {quickMessage}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
 
 ===== FILE: src/pages/Otp.jsx =====
 
@@ -775,7 +3319,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import '../styles/common.css';
 import '../styles/App.css';
 
-function Otp() {
+export default function Otp() {
   const [otp, setOtp] = useState('');
   const location = useLocation();
   const navigate = useNavigate();
@@ -787,20 +3331,15 @@ function Otp() {
       alert('Enter a valid 6-digit OTP');
       return;
     }
-
     try {
       const res = await fetch(`${backendUrl}/verify-otp`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ phone: '+91' + phone, otp }),
       });
-
       const data = await res.json();
-
       if (data.status === 'success' && data.auth_token) {
         localStorage.setItem('auth_token', data.auth_token);
-
-        // Use basic_onboarding_done directly from response
         if (data.basic_onboarding_done) {
           navigate('/home');
         } else {
@@ -809,9 +3348,8 @@ function Otp() {
       } else {
         alert('❌ ' + (data.message || 'Incorrect OTP'));
       }
-    } catch (error) {
+    } catch {
       alert('Something went wrong while verifying OTP');
-      console.error(error);
     }
   };
 
@@ -821,15 +3359,14 @@ function Otp() {
         <span className="time">9:41</span>
         <span className="battery">🔋</span>
       </div>
-
       <div className="screen-content">
-        <div className="text-center mb-lg" style={{ paddingTop: '40px' }}>
+        <div className="text-center mb-lg" style={{ paddingTop: 40 }}>
           <div
             style={{
               background: 'var(--primary-gradient)',
-              width: '72px',
-              height: '72px',
-              borderRadius: '18px',
+              width: 72,
+              height: 72,
+              borderRadius: 18,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -837,12 +3374,11 @@ function Otp() {
               boxShadow: '0 6px 16px rgba(255, 125, 30, 0.3)',
             }}
           >
-            <span style={{ fontSize: '30px', color: 'white' }}>🔐</span>
+            <span style={{ fontSize: 30, color: 'white' }}>🔐</span>
           </div>
           <h2 className="title">Enter OTP</h2>
           <p className="subtitle">Sent to +91 {phone}</p>
         </div>
-
         <div className="form-group mb-md">
           <input
             type="tel"
@@ -850,43 +3386,1521 @@ function Otp() {
             placeholder="Enter 6-digit code"
             maxLength="6"
             value={otp}
-            onChange={(e) => setOtp(e.target.value)}
+            onChange={e => setOtp(e.target.value)}
             style={{
               width: '100%',
               textAlign: 'center',
-              fontSize: '20px',
+              fontSize: 20,
               letterSpacing: '4px',
-              padding: '12px',
+              padding: 12,
               border: '1px solid #ccc',
-              borderRadius: '8px',
+              borderRadius: 8,
             }}
           />
         </div>
-
         <button className="btn btn-primary btn-full btn-large" onClick={verifyOtp}>
           Verify OTP
         </button>
-
         <p
           style={{
-            fontSize: '12px',
+            fontSize: 12,
             color: 'var(--text-secondary)',
             textAlign: 'center',
-            marginTop: '20px',
+            marginTop: 20,
           }}
         >
           Didn’t receive the code?{' '}
-          <a href="#" className="link">
-            Resend
-          </a>
+          <a href="#" className="link">Resend</a>
         </p>
       </div>
     </div>
   );
 }
 
-export default Otp;
 
+===== FILE: src/pages/Profile.jsx =====
+
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import '../styles/common.css';
+import '../styles/App.css';
+
+export default function Profile() {
+  const navigate = useNavigate();
+  const [profile, setProfile] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [editing, setEditing] = useState(false);
+  const [editData, setEditData] = useState({});
+
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+  const token = localStorage.getItem('auth_token');
+
+  useEffect(() => {
+    if (!token) {
+      navigate('/login');
+      return;
+    }
+    fetchProfile();
+  }, []);
+
+  const fetchProfile = async () => {
+    try {
+      const res = await fetch(`${backendUrl}/profile/me`, {
+        headers: { 'Authorization': token }
+      });
+      const data = await res.json();
+      
+      if (data.status === 'success') {
+        setProfile(data.data);
+        setEditData(data.data);
+      }
+    } catch (error) {
+      console.error('Error fetching profile:', error);
+    }
+    setLoading(false);
+  };
+
+  const handleEdit = () => {
+    setEditing(true);
+    setEditData({ ...profile });
+  };
+
+  const handleCancel = () => {
+    setEditing(false);
+    setEditData({ ...profile });
+  };
+
+  const handleSave = async () => {
+    try {
+      const res = await fetch(`${backendUrl}/profile/edit`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': token
+        },
+        body: JSON.stringify(editData)
+      });
+
+      const data = await res.json();
+      if (data.status === 'success') {
+        setProfile(editData);
+        setEditing(false);
+        alert('Profile updated successfully!');
+      } else {
+        alert(data.message || 'Failed to update profile');
+      }
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      alert('Something went wrong. Please try again.');
+    }
+  };
+
+  const handleLogout = async () => {
+    if (!confirm('Are you sure you want to logout?')) return;
+    
+    try {
+      await fetch(`${backendUrl}/logout`, {
+        method: 'POST',
+        headers: { 'Authorization': token }
+      });
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+    
+    localStorage.removeItem('auth_token');
+    navigate('/login');
+  };
+
+  if (loading) {
+    return (
+      <div className="screen-content">
+        <div style={{ textAlign: 'center', marginTop: '40px' }}>
+          <div style={{ 
+            width: '40px', 
+            height: '40px', 
+            border: '3px solid var(--divider)', 
+            borderTop: '3px solid var(--primary-color)', 
+            borderRadius: '50%', 
+            animation: 'spin 1s linear infinite',
+            margin: '0 auto 20px'
+          }}></div>
+          <p>Loading profile...</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="screen-content">
+      {/* Header */}
+      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
+        <button
+          onClick={() => navigate(-1)}
+          style={{
+            background: 'none',
+            border: 'none',
+            fontSize: '24px',
+            marginRight: '16px',
+            cursor: 'pointer'
+          }}
+        >
+          ←
+        </button>
+        <h2 style={{ margin: 0, fontSize: '20px', fontWeight: '600', flex: 1 }}>
+          My Profile
+        </h2>
+        {!editing && (
+          <button
+            onClick={handleEdit}
+            style={{
+              background: 'none',
+              border: 'none',
+              color: 'var(--primary-color)',
+              fontSize: '14px',
+              fontWeight: '500',
+              cursor: 'pointer'
+            }}
+          >
+            Edit
+          </button>
+        )}
+      </div>
+
+      {/* Profile Header */}
+      <div style={{
+        background: 'var(--background-soft)',
+        border: '1px solid var(--divider)',
+        borderRadius: '16px',
+        padding: '24px',
+        marginBottom: '24px',
+        textAlign: 'center'
+      }}>
+        <div style={{
+          width: '80px',
+          height: '80px',
+          background: profile?.profile_image_url ? `url(${profile.profile_image_url})` : 'var(--primary-gradient)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          borderRadius: '40px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          margin: '0 auto 16px',
+          fontSize: '32px',
+          color: 'white'
+        }}>
+          {!profile?.profile_image_url && '👤'}
+        </div>
+        
+        <h3 style={{ margin: '0 0 4px 0', fontSize: '20px', fontWeight: '600' }}>
+          {profile?.name || 'User'}
+        </h3>
+        <p style={{ margin: '0 0 8px 0', fontSize: '14px', color: 'var(--text-secondary)' }}>
+          {profile?.phone}
+        </p>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+          <span style={{ fontSize: '12px' }}>📍</span>
+          <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
+            {profile?.flat_number}, {profile?.society}, {profile?.city}
+          </span>
+        </div>
+      </div>
+
+      {/* Profile Details */}
+      <div style={{
+        background: 'var(--background-soft)',
+        border: '1px solid var(--divider)',
+        borderRadius: '12px',
+        marginBottom: '24px'
+      }}>
+        <div style={{ padding: '16px 20px', borderBottom: '1px solid var(--divider)' }}>
+          <h3 style={{ margin: 0, fontSize: '16px', fontWeight: '600' }}>
+            Personal Information
+          </h3>
+        </div>
+        
+        <div style={{ padding: '20px' }}>
+          {/* Name */}
+          <div style={{ marginBottom: '20px' }}>
+            <label style={{ 
+              display: 'block', 
+              marginBottom: '6px', 
+              fontSize: '14px', 
+              fontWeight: '500',
+              color: 'var(--text-secondary)'
+            }}>
+              Full Name
+            </label>
+            {editing ? (
+              <input
+                type="text"
+                value={editData.name || ''}
+                onChange={(e) => setEditData({ ...editData, name: e.target.value })}
+                style={{
+                  width: '100%',
+                  padding: '12px',
+                  border: '1px solid var(--divider)',
+                  borderRadius: '8px',
+                  fontSize: '16px'
+                }}
+              />
+            ) : (
+              <p style={{ margin: 0, fontSize: '16px', fontWeight: '500' }}>
+                {profile?.name || 'Not provided'}
+              </p>
+            )}
+          </div>
+
+          {/* Phone */}
+          <div style={{ marginBottom: '20px' }}>
+            <label style={{ 
+              display: 'block', 
+              marginBottom: '6px', 
+              fontSize: '14px', 
+              fontWeight: '500',
+              color: 'var(--text-secondary)'
+            }}>
+              Phone Number
+            </label>
+            <p style={{ margin: 0, fontSize: '16px', fontWeight: '500' }}>
+              {profile?.phone}
+            </p>
+          </div>
+
+          {/* Gender */}
+          <div style={{ marginBottom: '20px' }}>
+            <label style={{ 
+              display: 'block', 
+              marginBottom: '6px', 
+              fontSize: '14px', 
+              fontWeight: '500',
+              color: 'var(--text-secondary)'
+            }}>
+              Gender
+            </label>
+            {editing ? (
+              <select
+                value={editData.gender || ''}
+                onChange={(e) => setEditData({ ...editData, gender: e.target.value })}
+                style={{
+                  width: '100%',
+                  padding: '12px',
+                  border: '1px solid var(--divider)',
+                  borderRadius: '8px',
+                  fontSize: '16px'
+                }}
+              >
+                <option value="">Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
+            ) : (
+              <p style={{ margin: 0, fontSize: '16px', fontWeight: '500' }}>
+                {profile?.gender || 'Not provided'}
+              </p>
+            )}
+          </div>
+
+          {/* Date of Birth */}
+          <div style={{ marginBottom: '20px' }}>
+            <label style={{ 
+              display: 'block', 
+              marginBottom: '6px', 
+              fontSize: '14px', 
+              fontWeight: '500',
+              color: 'var(--text-secondary)'
+            }}>
+              Date of Birth
+            </label>
+            {editing ? (
+              <input
+                type="date"
+                value={editData.date_of_birth || ''}
+                onChange={(e) => setEditData({ ...editData, date_of_birth: e.target.value })}
+                style={{
+                  width: '100%',
+                  padding: '12px',
+                  border: '1px solid var(--divider)',
+                  borderRadius: '8px',
+                  fontSize: '16px'
+                }}
+              />
+            ) : (
+              <p style={{ margin: 0, fontSize: '16px', fontWeight: '500' }}>
+                {profile?.date_of_birth || 'Not provided'}
+              </p>
+            )}
+          </div>
+
+          {/* Flat Number */}
+          <div style={{ marginBottom: editing ? '20px' : '0' }}>
+            <label style={{ 
+              display: 'block', 
+              marginBottom: '6px', 
+              fontSize: '14px', 
+              fontWeight: '500',
+              color: 'var(--text-secondary)'
+            }}>
+              Flat/House Number
+            </label>
+            {editing ? (
+              <input
+                type="text"
+                value={editData.flat_number || ''}
+                onChange={(e) => setEditData({ ...editData, flat_number: e.target.value })}
+                style={{
+                  width: '100%',
+                  padding: '12px',
+                  border: '1px solid var(--divider)',
+                  borderRadius: '8px',
+                  fontSize: '16px'
+                }}
+              />
+            ) : (
+              <p style={{ margin: 0, fontSize: '16px', fontWeight: '500' }}>
+                {profile?.flat_number || 'Not provided'}
+              </p>
+            )}
+          </div>
+
+          {/* Edit Actions */}
+          {editing && (
+            <div style={{ display: 'flex', gap: '12px', marginTop: '24px' }}>
+              <button
+                onClick={handleCancel}
+                style={{
+                  flex: 1,
+                  background: 'none',
+                  border: '1px solid var(--divider)',
+                  color: 'var(--text-secondary)',
+                  borderRadius: '8px',
+                  padding: '12px',
+                  fontSize: '16px',
+                  fontWeight: '500',
+                  cursor: 'pointer'
+                }}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleSave}
+                style={{
+                  flex: 1,
+                  background: 'var(--primary-gradient)',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '8px',
+                  padding: '12px',
+                  fontSize: '16px',
+                  fontWeight: '500',
+                  cursor: 'pointer'
+                }}
+              >
+                Save Changes
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Quick Actions */}
+      {!editing && (
+        <div style={{ marginBottom: '24px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <button
+              onClick={() => navigate('/wallet')}
+              style={{
+                background: 'var(--background-soft)',
+                border: '1px solid var(--divider)',
+                borderRadius: '12px',
+                padding: '16px 20px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '12px',
+                textAlign: 'left'
+              }}
+            >
+              <span style={{ fontSize: '20px' }}>💳</span>
+              <div style={{ flex: 1 }}>
+                <p style={{ margin: '0 0 2px 0', fontSize: '16px', fontWeight: '500' }}>
+                  My Wallet
+                </p>
+                <p style={{ margin: 0, fontSize: '12px', color: 'var(--text-secondary)' }}>
+                  Manage your wallet and transactions
+                </p>
+              </div>
+              <span style={{ fontSize: '16px', color: 'var(--text-secondary)' }}>→</span>
+            </button>
+
+            <button
+              onClick={() => navigate('/orders')}
+              style={{
+                background: 'var(--background-soft)',
+                border: '1px solid var(--divider)',
+                borderRadius: '12px',
+                padding: '16px 20px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '12px',
+                textAlign: 'left'
+              }}
+            >
+              <span style={{ fontSize: '20px' }}>📦</span>
+              <div style={{ flex: 1 }}>
+                <p style={{ margin: '0 0 2px 0', fontSize: '16px', fontWeight: '500' }}>
+                  My Orders
+                </p>
+                <p style={{ margin: 0, fontSize: '12px', color: 'var(--text-secondary)' }}>
+                  Track and manage your orders
+                </p>
+              </div>
+              <span style={{ fontSize: '16px', color: 'var(--text-secondary)' }}>→</span>
+            </button>
+
+            <button
+              onClick={() => navigate('/support')}
+              style={{
+                background: 'var(--background-soft)',
+                border: '1px solid var(--divider)',
+                borderRadius: '12px',
+                padding: '16px 20px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '12px',
+                textAlign: 'left'
+              }}
+            >
+              <span style={{ fontSize: '20px' }}>❓</span>
+              <div style={{ flex: 1 }}>
+                <p style={{ margin: '0 0 2px 0', fontSize: '16px', fontWeight: '500' }}>
+                  Help & Support
+                </p>
+                <p style={{ margin: 0, fontSize: '12px', color: 'var(--text-secondary)' }}>
+                  Get help and contact support
+                </p>
+              </div>
+              <span style={{ fontSize: '16px', color: 'var(--text-secondary)' }}>→</span>
+            </button>
+
+            <button
+              onClick={() => navigate('/about')}
+              style={{
+                background: 'var(--background-soft)',
+                border: '1px solid var(--divider)',
+                borderRadius: '12px',
+                padding: '16px 20px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '12px',
+                textAlign: 'left'
+              }}
+            >
+              <span style={{ fontSize: '20px' }}>ℹ️</span>
+              <div style={{ flex: 1 }}>
+                <p style={{ margin: '0 0 2px 0', fontSize: '16px', fontWeight: '500' }}>
+                  About Habrio
+                </p>
+                <p style={{ margin: 0, fontSize: '12px', color: 'var(--text-secondary)' }}>
+                  App info and terms
+                </p>
+              </div>
+              <span style={{ fontSize: '16px', color: 'var(--text-secondary)' }}>→</span>
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Logout Button */}
+      {!editing && (
+        <button
+          onClick={handleLogout}
+          style={{
+            background: 'none',
+            border: '1px solid var(--error-color)',
+            color: 'var(--error-color)',
+            borderRadius: '12px',
+            padding: '16px',
+            fontSize: '16px',
+            fontWeight: '500',
+            cursor: 'pointer',
+            width: '100%',
+            marginBottom: '20px'
+          }}
+        >
+          Logout
+        </button>
+      )}
+
+      {/* Bottom Navigation Placeholder */}
+      <div style={{ height: '80px' }}></div>
+    </div>
+  );
+}
+
+===== FILE: src/pages/RateOrder.jsx =====
+
+import { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import '../styles/common.css';
+import '../styles/App.css';
+
+export default function RateOrder() {
+  const { orderId } = useParams();
+  const navigate = useNavigate();
+  const [order, setOrder] = useState(null);
+  const [rating, setRating] = useState(0);
+  const [review, setReview] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
+
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+  const token = localStorage.getItem('auth_token');
+
+  useEffect(() => {
+    if (!token) {
+      navigate('/login');
+      return;
+    }
+    fetchOrderDetails();
+  }, [orderId]);
+
+  const fetchOrderDetails = async () => {
+    try {
+      const res = await fetch(`${backendUrl}/order/history`, {
+        headers: { 'Authorization': token }
+      });
+      const data = await res.json();
+      
+      if (data.status === 'success') {
+        const orderDetail = data.orders.find(o => o.order_id === parseInt(orderId));
+        if (orderDetail) {
+          setOrder(orderDetail);
+        } else {
+          alert('Order not found');
+          navigate('/orders');
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching order details:', error);
+    }
+    setLoading(false);
+  };
+
+  const submitRating = async () => {
+    if (rating === 0) {
+      alert('Please select a rating');
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      const res = await fetch(`${backendUrl}/order/rate/${orderId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': token
+        },
+        body: JSON.stringify({
+          rating: rating,
+          review: review.trim()
+        })
+      });
+
+      const data = await res.json();
+      if (data.status === 'success') {
+        alert('Thank you for your rating!');
+        navigate(`/order/${orderId}`);
+      } else {
+        alert(data.message || 'Failed to submit rating');
+      }
+    } catch (error) {
+      console.error('Error submitting rating:', error);
+      alert('Something went wrong. Please try again.');
+    }
+    setSubmitting(false);
+  };
+
+  const getRatingText = (rating) => {
+    switch (rating) {
+      case 1: return 'Poor';
+      case 2: return 'Fair';
+      case 3: return 'Good';
+      case 4: return 'Very Good';
+      case 5: return 'Excellent';
+      default: return '';
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="screen-content">
+        <div style={{ textAlign: 'center', marginTop: '40px' }}>
+          <div style={{ 
+            width: '40px', 
+            height: '40px', 
+            border: '3px solid var(--divider)', 
+            borderTop: '3px solid var(--primary-color)', 
+            borderRadius: '50%', 
+            animation: 'spin 1s linear infinite',
+            margin: '0 auto 20px'
+          }}></div>
+          <p>Loading order details...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!order) {
+    return (
+      <div className="screen-content">
+        <div style={{ textAlign: 'center', padding: '40px 20px' }}>
+          <div style={{ fontSize: '64px', marginBottom: '20px' }}>📦</div>
+          <h3 style={{ margin: '0 0 8px 0', fontSize: '18px', fontWeight: '600' }}>
+            Order not found
+          </h3>
+          <p style={{ margin: '0 0 24px 0', color: 'var(--text-secondary)', fontSize: '14px' }}>
+            The order you're trying to rate doesn't exist
+          </p>
+          <button
+            onClick={() => navigate('/orders')}
+            style={{
+              background: 'var(--primary-gradient)',
+              color: 'white',
+              border: 'none',
+              borderRadius: '8px',
+              padding: '12px 24px',
+              fontSize: '16px',
+              fontWeight: '500',
+              cursor: 'pointer'
+            }}
+          >
+            Back to Orders
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="screen-content">
+      {/* Header */}
+      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
+        <button
+          onClick={() => navigate(-1)}
+          style={{
+            background: 'none',
+            border: 'none',
+            fontSize: '24px',
+            marginRight: '16px',
+            cursor: 'pointer'
+          }}
+        >
+          ←
+        </button>
+        <h2 style={{ margin: 0, fontSize: '20px', fontWeight: '600' }}>
+          Rate Your Order
+        </h2>
+      </div>
+
+      {/* Rating Header */}
+      <div style={{
+        background: 'var(--primary-gradient)',
+        borderRadius: '16px',
+        padding: '24px',
+        marginBottom: '24px',
+        color: 'white',
+        textAlign: 'center'
+      }}>
+        <div style={{ fontSize: '48px', marginBottom: '16px' }}>⭐</div>
+        <h3 style={{ margin: '0 0 8px 0', fontSize: '20px', fontWeight: '600' }}>
+          How was your experience?
+        </h3>
+        <p style={{ margin: 0, fontSize: '14px', opacity: 0.9 }}>
+          Your feedback helps us improve our service
+        </p>
+      </div>
+
+      {/* Order Summary */}
+      <div style={{
+        background: 'var(--background-soft)',
+        border: '1px solid var(--divider)',
+        borderRadius: '12px',
+        padding: '16px',
+        marginBottom: '24px'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
+          <div style={{ 
+            width: '40px', 
+            height: '40px', 
+            background: 'var(--primary-gradient)', 
+            borderRadius: '20px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '16px'
+          }}>
+            🏪
+          </div>
+          <div>
+            <p style={{ margin: '0 0 2px 0', fontSize: '16px', fontWeight: '600' }}>
+              Order #{order.order_id}
+            </p>
+            <p style={{ margin: 0, fontSize: '12px', color: 'var(--text-secondary)' }}>
+              Shop #{order.shop_id} • {order.items.length} items • ₹{order.final_amount || order.total_amount}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Rating Stars */}
+      <div style={{
+        background: 'var(--background-soft)',
+        border: '1px solid var(--divider)',
+        borderRadius: '12px',
+        padding: '24px',
+        marginBottom: '24px',
+        textAlign: 'center'
+      }}>
+        <h3 style={{ margin: '0 0 20px 0', fontSize: '18px', fontWeight: '600' }}>
+          Rate your experience
+        </h3>
+        
+        <div style={{ 
+          display: 'flex', 
+          justifyContent: 'center', 
+          gap: '12px', 
+          marginBottom: '16px'
+        }}>
+          {[1, 2, 3, 4, 5].map((star) => (
+            <button
+              key={star}
+              onClick={() => setRating(star)}
+              style={{
+                background: 'none',
+                border: 'none',
+                fontSize: '32px',
+                cursor: 'pointer',
+                color: star <= rating ? '#FFD700' : '#E0E0E0',
+                transition: 'color 0.2s'
+              }}
+            >
+              ⭐
+            </button>
+          ))}
+        </div>
+        
+        {rating > 0 && (
+          <p style={{ 
+            margin: 0, 
+            fontSize: '16px', 
+            fontWeight: '600',
+            color: 'var(--primary-color)'
+          }}>
+            {getRatingText(rating)}
+          </p>
+        )}
+      </div>
+
+      {/* Review Text */}
+      <div style={{
+        background: 'var(--background-soft)',
+        border: '1px solid var(--divider)',
+        borderRadius: '12px',
+        padding: '20px',
+        marginBottom: '24px'
+      }}>
+        <h3 style={{ margin: '0 0 12px 0', fontSize: '16px', fontWeight: '600' }}>
+          Share your feedback (Optional)
+        </h3>
+        <textarea
+          placeholder="Tell us about your experience with the order, delivery, and product quality..."
+          value={review}
+          onChange={(e) => setReview(e.target.value)}
+          style={{
+            width: '100%',
+            minHeight: '100px',
+            padding: '12px',
+            border: '1px solid var(--divider)',
+            borderRadius: '8px',
+            fontSize: '14px',
+            resize: 'vertical',
+            fontFamily: 'inherit'
+          }}
+          maxLength={500}
+        />
+        <p style={{ 
+          margin: '8px 0 0 0', 
+          fontSize: '12px', 
+          color: 'var(--text-secondary)',
+          textAlign: 'right'
+        }}>
+          {review.length}/500 characters
+        </p>
+      </div>
+
+      {/* Submit Button */}
+      <button
+        onClick={submitRating}
+        disabled={submitting || rating === 0}
+        style={{
+          background: submitting || rating === 0 
+            ? 'var(--text-disabled)' 
+            : 'var(--primary-gradient)',
+          color: 'white',
+          border: 'none',
+          borderRadius: '12px',
+          padding: '16px',
+          fontSize: '18px',
+          fontWeight: '600',
+          cursor: submitting || rating === 0 ? 'not-allowed' : 'pointer',
+          width: '100%',
+          marginBottom: '20px',
+          opacity: submitting || rating === 0 ? 0.6 : 1
+        }}
+      >
+        {submitting ? 'Submitting Rating...' : 'Submit Rating'}
+      </button>
+
+      {/* Skip Option */}
+      <button
+        onClick={() => navigate(`/order/${orderId}`)}
+        style={{
+          background: 'none',
+          border: 'none',
+          color: 'var(--text-secondary)',
+          fontSize: '14px',
+          cursor: 'pointer',
+          width: '100%',
+          padding: '8px',
+          marginBottom: '20px'
+        }}
+      >
+        Skip for now
+      </button>
+
+      {/* Bottom Navigation Placeholder */}
+      <div style={{ height: '80px' }}></div>
+    </div>
+  );
+}
+
+===== FILE: src/pages/SearchShops.jsx =====
+
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import '../styles/common.css';
+import '../styles/App.css';
+
+export default function SearchShops() {
+  const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState('');
+  const [shops, setShops] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [recentSearches, setRecentSearches] = useState([]);
+
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+  const token = localStorage.getItem('auth_token');
+
+  useEffect(() => {
+    if (!token) {
+      navigate('/login');
+      return;
+    }
+    // Load recent searches from localStorage
+    const recent = JSON.parse(localStorage.getItem('recentSearches') || '[]');
+    setRecentSearches(recent);
+  }, []);
+
+  const searchShops = async (query) => {
+    if (!query.trim()) return;
+    
+    setLoading(true);
+    try {
+      const res = await fetch(`${backendUrl}/shops/search?q=${encodeURIComponent(query)}`, {
+        headers: { 'Authorization': token }
+      });
+      const data = await res.json();
+      
+      if (data.status === 'success') {
+        setShops(data.shops);
+        // Save to recent searches
+        const updatedSearches = [query, ...recentSearches.filter(s => s !== query)].slice(0, 5);
+        setRecentSearches(updatedSearches);
+        localStorage.setItem('recentSearches', JSON.stringify(updatedSearches));
+      } else {
+        alert('Failed to search shops');
+      }
+    } catch (error) {
+      console.error('Error searching shops:', error);
+      alert('Something went wrong. Please try again.');
+    }
+    setLoading(false);
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    searchShops(searchQuery);
+  };
+
+  const handleRecentSearch = (query) => {
+    setSearchQuery(query);
+    searchShops(query);
+  };
+
+  const clearRecentSearches = () => {
+    setRecentSearches([]);
+    localStorage.removeItem('recentSearches');
+  };
+
+  return (
+    <div className="screen-content">
+      {/* Header */}
+      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
+        <button
+          onClick={() => navigate(-1)}
+          style={{
+            background: 'none',
+            border: 'none',
+            fontSize: '24px',
+            marginRight: '16px',
+            cursor: 'pointer'
+          }}
+        >
+          ←
+        </button>
+        <h2 style={{ margin: 0, fontSize: '20px', fontWeight: '600' }}>
+          Search Shops
+        </h2>
+      </div>
+
+      {/* Search Bar */}
+      <form onSubmit={handleSearch} style={{ marginBottom: '24px' }}>
+        <div style={{
+          display: 'flex',
+          background: 'var(--background-soft)',
+          border: '1px solid var(--divider)',
+          borderRadius: '12px',
+          padding: '12px 16px',
+          alignItems: 'center',
+          gap: '12px'
+        }}>
+          <span style={{ fontSize: '16px' }}>🔍</span>
+          <input
+            type="text"
+            placeholder="Search for shops, items..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            style={{
+              flex: 1,
+              border: 'none',
+              background: 'transparent',
+              fontSize: '16px',
+              outline: 'none'
+            }}
+          />
+          {searchQuery && (
+            <button
+              type="button"
+              onClick={() => setSearchQuery('')}
+              style={{
+                background: 'none',
+                border: 'none',
+                fontSize: '16px',
+                cursor: 'pointer',
+                color: 'var(--text-secondary)'
+              }}
+            >
+              ✕
+            </button>
+          )}
+        </div>
+      </form>
+
+      {/* Quick Filters */}
+      <div style={{ marginBottom: '24px' }}>
+        <div style={{ 
+          display: 'flex', 
+          gap: '8px', 
+          overflowX: 'auto',
+          paddingBottom: '8px'
+        }}>
+          {['Grocery', 'Pharmacy', 'Restaurant', 'Electronics', 'Fashion', 'Services'].map((category) => (
+            <button
+              key={category}
+              onClick={() => handleRecentSearch(category)}
+              style={{
+                background: 'var(--background-soft)',
+                border: '1px solid var(--divider)',
+                borderRadius: '20px',
+                padding: '8px 16px',
+                fontSize: '14px',
+                fontWeight: '500',
+                cursor: 'pointer',
+                whiteSpace: 'nowrap',
+                minWidth: 'fit-content'
+              }}
+            >
+              {category}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Recent Searches */}
+      {recentSearches.length > 0 && !searchQuery && shops.length === 0 && (
+        <div style={{ marginBottom: '24px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+            <h3 style={{ margin: 0, fontSize: '16px', fontWeight: '600' }}>Recent Searches</h3>
+            <button
+              onClick={clearRecentSearches}
+              style={{
+                background: 'none',
+                border: 'none',
+                color: 'var(--primary-color)',
+                fontSize: '14px',
+                fontWeight: '500',
+                cursor: 'pointer'
+              }}
+            >
+              Clear All
+            </button>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            {recentSearches.map((search, index) => (
+              <button
+                key={index}
+                onClick={() => handleRecentSearch(search)}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  textAlign: 'left',
+                  padding: '12px 0',
+                  fontSize: '16px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '12px',
+                  borderBottom: index < recentSearches.length - 1 ? '1px solid var(--divider)' : 'none'
+                }}
+              >
+                <span style={{ fontSize: '16px' }}>🕒</span>
+                {search}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Loading */}
+      {loading && (
+        <div style={{ textAlign: 'center', padding: '40px 20px' }}>
+          <div style={{ 
+            width: '40px', 
+            height: '40px', 
+            border: '3px solid var(--divider)', 
+            borderTop: '3px solid var(--primary-color)', 
+            borderRadius: '50%', 
+            animation: 'spin 1s linear infinite',
+            margin: '0 auto 20px'
+          }}></div>
+          <p>Searching...</p>
+        </div>
+      )}
+
+      {/* Search Results */}
+      {shops.length > 0 && (
+        <div>
+          <h3 style={{ margin: '0 0 16px 0', fontSize: '16px', fontWeight: '600' }}>
+            Search Results ({shops.length})
+          </h3>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            {shops.map((shop) => (
+              <div
+                key={shop.id}
+                onClick={() => navigate(`/shop/${shop.id}`)}
+                style={{
+                  background: 'var(--background-soft)',
+                  border: '1px solid var(--divider)',
+                  borderRadius: '12px',
+                  padding: '16px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '12px'
+                }}
+              >
+                <div style={{ 
+                  width: '48px', 
+                  height: '48px', 
+                  background: 'var(--primary-gradient)', 
+                  borderRadius: '24px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '20px'
+                }}>
+                  🏪
+                </div>
+                <div style={{ flex: 1 }}>
+                  <h4 style={{ margin: '0 0 4px 0', fontSize: '16px', fontWeight: '600' }}>
+                    {shop.shop_name}
+                  </h4>
+                  <p style={{ margin: '0 0 4px 0', fontSize: '14px', color: 'var(--text-secondary)' }}>
+                    {shop.shop_type} • {shop.description}
+                  </p>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span style={{ 
+                      fontSize: '12px', 
+                      color: shop.is_open ? 'var(--success-color)' : 'var(--error-color)',
+                      fontWeight: '500'
+                    }}>
+                      {shop.is_open ? '• Open' : '• Closed'}
+                    </span>
+                    {shop.delivers && (
+                      <span style={{ 
+                        fontSize: '12px', 
+                        color: 'var(--primary-color)',
+                        fontWeight: '500'
+                      }}>
+                        • Delivers
+                      </span>
+                    )}
+                  </div>
+                </div>
+                <div style={{ fontSize: '16px', color: 'var(--text-secondary)' }}>→</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* No Results */}
+      {!loading && searchQuery && shops.length === 0 && (
+        <div style={{ textAlign: 'center', padding: '40px 20px' }}>
+          <div style={{ fontSize: '48px', marginBottom: '16px' }}>🔍</div>
+          <h3 style={{ margin: '0 0 8px 0', fontSize: '18px', fontWeight: '600' }}>
+            No shops found
+          </h3>
+          <p style={{ margin: 0, color: 'var(--text-secondary)', fontSize: '14px' }}>
+            Try searching with different keywords
+          </p>
+        </div>
+      )}
+
+      {/* Bottom Navigation Placeholder */}
+      <div style={{ height: '80px' }}></div>
+    </div>
+  );
+}
+
+===== FILE: src/pages/ShopDetail.jsx =====
+
+import { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import '../styles/common.css';
+import '../styles/App.css';
+
+export default function ShopDetail() {
+  const { shopId } = useParams();
+  const navigate = useNavigate();
+  const [shop, setShop] = useState(null);
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [cartCount, setCartCount] = useState(0);
+
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+  const token = localStorage.getItem('auth_token');
+
+  useEffect(() => {
+    if (!token) {
+      navigate('/login');
+      return;
+    }
+    fetchShopItems();
+    fetchCartCount();
+  }, [shopId]);
+
+  const fetchShopItems = async () => {
+    try {
+      const res = await fetch(`${backendUrl}/items/shop/${shopId}`, {
+        headers: { 'Authorization': token }
+      });
+      const data = await res.json();
+      
+      if (data.status === 'success') {
+        setShop(data.shop);
+        setItems(data.items);
+      } else {
+        alert('Failed to load shop items');
+      }
+    } catch (error) {
+      console.error('Error fetching shop items:', error);
+      alert('Something went wrong. Please try again.');
+    }
+    setLoading(false);
+  };
+
+  const fetchCartCount = async () => {
+    try {
+      const res = await fetch(`${backendUrl}/cart/view`, {
+        headers: { 'Authorization': token }
+      });
+      const data = await res.json();
+      if (data.status === 'success') {
+        setCartCount(data.cart.length);
+      }
+    } catch (error) {
+      console.error('Error fetching cart:', error);
+    }
+  };
+
+  const addToCart = async (itemId) => {
+    try {
+      const res = await fetch(`${backendUrl}/cart/add`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': token
+        },
+        body: JSON.stringify({ item_id: itemId, quantity: 1 })
+      });
+
+      const data = await res.json();
+      if (data.status === 'success') {
+        alert('Item added to cart!');
+        fetchCartCount();
+      } else {
+        alert(data.message || 'Failed to add item to cart');
+      }
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+      alert('Something went wrong. Please try again.');
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="screen-content">
+        <div style={{ textAlign: 'center', marginTop: '40px' }}>
+          <div style={{ 
+            width: '40px', 
+            height: '40px', 
+            border: '3px solid var(--divider)', 
+            borderTop: '3px solid var(--primary-color)', 
+            borderRadius: '50%', 
+            animation: 'spin 1s linear infinite',
+            margin: '0 auto 20px'
+          }}></div>
+          <p>Loading shop details...</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="screen-content">
+      {/* Header */}
+      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
+        <button
+          onClick={() => navigate(-1)}
+          style={{
+            background: 'none',
+            border: 'none',
+            fontSize: '24px',
+            marginRight: '16px',
+            cursor: 'pointer'
+          }}
+        >
+          ←
+        </button>
+        <h2 style={{ margin: 0, fontSize: '20px', fontWeight: '600', flex: 1 }}>
+          {shop?.shop_name}
+        </h2>
+        {cartCount > 0 && (
+          <button
+            onClick={() => navigate('/cart')}
+            style={{
+              position: 'relative',
+              background: 'var(--primary-gradient)',
+              border: 'none',
+              borderRadius: '20px',
+              width: '40px',
+              height: '40px',
+              color: 'white',
+              fontSize: '18px',
+              cursor: 'pointer'
+            }}
+          >
+            🛒
+            <span style={{
+              position: 'absolute',
+              top: '-8px',
+              right: '-8px',
+              background: 'var(--error-color)',
+              color: 'white',
+              borderRadius: '50%',
+              width: '20px',
+              height: '20px',
+              fontSize: '12px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}>
+              {cartCount}
+            </span>
+          </button>
+        )}
+      </div>
+
+      {/* Shop Info */}
+      <div style={{
+        background: 'var(--background-soft)',
+        border: '1px solid var(--divider)',
+        borderRadius: '12px',
+        padding: '20px',
+        marginBottom: '24px'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+          <div style={{ 
+            width: '60px', 
+            height: '60px', 
+            background: 'var(--primary-gradient)', 
+            borderRadius: '30px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '24px'
+          }}>
+            🏪
+          </div>
+          <div style={{ flex: 1 }}>
+            <h3 style={{ margin: '0 0 4px 0', fontSize: '18px', fontWeight: '600' }}>
+              {shop?.shop_name}
+            </h3>
+            <p style={{ margin: '0 0 4px 0', fontSize: '14px', color: 'var(--text-secondary)' }}>
+              {shop?.shop_type} • {shop?.description || 'Quality products & services'}
+            </p>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <span style={{ 
+                fontSize: '12px', 
+                color: 'var(--success-color)',
+                fontWeight: '500'
+              }}>
+                • Open
+              </span>
+              <span style={{ 
+                fontSize: '12px', 
+                color: 'var(--primary-color)',
+                fontWeight: '500'
+              }}>
+                • Delivers
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Items Section */}
+      <h3 style={{ margin: '0 0 16px 0', fontSize: '18px', fontWeight: '600' }}>
+        Available Items ({items.length})
+      </h3>
+
+      {items.length === 0 ? (
+        <div style={{ textAlign: 'center', padding: '40px 20px' }}>
+          <p>No items available at this shop</p>
+        </div>
+      ) : (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          {items.map((item) => (
+            <div
+              key={item.id}
+              style={{
+                background: 'var(--background-soft)',
+                border: '1px solid var(--divider)',
+                borderRadius: '12px',
+                padding: '16px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '12px'
+              }}
+            >
+              <div style={{ 
+                width: '60px', 
+                height: '60px', 
+                background: item.image_url ? `url(${item.image_url})` : 'var(--divider)',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                borderRadius: '8px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '24px'
+              }}>
+                {!item.image_url && '📦'}
+              </div>
+              
+              <div style={{ flex: 1 }}>
+                <h4 style={{ margin: '0 0 4px 0', fontSize: '16px', fontWeight: '600' }}>
+                  {item.title}
+                </h4>
+                <p style={{ margin: '0 0 4px 0', fontSize: '14px', color: 'var(--text-secondary)' }}>
+                  {item.brand && `${item.brand} • `}{item.pack_size} {item.unit}
+                </p>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <span style={{ fontSize: '16px', fontWeight: '600', color: 'var(--primary-color)' }}>
+                    ₹{item.price}
+                  </span>
+                  {item.mrp && item.mrp > item.price && (
+                    <>
+                      <span style={{ 
+                        fontSize: '14px', 
+                        color: 'var(--text-secondary)',
+                        textDecoration: 'line-through'
+                      }}>
+                        ₹{item.mrp}
+                      </span>
+                      <span style={{ 
+                        fontSize: '12px', 
+                        color: 'var(--success-color)',
+                        fontWeight: '500'
+                      }}>
+                        {Math.round(((item.mrp - item.price) / item.mrp) * 100)}% OFF
+                      </span>
+                    </>
+                  )}
+                </div>
+              </div>
+              
+              <button
+                onClick={() => addToCart(item.id)}
+                style={{
+                  background: 'var(--primary-gradient)',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '8px',
+                  padding: '8px 16px',
+                  fontSize: '14px',
+                  fontWeight: '500',
+                  cursor: 'pointer'
+                }}
+              >
+                Add
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Bottom Navigation Placeholder */}
+      <div style={{ height: '80px' }}></div>
+    </div>
+  );
+}
 
 ===== FILE: src/pages/ShopList.jsx =====
 
@@ -1039,13 +5053,275 @@ function ShopList() {
 export default ShopList;
 
 
+===== FILE: src/pages/Support.jsx =====
+
+import { useNavigate } from 'react-router-dom';
+import '../styles/common.css';
+import '../styles/App.css';
+
+export default function Support() {
+  const navigate = useNavigate();
+
+  const supportOptions = [
+    {
+      icon: '💬',
+      title: 'Chat with Us',
+      description: 'Get instant help from our support team',
+      action: () => alert('Chat support will be available soon!')
+    },
+    {
+      icon: '📞',
+      title: 'Call Support',
+      description: 'Speak directly with our customer care',
+      action: () => window.location.href = 'tel:+918800000000'
+    },
+    {
+      icon: '📧',
+      title: 'Email Us',
+      description: 'Send us your queries via email',
+      action: () => window.location.href = 'mailto:support@habrio.com'
+    },
+    {
+      icon: '❓',
+      title: 'FAQ',
+      description: 'Find answers to common questions',
+      action: () => navigate('/faq')
+    }
+  ];
+
+  const commonIssues = [
+    {
+      icon: '💳',
+      title: 'Payment Issues',
+      description: 'Problems with wallet, refunds, or payments'
+    },
+    {
+      icon: '📦',
+      title: 'Order Problems',
+      description: 'Order not received, wrong items, delays'
+    },
+    {
+      icon: '🏪',
+      title: 'Shop Issues',
+      description: 'Shop not available, item out of stock'
+    },
+    {
+      icon: '👤',
+      title: 'Account Help',
+      description: 'Profile, login, or account related issues'
+    }
+  ];
+
+  return (
+    <div className="screen-content">
+      {/* Header */}
+      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
+        <button
+          onClick={() => navigate(-1)}
+          style={{
+            background: 'none',
+            border: 'none',
+            fontSize: '24px',
+            marginRight: '16px',
+            cursor: 'pointer'
+          }}
+        >
+          ←
+        </button>
+        <h2 style={{ margin: 0, fontSize: '20px', fontWeight: '600' }}>
+          Help & Support
+        </h2>
+      </div>
+
+      {/* Support Header */}
+      <div style={{
+        background: 'var(--primary-gradient)',
+        borderRadius: '16px',
+        padding: '24px',
+        marginBottom: '24px',
+        color: 'white',
+        textAlign: 'center'
+      }}>
+        <div style={{ fontSize: '48px', marginBottom: '16px' }}>🤝</div>
+        <h3 style={{ margin: '0 0 8px 0', fontSize: '20px', fontWeight: '600' }}>
+          We're Here to Help
+        </h3>
+        <p style={{ margin: 0, fontSize: '14px', opacity: 0.9 }}>
+          Get support 24/7 for all your queries and issues
+        </p>
+      </div>
+
+      {/* Contact Options */}
+      <div style={{ marginBottom: '24px' }}>
+        <h3 style={{ margin: '0 0 16px 0', fontSize: '18px', fontWeight: '600' }}>
+          Contact Us
+        </h3>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          {supportOptions.map((option, index) => (
+            <button
+              key={index}
+              onClick={option.action}
+              style={{
+                background: 'var(--background-soft)',
+                border: '1px solid var(--divider)',
+                borderRadius: '12px',
+                padding: '16px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '16px',
+                textAlign: 'left'
+              }}
+            >
+              <div style={{
+                width: '48px',
+                height: '48px',
+                background: 'white',
+                borderRadius: '24px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '20px'
+              }}>
+                {option.icon}
+              </div>
+              <div style={{ flex: 1 }}>
+                <h4 style={{ margin: '0 0 4px 0', fontSize: '16px', fontWeight: '600' }}>
+                  {option.title}
+                </h4>
+                <p style={{ margin: 0, fontSize: '14px', color: 'var(--text-secondary)' }}>
+                  {option.description}
+                </p>
+              </div>
+              <span style={{ fontSize: '16px', color: 'var(--text-secondary)' }}>→</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Common Issues */}
+      <div style={{ marginBottom: '24px' }}>
+        <h3 style={{ margin: '0 0 16px 0', fontSize: '18px', fontWeight: '600' }}>
+          Common Issues
+        </h3>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px' }}>
+          {commonIssues.map((issue, index) => (
+            <div
+              key={index}
+              style={{
+                background: 'var(--background-soft)',
+                border: '1px solid var(--divider)',
+                borderRadius: '12px',
+                padding: '16px',
+                textAlign: 'center'
+              }}
+            >
+              <div style={{ fontSize: '32px', marginBottom: '12px' }}>
+                {issue.icon}
+              </div>
+              <h4 style={{ margin: '0 0 6px 0', fontSize: '14px', fontWeight: '600' }}>
+                {issue.title}
+              </h4>
+              <p style={{ margin: 0, fontSize: '12px', color: 'var(--text-secondary)', lineHeight: '1.3' }}>
+                {issue.description}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Emergency Contact */}
+      <div style={{
+        background: 'rgba(255, 59, 48, 0.1)',
+        border: '1px solid rgba(255, 59, 48, 0.2)',
+        borderRadius: '12px',
+        padding: '16px',
+        marginBottom: '24px'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
+          <span style={{ fontSize: '20px' }}>🚨</span>
+          <h4 style={{ margin: 0, fontSize: '16px', fontWeight: '600', color: 'var(--error-color)' }}>
+            Emergency Contact
+          </h4>
+        </div>
+        <p style={{ margin: '0 0 12px 32px', fontSize: '14px', color: 'var(--text-secondary)' }}>
+          For urgent issues like safety concerns or emergency situations
+        </p>
+        <button
+          onClick={() => window.location.href = 'tel:+911234567890'}
+          style={{
+            background: 'var(--error-color)',
+            color: 'white',
+            border: 'none',
+            borderRadius: '8px',
+            padding: '10px 16px',
+            fontSize: '14px',
+            fontWeight: '500',
+            cursor: 'pointer',
+            marginLeft: '32px'
+          }}
+        >
+          📞 Call Emergency Line
+        </button>
+      </div>
+
+      {/* Operating Hours */}
+      <div style={{
+        background: 'var(--background-soft)',
+        border: '1px solid var(--divider)',
+        borderRadius: '12px',
+        padding: '20px',
+        marginBottom: '24px'
+      }}>
+        <h3 style={{ margin: '0 0 16px 0', fontSize: '16px', fontWeight: '600' }}>
+          Support Hours
+        </h3>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <span style={{ fontSize: '14px' }}>📞 Phone Support</span>
+            <span style={{ fontSize: '14px', color: 'var(--text-secondary)' }}>9 AM - 9 PM</span>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <span style={{ fontSize: '14px' }}>💬 Chat Support</span>
+            <span style={{ fontSize: '14px', color: 'var(--success-color)', fontWeight: '500' }}>24/7</span>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <span style={{ fontSize: '14px' }}>📧 Email Support</span>
+            <span style={{ fontSize: '14px', color: 'var(--text-secondary)' }}>24-48 hours</span>
+          </div>
+        </div>
+      </div>
+
+      {/* App Version */}
+      <div style={{
+        background: 'var(--background-soft)',
+        border: '1px solid var(--divider)',
+        borderRadius: '12px',
+        padding: '16px',
+        marginBottom: '20px',
+        textAlign: 'center'
+      }}>
+        <p style={{ margin: '0 0 4px 0', fontSize: '12px', color: 'var(--text-secondary)' }}>
+          Habrio App Version 1.0.0
+        </p>
+        <p style={{ margin: 0, fontSize: '12px', color: 'var(--text-secondary)' }}>
+          Need technical help? Include this version number when contacting support
+        </p>
+      </div>
+
+      {/* Bottom Navigation Placeholder */}
+      <div style={{ height: '80px' }}></div>
+    </div>
+  );
+}
+
 ===== FILE: src/pages/TitleScreen.jsx =====
 
 import { useNavigate } from 'react-router-dom';
 import '../styles/common.css';
 import '../styles/App.css';
 
-function TitleScreen() {
+export default function TitleScreen() {
   const navigate = useNavigate();
 
   return (
@@ -1054,44 +5330,40 @@ function TitleScreen() {
         <span className="time">9:41</span>
         <span className="battery">🔋</span>
       </div>
-
       <div className="screen-content text-center">
         <div
           className="logo-box"
           style={{
             background: 'var(--primary-gradient)',
-            width: '84px',
-            height: '84px',
-            borderRadius: '24px',
+            width: 84,
+            height: 84,
+            borderRadius: 24,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             margin: '0 auto 24px',
-            boxShadow: '0 6px 14px rgba(255, 125, 30, 0.3)',
+            boxShadow: '0 6px 14px rgba(255, 125, 30, 0.3)'
           }}
         >
-          <span className="logo-icon" style={{ fontSize: '36px', color: '#fff' }}>🏘️</span>
+          <span className="logo-icon" style={{ fontSize: 36, color: '#fff' }}>🏘️</span>
         </div>
-
-        <h1 className="title mb-xs" style={{ fontSize: '24px' }}>
+        <h1 className="title mb-xs" style={{ fontSize: 24 }}>
           Welcome to Habrio
         </h1>
-        <p className="subtitle mb-lg" style={{ fontSize: '14px' }}>
+        <p className="subtitle mb-lg" style={{ fontSize: 14 }}>
           Your society’s very own super app
         </p>
-
         <button
           className="btn btn-primary btn-full btn-large"
-          style={{ marginBottom: '24px' }}
+          style={{ marginBottom: 24 }}
           onClick={() => navigate('/login')}
         >
           Get Started
         </button>
-
         <p
           className="text-center"
           style={{
-            fontSize: '12px',
+            fontSize: 12,
             color: 'var(--text-tertiary)',
           }}
         >
@@ -1102,35 +5374,736 @@ function TitleScreen() {
   );
 }
 
-export default TitleScreen;
 
+===== FILE: src/pages/Wallet.jsx =====
+
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import '../styles/common.css';
+import '../styles/App.css';
+
+export default function Wallet() {
+  const navigate = useNavigate();
+  const [balance, setBalance] = useState(0);
+  const [transactions, setTransactions] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+  const token = localStorage.getItem('auth_token');
+
+  useEffect(() => {
+    if (!token) {
+      navigate('/login');
+      return;
+    }
+    fetchWallet();
+    fetchTransactions();
+  }, []);
+
+  const fetchWallet = async () => {
+    try {
+      const res = await fetch(`${backendUrl}/wallet`, {
+        headers: { 'Authorization': token }
+      });
+      const data = await res.json();
+      if (data.status === 'success') {
+        setBalance(data.balance);
+      }
+    } catch (error) {
+      console.error('Error fetching wallet:', error);
+    }
+  };
+
+  const fetchTransactions = async () => {
+    try {
+      const res = await fetch(`${backendUrl}/wallet/history`, {
+        headers: { 'Authorization': token }
+      });
+      const data = await res.json();
+      if (data.status === 'success') {
+        setTransactions(data.transactions.slice(0, 5)); // Show only recent 5
+      }
+    } catch (error) {
+      console.error('Error fetching transactions:', error);
+    }
+    setLoading(false);
+  };
+
+  const getTransactionIcon = (type) => {
+    switch (type) {
+      case 'credit':
+      case 'recharge': return '💰';
+      case 'debit': return '💸';
+      case 'refund': return '↩️';
+      default: return '💳';
+    }
+  };
+
+  const getTransactionColor = (type) => {
+    switch (type) {
+      case 'credit':
+      case 'recharge':
+      case 'refund': return 'var(--success-color)';
+      case 'debit': return 'var(--error-color)';
+      default: return 'var(--text-secondary)';
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="screen-content">
+        <div style={{ textAlign: 'center', marginTop: '40px' }}>
+          <div style={{ 
+            width: '40px', 
+            height: '40px', 
+            border: '3px solid var(--divider)', 
+            borderTop: '3px solid var(--primary-color)', 
+            borderRadius: '50%', 
+            animation: 'spin 1s linear infinite',
+            margin: '0 auto 20px'
+          }}></div>
+          <p>Loading wallet...</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="screen-content">
+      {/* Header */}
+      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
+        <button
+          onClick={() => navigate(-1)}
+          style={{
+            background: 'none',
+            border: 'none',
+            fontSize: '24px',
+            marginRight: '16px',
+            cursor: 'pointer'
+          }}
+        >
+          ←
+        </button>
+        <h2 style={{ margin: 0, fontSize: '20px', fontWeight: '600' }}>
+          My Wallet
+        </h2>
+      </div>
+
+      {/* Wallet Balance Card */}
+      <div style={{
+        background: 'var(--primary-gradient)',
+        borderRadius: '16px',
+        padding: '24px',
+        marginBottom: '24px',
+        color: 'white',
+        position: 'relative',
+        overflow: 'hidden'
+      }}>
+        {/* Background decoration */}
+        <div style={{
+          position: 'absolute',
+          top: '-50px',
+          right: '-50px',
+          width: '150px',
+          height: '150px',
+          background: 'rgba(255, 255, 255, 0.1)',
+          borderRadius: '50%'
+        }}></div>
+        
+        <div style={{ position: 'relative', zIndex: 1 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
+            <span style={{ fontSize: '24px' }}>💳</span>
+            <span style={{ fontSize: '16px', opacity: 0.9 }}>Wallet Balance</span>
+          </div>
+          
+          <h1 style={{ margin: '0 0 20px 0', fontSize: '32px', fontWeight: '700' }}>
+            ₹{balance.toFixed(2)}
+          </h1>
+          
+          <button
+            onClick={() => navigate('/wallet/add')}
+            style={{
+              background: 'rgba(255, 255, 255, 0.2)',
+              color: 'white',
+              border: '1px solid rgba(255, 255, 255, 0.3)',
+              borderRadius: '8px',
+              padding: '10px 20px',
+              fontSize: '14px',
+              fontWeight: '500',
+              cursor: 'pointer',
+              marginRight: '12px'
+            }}
+          >
+            + Add Money
+          </button>
+          
+          <button
+            onClick={() => navigate('/wallet/history')}
+            style={{
+              background: 'transparent',
+              color: 'white',
+              border: '1px solid rgba(255, 255, 255, 0.3)',
+              borderRadius: '8px',
+              padding: '10px 20px',
+              fontSize: '14px',
+              fontWeight: '500',
+              cursor: 'pointer'
+            }}
+          >
+            View History
+          </button>
+        </div>
+      </div>
+
+      {/* Quick Actions */}
+      <div style={{ marginBottom: '24px' }}>
+        <h3 style={{ margin: '0 0 16px 0', fontSize: '18px', fontWeight: '600' }}>
+          Quick Actions
+        </h3>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px' }}>
+          <button
+            onClick={() => navigate('/wallet/add')}
+            style={{
+              background: 'var(--background-soft)',
+              border: '1px solid var(--divider)',
+              borderRadius: '12px',
+              padding: '16px',
+              cursor: 'pointer',
+              textAlign: 'center'
+            }}
+          >
+            <div style={{ fontSize: '24px', marginBottom: '8px' }}>💰</div>
+            <p style={{ margin: '0 0 4px 0', fontSize: '14px', fontWeight: '600' }}>Add Money</p>
+            <p style={{ margin: 0, fontSize: '12px', color: 'var(--text-secondary)' }}>
+              Top up your wallet
+            </p>
+          </button>
+          
+          <button
+            onClick={() => navigate('/wallet/history')}
+            style={{
+              background: 'var(--background-soft)',
+              border: '1px solid var(--divider)',
+              borderRadius: '12px',
+              padding: '16px',
+              cursor: 'pointer',
+              textAlign: 'center'
+            }}
+          >
+            <div style={{ fontSize: '24px', marginBottom: '8px' }}>📊</div>
+            <p style={{ margin: '0 0 4px 0', fontSize: '14px', fontWeight: '600' }}>Transaction History</p>
+            <p style={{ margin: 0, fontSize: '12px', color: 'var(--text-secondary)' }}>
+              View all transactions
+            </p>
+          </button>
+        </div>
+      </div>
+
+      {/* Recent Transactions */}
+      <div style={{ marginBottom: '24px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+          <h3 style={{ margin: 0, fontSize: '18px', fontWeight: '600' }}>
+            Recent Transactions
+          </h3>
+          {transactions.length > 0 && (
+            <button
+              onClick={() => navigate('/wallet/history')}
+              style={{
+                background: 'none',
+                border: 'none',
+                color: 'var(--primary-color)',
+                fontSize: '14px',
+                fontWeight: '500',
+                cursor: 'pointer'
+              }}
+            >
+              View All
+            </button>
+          )}
+        </div>
+
+        {transactions.length === 0 ? (
+          <div style={{
+            background: 'var(--background-soft)',
+            border: '1px solid var(--divider)',
+            borderRadius: '12px',
+            padding: '32px 20px',
+            textAlign: 'center'
+          }}>
+            <div style={{ fontSize: '48px', marginBottom: '16px' }}>📝</div>
+            <h4 style={{ margin: '0 0 8px 0', fontSize: '16px', fontWeight: '600' }}>
+              No transactions yet
+            </h4>
+            <p style={{ margin: 0, fontSize: '14px', color: 'var(--text-secondary)' }}>
+              Your transaction history will appear here
+            </p>
+          </div>
+        ) : (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            {transactions.map((transaction, index) => (
+              <div
+                key={transaction.id}
+                style={{
+                  background: 'var(--background-soft)',
+                  border: '1px solid var(--divider)',
+                  borderRadius: '12px',
+                  padding: '16px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '12px'
+                }}
+              >
+                <div style={{
+                  width: '40px',
+                  height: '40px',
+                  background: 'white',
+                  borderRadius: '20px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '18px'
+                }}>
+                  {getTransactionIcon(transaction.type)}
+                </div>
+                
+                <div style={{ flex: 1 }}>
+                  <p style={{ margin: '0 0 4px 0', fontSize: '14px', fontWeight: '600', textTransform: 'capitalize' }}>
+                    {transaction.type === 'recharge' ? 'Money Added' : 
+                     transaction.type === 'debit' ? 'Payment' :
+                     transaction.type === 'refund' ? 'Refund' : transaction.type}
+                  </p>
+                  <p style={{ margin: '0 0 2px 0', fontSize: '12px', color: 'var(--text-secondary)' }}>
+                    {transaction.reference || 'Wallet transaction'}
+                  </p>
+                  <p style={{ margin: 0, fontSize: '11px', color: 'var(--text-secondary)' }}>
+                    {new Date(transaction.created_at).toLocaleDateString('en-IN', {
+                      day: 'numeric',
+                      month: 'short',
+                      hour: '2-digit',
+                      minute: '2-digit'
+                    })}
+                  </p>
+                </div>
+                
+                <div style={{ textAlign: 'right' }}>
+                  <p style={{ 
+                    margin: '0 0 2px 0', 
+                    fontSize: '16px', 
+                    fontWeight: '600',
+                    color: getTransactionColor(transaction.type)
+                  }}>
+                    {transaction.type === 'debit' ? '-' : '+'}₹{transaction.amount}
+                  </p>
+                  <p style={{ 
+                    margin: 0, 
+                    fontSize: '10px', 
+                    color: 'var(--success-color)',
+                    textTransform: 'uppercase',
+                    fontWeight: '500'
+                  }}>
+                    {transaction.status}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Safety Notice */}
+      <div style={{
+        background: 'rgba(252, 100, 79, 0.1)',
+        border: '1px solid rgba(252, 100, 79, 0.2)',
+        borderRadius: '12px',
+        padding: '16px',
+        marginBottom: '20px'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+          <span style={{ fontSize: '16px', marginTop: '2px' }}>🔒</span>
+          <div>
+            <h4 style={{ margin: '0 0 4px 0', fontSize: '14px', fontWeight: '600', color: 'var(--primary-color)' }}>
+              Your money is safe
+            </h4>
+            <p style={{ margin: 0, fontSize: '12px', color: 'var(--text-secondary)', lineHeight: '1.4' }}>
+              All transactions are secured with bank-grade encryption. Your wallet balance is protected and can be refunded anytime.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Bottom Navigation Placeholder */}
+      <div style={{ height: '80px' }}></div>
+    </div>
+  );
+}
+
+===== FILE: src/pages/WalletHistory.jsx =====
+
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import '../styles/common.css';
+import '../styles/App.css';
+
+export default function WalletHistory() {
+  const navigate = useNavigate();
+  const [transactions, setTransactions] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [filter, setFilter] = useState('all');
+
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+  const token = localStorage.getItem('auth_token');
+
+  useEffect(() => {
+    if (!token) {
+      navigate('/login');
+      return;
+    }
+    fetchTransactions();
+  }, []);
+
+  const fetchTransactions = async () => {
+    try {
+      const res = await fetch(`${backendUrl}/wallet/history`, {
+        headers: { 'Authorization': token }
+      });
+      const data = await res.json();
+      if (data.status === 'success') {
+        setTransactions(data.transactions);
+      }
+    } catch (error) {
+      console.error('Error fetching transactions:', error);
+    }
+    setLoading(false);
+  };
+
+  const getTransactionIcon = (type) => {
+    switch (type) {
+      case 'credit':
+      case 'recharge': return '💰';
+      case 'debit': return '💸';
+      case 'refund': return '↩️';
+      default: return '💳';
+    }
+  };
+
+  const getTransactionColor = (type) => {
+    switch (type) {
+      case 'credit':
+      case 'recharge':
+      case 'refund': return 'var(--success-color)';
+      case 'debit': return 'var(--error-color)';
+      default: return 'var(--text-secondary)';
+    }
+  };
+
+  const filteredTransactions = transactions.filter(transaction => {
+    if (filter === 'all') return true;
+    if (filter === 'credit') return ['credit', 'recharge', 'refund'].includes(transaction.type);
+    if (filter === 'debit') return transaction.type === 'debit';
+    return true;
+  });
+
+  if (loading) {
+    return (
+      <div className="screen-content">
+        <div style={{ textAlign: 'center', marginTop: '40px' }}>
+          <div style={{ 
+            width: '40px', 
+            height: '40px', 
+            border: '3px solid var(--divider)', 
+            borderTop: '3px solid var(--primary-color)', 
+            borderRadius: '50%', 
+            animation: 'spin 1s linear infinite',
+            margin: '0 auto 20px'
+          }}></div>
+          <p>Loading transactions...</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="screen-content">
+      {/* Header */}
+      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
+        <button
+          onClick={() => navigate(-1)}
+          style={{
+            background: 'none',
+            border: 'none',
+            fontSize: '24px',
+            marginRight: '16px',
+            cursor: 'pointer'
+          }}
+        >
+          ←
+        </button>
+        <h2 style={{ margin: 0, fontSize: '20px', fontWeight: '600' }}>
+          Transaction History
+        </h2>
+      </div>
+
+      {/* Filter Tabs */}
+      <div style={{ 
+        display: 'flex', 
+        gap: '8px', 
+        marginBottom: '20px',
+        overflowX: 'auto',
+        paddingBottom: '8px'
+      }}>
+        {[
+          { key: 'all', label: 'All' },
+          { key: 'credit', label: 'Money In' },
+          { key: 'debit', label: 'Money Out' }
+        ].map((tab) => (
+          <button
+            key={tab.key}
+            onClick={() => setFilter(tab.key)}
+            style={{
+              background: filter === tab.key ? 'var(--primary-gradient)' : 'var(--background-soft)',
+              color: filter === tab.key ? 'white' : 'var(--text-primary)',
+              border: filter === tab.key ? 'none' : '1px solid var(--divider)',
+              borderRadius: '20px',
+              padding: '8px 16px',
+              fontSize: '14px',
+              fontWeight: '500',
+              cursor: 'pointer',
+              whiteSpace: 'nowrap',
+              minWidth: 'fit-content'
+            }}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Transactions List */}
+      {filteredTransactions.length === 0 ? (
+        <div style={{ textAlign: 'center', padding: '40px 20px' }}>
+          <div style={{ fontSize: '64px', marginBottom: '20px' }}>📝</div>
+          <h3 style={{ margin: '0 0 8px 0', fontSize: '18px', fontWeight: '600' }}>
+            No transactions found
+          </h3>
+          <p style={{ margin: '0 0 24px 0', color: 'var(--text-secondary)', fontSize: '14px' }}>
+            Your transaction history will appear here once you start using your wallet
+          </p>
+          <button
+            onClick={() => navigate('/wallet/add')}
+            style={{
+              background: 'var(--primary-gradient)',
+              color: 'white',
+              border: 'none',
+              borderRadius: '8px',
+              padding: '12px 24px',
+              fontSize: '16px',
+              fontWeight: '500',
+              cursor: 'pointer'
+            }}
+          >
+            Add Money
+          </button>
+        </div>
+      ) : (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          {/* Group by Date */}
+          {filteredTransactions.reduce((grouped, transaction) => {
+            const date = new Date(transaction.created_at).toDateString();
+            if (!grouped[date]) {
+              grouped[date] = [];
+            }
+            grouped[date].push(transaction);
+            return grouped;
+          }, {}) && 
+            Object.entries(
+              filteredTransactions.reduce((grouped, transaction) => {
+                const date = new Date(transaction.created_at).toDateString();
+                if (!grouped[date]) {
+                  grouped[date] = [];
+                }
+                grouped[date].push(transaction);
+                return grouped;
+              }, {})
+            ).map(([date, dayTransactions]) => (
+              <div key={date} style={{ marginBottom: '16px' }}>
+                <h4 style={{ 
+                  margin: '0 0 8px 0', 
+                  fontSize: '14px', 
+                  fontWeight: '600',
+                  color: 'var(--text-secondary)',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.5px'
+                }}>
+                  {new Date(date).toLocaleDateString('en-IN', {
+                    day: 'numeric',
+                    month: 'short',
+                    year: 'numeric'
+                  })}
+                </h4>
+                
+                {dayTransactions.map((transaction) => (
+                  <div
+                    key={transaction.id}
+                    style={{
+                      background: 'var(--background-soft)',
+                      border: '1px solid var(--divider)',
+                      borderRadius: '12px',
+                      padding: '16px',
+                      marginBottom: '8px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '12px'
+                    }}
+                  >
+                    <div style={{
+                      width: '48px',
+                      height: '48px',
+                      background: 'white',
+                      borderRadius: '24px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '20px'
+                    }}>
+                      {getTransactionIcon(transaction.type)}
+                    </div>
+                    
+                    <div style={{ flex: 1 }}>
+                      <p style={{ margin: '0 0 4px 0', fontSize: '16px', fontWeight: '600', textTransform: 'capitalize' }}>
+                        {transaction.type === 'recharge' ? 'Money Added' : 
+                         transaction.type === 'debit' ? 'Payment' :
+                         transaction.type === 'refund' ? 'Refund Received' : 
+                         transaction.type === 'credit' ? 'Money Credited' : transaction.type}
+                      </p>
+                      <p style={{ margin: '0 0 4px 0', fontSize: '14px', color: 'var(--text-secondary)' }}>
+                        {transaction.reference || 'Wallet transaction'}
+                      </p>
+                      <p style={{ margin: 0, fontSize: '12px', color: 'var(--text-secondary)' }}>
+                        {new Date(transaction.created_at).toLocaleTimeString('en-IN', {
+                          hour: '2-digit',
+                          minute: '2-digit'
+                        })}
+                      </p>
+                    </div>
+                    
+                    <div style={{ textAlign: 'right' }}>
+                      <p style={{ 
+                        margin: '0 0 4px 0', 
+                        fontSize: '18px', 
+                        fontWeight: '700',
+                        color: getTransactionColor(transaction.type)
+                      }}>
+                        {transaction.type === 'debit' ? '-' : '+'}₹{parseFloat(transaction.amount).toFixed(2)}
+                      </p>
+                      <p style={{ 
+                        margin: 0, 
+                        fontSize: '10px', 
+                        color: transaction.status === 'success' ? 'var(--success-color)' : 'var(--error-color)',
+                        textTransform: 'uppercase',
+                        fontWeight: '600',
+                        padding: '2px 6px',
+                        borderRadius: '4px',
+                        background: transaction.status === 'success' ? 'rgba(0, 199, 117, 0.1)' : 'rgba(255, 59, 48, 0.1)'
+                      }}>
+                        {transaction.status}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ))
+          }
+        </div>
+      )}
+
+      {/* Bottom Navigation Placeholder */}
+      <div style={{ height: '80px' }}></div>
+    </div>
+  );
+}
 
 ===== FILE: src/router.jsx =====
 
 // src/router.jsx
 import { Routes, Route } from 'react-router-dom';
+
+// Auth & Onboarding
 import Login from './pages/Login';
-import Home from './pages/Home';
-import TitleScreen from './pages/TitleScreen';
 import Otp from './pages/Otp';
+import TitleScreen from './pages/TitleScreen';
 import BasicOnboarding from './pages/BasicOnboarding';
 import ConsumerOnboarding from './pages/ConsumerOnboarding';
+
+// Main App
+import Home from './pages/Home';
+import Profile from './pages/Profile';
 import ShopList from './pages/ShopList';
+
+// Shop & Items
+import ShopDetail from './pages/ShopDetail';
+import SearchShops from './pages/SearchShops';
+
+// Cart & Checkout
+import Cart from './pages/Cart';
+import Checkout from './pages/Checkout';
+
+// Orders
+import OrderHistory from './pages/OrderHistory';
+import OrderDetail from './pages/OrderDetail';
+import OrderMessages from './pages/OrderMessages';
+import RateOrder from './pages/RateOrder';
+
+// Wallet
+import Wallet from './pages/Wallet';
+import WalletHistory from './pages/WalletHistory';
+import AddMoney from './pages/AddMoney';
+
+// Support & Info
+import Support from './pages/Support';
+import AboutHabrio from './pages/AboutHabrio';
 
 export default function AppRoutes() {
   return (
     <Routes>
+      {/* Auth & Onboarding Routes */}
       <Route path="/" element={<TitleScreen />} />
       <Route path="/login" element={<Login />} />
       <Route path="/otp" element={<Otp />} />
       <Route path="/onboarding/basic" element={<BasicOnboarding />} />
       <Route path="/onboarding/consumer" element={<ConsumerOnboarding />} />
+
+      {/* Main App Routes */}
       <Route path="/home" element={<Home />} />
+      <Route path="/profile" element={<Profile />} />
+
+      {/* Shop & Discovery Routes */}
       <Route path="/shops" element={<ShopList />} />
+      <Route path="/shop/:shopId" element={<ShopDetail />} />
+      <Route path="/shops/search" element={<SearchShops />} />
+
+      {/* Cart & Checkout Routes */}
+      <Route path="/cart" element={<Cart />} />
+      <Route path="/checkout" element={<Checkout />} />
+
+      {/* Order Routes */}
+      <Route path="/orders" element={<OrderHistory />} />
+      <Route path="/order/:orderId" element={<OrderDetail />} />
+      <Route path="/order/:orderId/messages" element={<OrderMessages />} />
+      <Route path="/order/:orderId/rate" element={<RateOrder />} />
+
+      {/* Wallet Routes */}
+      <Route path="/wallet" element={<Wallet />} />
+      <Route path="/wallet/history" element={<WalletHistory />} />
+      <Route path="/wallet/add" element={<AddMoney />} />
+
+      {/* Support & Info Routes */}
+      <Route path="/support" element={<Support />} />
+      <Route path="/about" element={<AboutHabrio />} />
+
+      {/* Fallback Route */}
+      <Route path="*" element={<Home />} />
     </Routes>
   );
 }
-
 
 ===== FILE: src/styles/App.css =====
 
