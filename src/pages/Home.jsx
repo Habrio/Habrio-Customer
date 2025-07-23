@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/common.css';
 import '../styles/App.css';
-import BottomNav from '../components/BottomNav';
 import MobileLayout from '../components/MobileLayout';
 
 function Home() {
@@ -81,7 +80,7 @@ function Home() {
 
   if (loading) {
     return (
-      <MobileLayout>
+      <div>
         <div className="screen-content">
           <div style={{ textAlign: 'center', marginTop: '40px' }}>
             <div style={{
@@ -96,12 +95,12 @@ function Home() {
             <p>Loading...</p>
           </div>
         </div>
-      </MobileLayout>
+      </div>
     );
   }
 
   return (
-    <MobileLayout>
+    <div>
       <div className="screen-content">
         {/* Header */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
@@ -331,8 +330,7 @@ function Home() {
           </div>
         </div>
       </div>
-    <BottomNav />
-    </MobileLayout>
+    </div>
   );
 }
 

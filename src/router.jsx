@@ -1,5 +1,6 @@
 // src/router.jsx
 import { Routes, Route } from 'react-router-dom';
+import MobileLayout from './components/MobileLayout';
 
 // Auth & Onboarding
 import Login from './pages/Login';
@@ -12,8 +13,6 @@ import ConsumerOnboarding from './pages/ConsumerOnboarding';
 import Home from './pages/Home';
 import Profile from './pages/Profile';
 import ShopList from './pages/ShopList';
-
-// Shop & Items
 import ShopDetail from './pages/ShopDetail';
 import SearchShops from './pages/SearchShops';
 
@@ -39,43 +38,33 @@ import AboutHabrio from './pages/AboutHabrio';
 export default function AppRoutes() {
   return (
     <Routes>
-      {/* Auth & Onboarding Routes */}
+      {/* Auth & Onboarding Routes (no layout) */}
       <Route path="/" element={<TitleScreen />} />
       <Route path="/login" element={<Login />} />
       <Route path="/otp" element={<Otp />} />
       <Route path="/onboarding/basic" element={<BasicOnboarding />} />
       <Route path="/onboarding/consumer" element={<ConsumerOnboarding />} />
 
-      {/* Main App Routes */}
-      <Route path="/home" element={<Home />} />
-      <Route path="/profile" element={<Profile />} />
-
-      {/* Shop & Discovery Routes */}
-      <Route path="/shops" element={<ShopList />} />
-      <Route path="/shop/:shopId" element={<ShopDetail />} />
-      <Route path="/shops/search" element={<SearchShops />} />
-
-      {/* Cart & Checkout Routes */}
-      <Route path="/cart" element={<Cart />} />
-      <Route path="/checkout" element={<Checkout />} />
-
-      {/* Order Routes */}
-      <Route path="/orders" element={<OrderHistory />} />
-      <Route path="/order/:orderId" element={<OrderDetail />} />
-      <Route path="/order/:orderId/messages" element={<OrderMessages />} />
-      <Route path="/order/:orderId/rate" element={<RateOrder />} />
-
-      {/* Wallet Routes */}
-      <Route path="/wallet" element={<Wallet />} />
-      <Route path="/wallet/history" element={<WalletHistory />} />
-      <Route path="/wallet/add" element={<AddMoney />} />
-
-      {/* Support & Info Routes */}
-      <Route path="/support" element={<Support />} />
-      <Route path="/about" element={<AboutHabrio />} />
+      {/* Main App Routes (with layout) */}
+      <Route path="/home" element={<MobileLayout><Home /></MobileLayout>} />
+      <Route path="/profile" element={<MobileLayout><Profile /></MobileLayout>} />
+      <Route path="/shops" element={<MobileLayout><ShopList /></MobileLayout>} />
+      <Route path="/shop/:shopId" element={<MobileLayout><ShopDetail /></MobileLayout>} />
+      <Route path="/shops/search" element={<MobileLayout><SearchShops /></MobileLayout>} />
+      <Route path="/cart" element={<MobileLayout><Cart /></MobileLayout>} />
+      <Route path="/checkout" element={<MobileLayout><Checkout /></MobileLayout>} />
+      <Route path="/orders" element={<MobileLayout><OrderHistory /></MobileLayout>} />
+      <Route path="/order/:orderId" element={<MobileLayout><OrderDetail /></MobileLayout>} />
+      <Route path="/order/:orderId/messages" element={<MobileLayout><OrderMessages /></MobileLayout>} />
+      <Route path="/order/:orderId/rate" element={<MobileLayout><RateOrder /></MobileLayout>} />
+      <Route path="/wallet" element={<MobileLayout><Wallet /></MobileLayout>} />
+      <Route path="/wallet/history" element={<MobileLayout><WalletHistory /></MobileLayout>} />
+      <Route path="/wallet/add" element={<MobileLayout><AddMoney /></MobileLayout>} />
+      <Route path="/support" element={<MobileLayout><Support /></MobileLayout>} />
+      <Route path="/about" element={<MobileLayout><AboutHabrio /></MobileLayout>} />
 
       {/* Fallback Route */}
-      <Route path="*" element={<Home />} />
+      <Route path="*" element={<MobileLayout><Home /></MobileLayout>} />
     </Routes>
   );
 }
