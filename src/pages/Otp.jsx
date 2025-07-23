@@ -28,23 +28,8 @@ function Otp() {
       if (data.status === 'success' && data.auth_token) {
         localStorage.setItem('auth_token', data.auth_token);
 
-        // 🔍 Debug: Confirm token stored correctly
-        const savedToken = localStorage.getItem('auth_token');
-        if (!savedToken) {
-          alert('Login token not stored. Try again.');
-          return;
-        }
-
-        // Fetch onboarding status
-        const statusRes = await fetch(`${backendUrl}/onboarding/status`, {
-          headers: {
-            Authorization: `Bearer ${savedToken}`,
-          },
-        });
-
-        const status = await statusRes.json();
-
-        if (status.status === 'success' && status.basic_onboarding_done) {
+        // Use basic_onboarding_done directly from response
+        if (data.basic_onboarding_done) {
           navigate('/home');
         } else {
           navigate('/onboarding/basic');

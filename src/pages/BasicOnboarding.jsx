@@ -1,4 +1,3 @@
-// src/pages/BasicOnboarding.jsx
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/common.css';
@@ -13,19 +12,35 @@ export default function BasicOnboarding() {
   });
 
   const handleChange = e => {
-    setData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+    setData(prev => ({ ...prev, [e.target.name]: e.target.value.trimStart() }));
   };
 
   const submit = async () => {
     const token = localStorage.getItem('auth_token');
+    if (!token) {
+      alert('Missing login token. Please login again.');
+      return;
+    }
+
+    const { name, city, society } = data;
+    if (!name || !city || !society) {
+      alert('All fields are required');
+      return;
+    }
+
     try {
       const res = await fetch(`${backendUrl}/onboarding/basic`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          'Authorization': token
         },
-        body: JSON.stringify({ ...data, role: 'consumer' }) // role still sent from frontend
+        body: JSON.stringify({
+          name: name.trim(),
+          city: city.trim(),
+          society: society.trim(),
+          role: 'consumer'
+        })
       });
 
       const result = await res.json();

@@ -11,22 +11,32 @@ export default function ConsumerOnboarding() {
 
   const submit = async () => {
     const token = localStorage.getItem('auth_token');
-    if (!token) return alert('Missing auth token');
+    if (!token) return alert('Missing login token. Please login again.');
 
-    const res = await fetch(`${backendUrl}/onboarding/consumer`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
-      body: JSON.stringify({ flat_number: flatNumber })
-    });
+    if (!flatNumber.trim()) {
+      alert('Please enter your flat or house number');
+      return;
+    }
 
-    const result = await res.json();
-    if (result.status === 'success') {
-      navigate('/home');
-    } else {
-      alert(result.message || 'Consumer onboarding failed');
+    try {
+      const res = await fetch(`${backendUrl}/onboarding/consumer`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization':  token
+        },
+        body: JSON.stringify({ flat_number: flatNumber.trim() })
+      });
+
+      const result = await res.json();
+      if (result.status === 'success') {
+        navigate('/home');
+      } else {
+        alert(result.message || 'Consumer onboarding failed');
+      }
+    } catch (err) {
+      console.error('Error submitting consumer onboarding:', err);
+      alert('Something went wrong. Please try again.');
     }
   };
 
@@ -45,7 +55,7 @@ export default function ConsumerOnboarding() {
             className="form-input"
             placeholder="e.g., A-302"
             value={flatNumber}
-            onChange={(e) => setFlatNumber(e.target.value)}
+            onChange={(e) => setFlatNumber(e.target.value.trimStart())}
           />
         </div>
 
