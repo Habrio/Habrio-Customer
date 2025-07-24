@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/common.css';
 import '../styles/App.css';
+import '../styles/design-system.css';
+import PageHeader from '../components/molecules/PageHeader';
 
 export default function WalletHistory() {
   const navigate = useNavigate();
@@ -84,23 +86,7 @@ export default function WalletHistory() {
   return (
     <div className="screen-content">
       {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
-        <button
-          onClick={() => navigate(-1)}
-          style={{
-            background: 'none',
-            border: 'none',
-            fontSize: '24px',
-            marginRight: '16px',
-            cursor: 'pointer'
-          }}
-        >
-          ←
-        </button>
-        <h2 style={{ margin: 0, fontSize: '20px', fontWeight: '600' }}>
-          Transaction History
-        </h2>
-      </div>
+      <PageHeader title="Transaction History" />
 
       {/* Filter Tabs */}
       <div style={{ 

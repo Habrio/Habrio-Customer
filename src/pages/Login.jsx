@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/common.css';
 import '../styles/App.css';
+import '../styles/design-system.css';
 
 export default function Login() {
   const [phone, setPhone] = useState('');

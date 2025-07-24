@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import '../styles/common.css';
 import '../styles/App.css';
+import '../styles/design-system.css';
+import PageHeader from '../components/molecules/PageHeader';
 
 export default function RateOrder() {
   const { orderId } = useParams();
@@ -143,23 +145,7 @@ export default function RateOrder() {
   return (
     <div className="screen-content">
       {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
-        <button
-          onClick={() => navigate(-1)}
-          style={{
-            background: 'none',
-            border: 'none',
-            fontSize: '24px',
-            marginRight: '16px',
-            cursor: 'pointer'
-          }}
-        >
-          ←
-        </button>
-        <h2 style={{ margin: 0, fontSize: '20px', fontWeight: '600' }}>
-          Rate Your Order
-        </h2>
-      </div>
+      <PageHeader title="Rate Your Order" />
 
       {/* Rating Header */}
       <div style={{
