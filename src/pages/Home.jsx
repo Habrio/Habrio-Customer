@@ -7,10 +7,11 @@ import {
   CategoryCard,
   FeaturedShopCard,
   NearbyShopCard
-} from '../components/Cards';
+} from '../components/molecules/Cards';
+import { HiShoppingCart, HiAnnotation, HiCollection, HiDeviceMobile, HiCog, HiSparkles, HiUser } from 'react-icons/hi';
+import { get } from '../utils/api';
 import '../styles/common.css';
 import '../styles/App.css';
-import '../styles/Cards.css';
 
 function Home() {
   const navigate = useNavigate();
@@ -20,7 +21,6 @@ function Home() {
   const [loading, setLoading] = useState(true);
   const [walletBalance, setWalletBalance] = useState(0);
 
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
   const token = localStorage.getItem('auth_token');
 
   useEffect(() => {
@@ -34,10 +34,7 @@ function Home() {
 
   const fetchUserData = async () => {
     try {
-      const res = await fetch(`${backendUrl}/profile/me`, {
-        headers: { Authorization: token }
-      });
-      const { status, data } = await res.json();
+      const { status, data } = await get('/profile/me');
       if (status === 'success') setUserProfile(data);
     } catch (e) {
       console.error('Fetch profile error:', e);
@@ -46,10 +43,7 @@ function Home() {
 
   const fetchNearbyShops = async () => {
     try {
-      const res = await fetch(`${backendUrl}/shops?status=open`, {
-        headers: { Authorization: token }
-      });
-      const { status, shops } = await res.json();
+      const { status, shops } = await get('/shops?status=open');
       if (status === 'success') {
         setNearbyShops(shops.slice(0, 6));
         setFeaturedShops(shops.filter(s => s.featured).slice(0, 3));
@@ -61,10 +55,7 @@ function Home() {
 
   const fetchWalletBalance = async () => {
     try {
-      const res = await fetch(`${backendUrl}/wallet`, {
-        headers: { Authorization: token }
-      });
-      const { status, balance } = await res.json();
+      const { status, balance } = await get('/wallet');
       if (status === 'success') setWalletBalance(balance);
     } catch (e) {
       console.error('Fetch wallet error:', e);
@@ -72,12 +63,12 @@ function Home() {
   };
 
   const shopCategories = [
-    { name: 'Grocery', icon: '🛒', type: 'grocery' },
-    { name: 'Pharmacy', icon: '💊', type: 'pharmacy' },
-    { name: 'Restaurant', icon: '🍽️', type: 'restaurant' },
-    { name: 'Electronics', icon: '📱', type: 'electronics' },
-    { name: 'Fashion', icon: '👕', type: 'fashion' },
-    { name: 'Services', icon: '🔧', type: 'services' }
+    { name: 'Grocery', icon: HiShoppingCart, type: 'grocery' },
+    { name: 'Pharmacy', icon: HiAnnotation, type: 'pharmacy' },
+    { name: 'Restaurant', icon: HiCollection, type: 'restaurant' },
+    { name: 'Electronics', icon: HiDeviceMobile, type: 'electronics' },
+    { name: 'Fashion', icon: HiSparkles, type: 'fashion' },
+    { name: 'Services', icon: HiCog, type: 'services' }
   ];
 
   if (loading) {
@@ -105,7 +96,7 @@ function Home() {
           className="w-10 h-10 rounded-full bg-gradient-to-r from-green-400 to-blue-500 flex items-center justify-center text-white text-lg"
           onClick={() => navigate('/profile')}
         >
-          👤
+          <HiUser />
         </button>
       </div>
 
@@ -122,7 +113,6 @@ function Home() {
           {shopCategories.map((cat) => (
             <CategoryCard
               key={cat.type}
-              className="flex-none"
               icon={cat.icon}
               name={cat.name}
               to={`/shops?type=${cat.type}`}

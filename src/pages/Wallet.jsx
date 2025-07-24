@@ -261,7 +261,7 @@ export default function Wallet() {
           </div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            {transactions.map((transaction, index) => (
+            {transactions.map((transaction) => (
               <div
                 key={transaction.id}
                 style={{

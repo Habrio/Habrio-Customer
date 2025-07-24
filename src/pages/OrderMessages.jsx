@@ -157,7 +157,7 @@ export default function OrderMessages() {
           </div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            {messages.map((message, index) => {
+            {messages.map((message) => {
               const isMyMessage = message.sender_phone === userPhone;
               return (
                 <div
@@ -294,9 +294,9 @@ export default function OrderMessages() {
               'Please call before delivery',
               'Is this item fresh?',
               'Can you provide a substitute?'
-            ].map((quickMessage, index) => (
+            ].map((quickMessage) => (
               <button
-                key={index}
+                key={quickMessage}
                 onClick={() => setNewMessage(quickMessage)}
                 style={{
                   background: 'var(--background-soft)',

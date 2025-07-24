@@ -1,7 +1,7 @@
 // src/router.jsx
 import { Routes, Route } from 'react-router-dom';
-import MobileLayout from './components/MobileLayout';
-import BottomNav from './components/BottomNav';
+import MobileLayout from './components/layout/MobileLayout';
+import BottomNav from './components/organisms/BottomNav';
 
 // Auth & Onboarding (no layout)
 import Login from './pages/Login';
