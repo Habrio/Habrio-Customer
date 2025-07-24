@@ -1,5 +1,5 @@
 // src/App.jsx
-import { BrowserRouter } from 'react-router-dom';
+import { HashRouter } from 'react-router-dom';
 import AppRoutes from './router';
 
 // Global styles
@@ -10,9 +10,9 @@ import './styles/App.css';
 
 function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <AppRoutes />
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 
