@@ -84,6 +84,117 @@ export default function BottomNav() {
 }
 
 
+===== FILE: src/components/Cards.jsx =====
+
+// src/components/Cards.jsx
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+
+/** Base Card wrapper */
+function Card({ children, className = '', onClick }) {
+  return (
+    <div
+      className={`card ${className}`}
+      onClick={onClick}
+      role={onClick ? 'button' : undefined}
+    >
+      {children}
+    </div>
+  );
+}
+
+/** Category Card */
+export function CategoryCard({ icon, name, to }) {
+  const navigate = useNavigate();
+  return (
+    <Card
+      className="category-card"
+      onClick={() => to && navigate(to)}
+    >
+      <div className="category-icon">{icon}</div>
+      <div className="category-name">{name}</div>
+    </Card>
+  );
+}
+
+/** Featured Shop Card (horizontal scroll) */
+export function FeaturedShopCard({ shop }) {
+  const navigate = useNavigate();
+  return (
+    <Card
+      className="featured-shop-card"
+      onClick={() => navigate(`/shop/${shop.id}`)}
+    >
+      <div className="featured-shop-icon">🏪</div>
+      <h4 className="featured-shop-name">{shop.shop_name}</h4>
+      <p className="featured-shop-type">{shop.shop_type}</p>
+      <div
+        className={`featured-shop-status ${
+          shop.is_open ? 'open' : 'closed'
+        }`}
+      >
+        {shop.is_open ? 'Open' : 'Closed'}
+      </div>
+    </Card>
+  );
+}
+
+/** Nearby Shop Card (list) */
+export function NearbyShopCard({ shop }) {
+  const navigate = useNavigate();
+  return (
+    <Card
+      className="nearby-shop-card"
+      onClick={() => navigate(`/shop/${shop.id}`)}
+    >
+      <div className="nearby-shop-icon">🏪</div>
+      <div className="nearby-shop-info">
+        <h4>{shop.shop_name}</h4>
+        <p>{shop.shop_type} • {shop.description}</p>
+        <div className="nearby-shop-tags">
+          <span className={shop.is_open ? 'open' : 'closed'}>
+            {shop.is_open ? 'Open' : 'Closed'}
+          </span>
+          {shop.delivers && <span className="delivers">Delivers</span>}
+        </div>
+      </div>
+      <div className="nearby-shop-arrow">→</div>
+    </Card>
+  );
+}
+
+/** Wallet Balance Card (header) */
+export function WalletCard({ balance }) {
+  const navigate = useNavigate();
+  return (
+    <Card
+      className="wallet-card"
+      onClick={() => navigate('/wallet')}
+    >
+      <div>
+        <p>Wallet Balance</p>
+        <h3>₹{balance.toFixed(2)}</h3>
+      </div>
+      <div className="wallet-icon">💳</div>
+    </Card>
+  );
+}
+
+/** Search Bar Card */
+export function SearchCard({ placeholder = 'Search…', to }) {
+  const navigate = useNavigate();
+  return (
+    <Card
+      className="search-card"
+      onClick={() => to && navigate(to)}
+    >
+      <span className="search-icon">🔍</span>
+      <span className="search-text">{placeholder}</span>
+    </Card>
+  );
+}
+
+
 ===== FILE: src/components/MobileLayout.jsx =====
 
 // src/components/MobileLayout.jsx
@@ -1716,11 +1827,19 @@ export default function ConsumerOnboarding() {
 
 ===== FILE: src/pages/Home.jsx =====
 
+// src/pages/Home.jsx
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import {
+  WalletCard,
+  SearchCard,
+  CategoryCard,
+  FeaturedShopCard,
+  NearbyShopCard
+} from '../components/Cards';
 import '../styles/common.css';
 import '../styles/App.css';
-import MobileLayout from '../components/MobileLayout';
+import '../styles/Cards.css';
 
 function Home() {
   const navigate = useNavigate();
@@ -1734,56 +1853,50 @@ function Home() {
   const token = localStorage.getItem('auth_token');
 
   useEffect(() => {
-    if (!token) {
-      navigate('/login');
-      return;
-    }
-    fetchUserData();
-    fetchNearbyShops();
-    fetchWalletBalance();
+    if (!token) return navigate('/login');
+    Promise.all([
+      fetchUserData(),
+      fetchNearbyShops(),
+      fetchWalletBalance()
+    ]).finally(() => setLoading(false));
   }, []);
 
   const fetchUserData = async () => {
     try {
       const res = await fetch(`${backendUrl}/profile/me`, {
-        headers: { 'Authorization': token }
+        headers: { Authorization: token }
       });
-      const data = await res.json();
-      if (data.status === 'success') {
-        setUserProfile(data.data);
-      }
-    } catch (error) {
-      console.error('Error fetching profile:', error);
+      const { status, data } = await res.json();
+      if (status === 'success') setUserProfile(data);
+    } catch (e) {
+      console.error('Fetch profile error:', e);
     }
   };
 
   const fetchNearbyShops = async () => {
     try {
       const res = await fetch(`${backendUrl}/shops?status=open`, {
-        headers: { 'Authorization': token }
+        headers: { Authorization: token }
       });
-      const data = await res.json();
-      if (data.status === 'success') {
-        setNearbyShops(data.shops.slice(0, 6));
-        setFeaturedShops(data.shops.filter(shop => shop.featured).slice(0, 3));
+      const { status, shops } = await res.json();
+      if (status === 'success') {
+        setNearbyShops(shops.slice(0, 6));
+        setFeaturedShops(shops.filter(s => s.featured).slice(0, 3));
       }
-    } catch (error) {
-      console.error('Error fetching shops:', error);
+    } catch (e) {
+      console.error('Fetch shops error:', e);
     }
-    setLoading(false);
   };
 
   const fetchWalletBalance = async () => {
     try {
       const res = await fetch(`${backendUrl}/wallet`, {
-        headers: { 'Authorization': token }
+        headers: { Authorization: token }
       });
-      const data = await res.json();
-      if (data.status === 'success') {
-        setWalletBalance(data.balance);
-      }
-    } catch (error) {
-      console.error('Error fetching wallet:', error);
+      const { status, balance } = await res.json();
+      if (status === 'success') setWalletBalance(balance);
+    } catch (e) {
+      console.error('Fetch wallet error:', e);
     }
   };
 
@@ -1798,256 +1911,82 @@ function Home() {
 
   if (loading) {
     return (
-      <div>
-        <div className="screen-content">
-          <div style={{ textAlign: 'center', marginTop: '40px' }}>
-            <div style={{
-              width: '40px',
-              height: '40px',
-              border: '3px solid var(--divider)',
-              borderTop: '3px solid var(--primary-color)',
-              borderRadius: '50%',
-              animation: 'spin 1s linear infinite',
-              margin: '0 auto 20px'
-            }}></div>
-            <p>Loading...</p>
-          </div>
+      <div className="screen-content px-4">
+        <div className="loader-center">
+          <div className="spinner" />
+          <p>Loading...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div>
-      <div className="screen-content">
-        {/* Header */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-          <div>
-            <h2 style={{ margin: 0, fontSize: '20px', fontWeight: '600' }}>
-              Hello, {userProfile?.name || 'User'}! 👋
-            </h2>
-            <p style={{ margin: '4px 0 0 0', color: 'var(--text-secondary)', fontSize: '14px' }}>
-              {userProfile?.society}, {userProfile?.city}
-            </p>
-          </div>
-          <button
-            onClick={() => navigate('/profile')}
-            style={{
-              width: '40px',
-              height: '40px',
-              borderRadius: '20px',
-              background: 'var(--primary-gradient)',
-              border: 'none',
-              color: 'white',
-              fontSize: '18px',
-              cursor: 'pointer'
-            }}
-          >
-            👤
-          </button>
+    <div className="screen-content px-4 py-4">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h2 className="text-xl font-semibold">Hello, {userProfile?.name || 'User'}! 👋</h2>
+          <p className="text-sm text-gray-500 mt-1">
+            {userProfile?.society}, {userProfile?.city}
+          </p>
         </div>
-
-        {/* Wallet Card */}
-        <div
-          onClick={() => navigate('/wallet')}
-          style={{
-            background: 'var(--primary-gradient)',
-            borderRadius: '12px',
-            padding: '20px',
-            marginBottom: '24px',
-            color: 'white',
-            cursor: 'pointer'
-          }}
+        <button
+          className="w-10 h-10 rounded-full bg-gradient-to-r from-green-400 to-blue-500 flex items-center justify-center text-white text-lg"
+          onClick={() => navigate('/profile')}
         >
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <div>
-              <p style={{ margin: 0, fontSize: '14px', opacity: 0.9 }}>Wallet Balance</p>
-              <h3 style={{ margin: '4px 0 0 0', fontSize: '24px', fontWeight: '600' }}>
-                ₹{walletBalance.toFixed(2)}
-              </h3>
-            </div>
-            <div style={{ fontSize: '24px' }}>💳</div>
-          </div>
-        </div>
-
-        {/* Search Bar */}
-        <div
-          onClick={() => navigate('/shops/search')}
-          style={{
-            background: 'var(--background-soft)',
-            border: '1px solid var(--divider)',
-            borderRadius: '8px',
-            padding: '12px 16px',
-            marginBottom: '24px',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '12px'
-          }}
-        >
-          <span style={{ fontSize: '16px' }}>🔍</span>
-          <span style={{ color: 'var(--text-secondary)' }}>Search for shops, items...</span>
-        </div>
-
-        {/* Categories */}
-        <div style={{ marginBottom: '24px' }}>
-          <h3 style={{ margin: '0 0 16px 0', fontSize: '18px', fontWeight: '600' }}>Categories</h3>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(3, 1fr)',
-            gap: '12px'
-          }}>
-            {shopCategories.map((category, index) => (
-              <div
-                key={index}
-                onClick={() => navigate(`/shops?type=${category.type}`)}
-                style={{
-                  background: 'var(--background-soft)',
-                  border: '1px solid var(--divider)',
-                  borderRadius: '8px',
-                  padding: '16px 8px',
-                  textAlign: 'center',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s'
-                }}
-              >
-                <div style={{ fontSize: '24px', marginBottom: '8px' }}>{category.icon}</div>
-                <p style={{ margin: 0, fontSize: '12px', fontWeight: '500' }}>{category.name}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Featured Shops */}
-        {featuredShops.length > 0 && (
-          <div style={{ marginBottom: '24px' }}>
-            <h3 style={{ margin: '0 0 16px 0', fontSize: '18px', fontWeight: '600' }}>Featured Shops</h3>
-            <div style={{ display: 'flex', gap: '12px', overflowX: 'auto' }}>
-              {featuredShops.map((shop) => (
-                <div
-                  key={shop.id}
-                  onClick={() => navigate(`/shop/${shop.id}`)}
-                  style={{
-                    background: 'var(--background-soft)',
-                    border: '1px solid var(--divider)',
-                    borderRadius: '8px',
-                    padding: '12px',
-                    minWidth: '140px',
-                    cursor: 'pointer'
-                  }}
-                >
-                  <div style={{
-                    width: '40px',
-                    height: '40px',
-                    background: 'var(--primary-gradient)',
-                    borderRadius: '20px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    marginBottom: '8px',
-                    fontSize: '18px'
-                  }}>
-                    🏪
-                  </div>
-                  <h4 style={{ margin: '0 0 4px 0', fontSize: '14px', fontWeight: '600' }}>
-                    {shop.shop_name}
-                  </h4>
-                  <p style={{ margin: 0, fontSize: '12px', color: 'var(--text-secondary)' }}>
-                    {shop.shop_type}
-                  </p>
-                  <div style={{
-                    marginTop: '8px',
-                    fontSize: '10px',
-                    color: 'var(--success-color)',
-                    fontWeight: '500'
-                  }}>
-                    {shop.is_open ? '• Open' : '• Closed'}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Nearby Shops */}
-        <div style={{ marginBottom: '24px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-            <h3 style={{ margin: 0, fontSize: '18px', fontWeight: '600' }}>Nearby Shops</h3>
-            <button
-              onClick={() => navigate('/shops')}
-              style={{
-                background: 'none',
-                border: 'none',
-                color: 'var(--primary-color)',
-                fontSize: '14px',
-                fontWeight: '500',
-                cursor: 'pointer'
-              }}
-            >
-              View All
-            </button>
-          </div>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            {nearbyShops.map((shop) => (
-              <div
-                key={shop.id}
-                onClick={() => navigate(`/shop/${shop.id}`)}
-                style={{
-                  background: 'var(--background-soft)',
-                  border: '1px solid var(--divider)',
-                  borderRadius: '8px',
-                  padding: '16px',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '12px'
-                }}
-              >
-                <div style={{
-                  width: '48px',
-                  height: '48px',
-                  background: 'var(--primary-gradient)',
-                  borderRadius: '24px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: '20px'
-                }}>
-                  🏪
-                </div>
-                <div style={{ flex: 1 }}>
-                  <h4 style={{ margin: '0 0 4px 0', fontSize: '16px', fontWeight: '600' }}>
-                    {shop.shop_name}
-                  </h4>
-                  <p style={{ margin: '0 0 4px 0', fontSize: '14px', color: 'var(--text-secondary)' }}>
-                    {shop.shop_type} • {shop.description}
-                  </p>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <span style={{
-                      fontSize: '12px',
-                      color: shop.is_open ? 'var(--success-color)' : 'var(--error-color)',
-                      fontWeight: '500'
-                    }}>
-                      {shop.is_open ? '• Open' : '• Closed'}
-                    </span>
-                    {shop.delivers && (
-                      <span style={{
-                        fontSize: '12px',
-                        color: 'var(--primary-color)',
-                        fontWeight: '500'
-                      }}>
-                        • Delivers
-                      </span>
-                    )}
-                  </div>
-                </div>
-                <div style={{ fontSize: '16px', color: 'var(--text-secondary)' }}>→</div>
-              </div>
-            ))}
-          </div>
-        </div>
+          👤
+        </button>
       </div>
+
+      {/* Wallet & Search */}
+      <div className="flex space-x-4 mb-6">
+        <WalletCard balance={walletBalance} />
+        <SearchCard to="/shops/search" placeholder="Search for shops, items…" />
+      </div>
+
+      {/* Categories (Horizontal Scroll) */}
+      <section className="mb-6">
+        <h3 className="text-lg font-semibold mb-3">Categories</h3>
+        <div className="flex space-x-4 overflow-x-auto pb-2">
+          {shopCategories.map((cat) => (
+            <CategoryCard
+              key={cat.type}
+              className="flex-none"
+              icon={cat.icon}
+              name={cat.name}
+              to={`/shops?type=${cat.type}`}
+            />
+          ))}
+        </div>
+      </section>
+
+      {/* Featured Shops */}
+      {featuredShops.length > 0 && (
+        <section className="mb-6">
+          <h3 className="text-lg font-semibold mb-3">Featured Shops</h3>
+          <div className="flex space-x-3 overflow-x-auto pb-2">
+            {featuredShops.map((shop) => (
+              <FeaturedShopCard key={shop.id} shop={shop} />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Nearby Shops */}
+      <section className="mb-6">
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="text-lg font-semibold">Nearby Shops</h3>
+          <button
+            className="text-sm font-medium text-green-600"
+            onClick={() => navigate('/shops')}
+          >View All</button>
+        </div>
+        <div className="space-y-3">
+          {nearbyShops.map((shop) => (
+            <NearbyShopCard key={shop.id} shop={shop} />
+          ))}
+        </div>
+      </section>
     </div>
   );
 }
@@ -6164,6 +6103,170 @@ html, body, #root {
 .mb-md  { margin-bottom: 16px; }
 .mb-lg  { margin-bottom: 24px; }
 .mb-xl  { margin-bottom: 32px; }
+
+
+===== FILE: src/styles/Cards.css =====
+
+/* Base Card */
+.card {
+  background: var(--background-soft);
+  border: 1px solid var(--divider);
+  border-radius: 12px;
+  padding: 12px;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.card[role="button"] {
+  cursor: pointer;
+}
+
+.card[role="button"]:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Wallet Card */
+.wallet-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--primary-gradient);
+  color: white;
+  border: none;
+}
+
+.wallet-icon {
+  font-size: 24px;
+}
+
+/* Search Card */
+.search-card {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.search-icon {
+  font-size: 16px;
+}
+
+.search-text {
+  color: var(--text-secondary);
+}
+
+/* Category Card */
+.category-card {
+  text-align: center;
+  padding: 16px 8px;
+}
+
+.category-icon {
+  font-size: 24px;
+  margin-bottom: 4px;
+}
+
+.category-name {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* Featured Shop Card */
+.featured-shop-card {
+  min-width: 140px;
+  text-align: center;
+  padding: 16px;
+}
+
+.featured-shop-icon {
+  width: 40px;
+  height: 40px;
+  background: var(--primary-gradient);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 18px;
+  margin: 0 auto 8px;
+}
+
+.featured-shop-name {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.featured-shop-type {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.featured-shop-status {
+  font-size: 10px;
+  margin-top: 8px;
+}
+
+.featured-shop-status.open {
+  color: var(--success-color);
+}
+
+.featured-shop-status.closed {
+  color: var(--error-color);
+}
+
+/* Nearby Shop Card */
+.nearby-shop-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nearby-shop-icon {
+  width: 48px;
+  height: 48px;
+  background: var(--primary-gradient);
+  border-radius: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 20px;
+}
+
+.nearby-shop-info h4 {
+  margin: 0 0 4px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.nearby-shop-info p {
+  margin: 0 0 4px;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.nearby-shop-tags span {
+  font-size: 12px;
+  margin-right: 8px;
+  font-weight: 500;
+}
+
+.nearby-shop-tags .open {
+  color: var(--success-color);
+}
+
+.nearby-shop-tags .closed {
+  color: var(--error-color);
+}
+
+.nearby-shop-tags .delivers {
+  color: var(--primary-color);
+}
+
+.nearby-shop-arrow {
+  margin-left: auto;
+  color: var(--text-secondary);
+}
 
 
 ===== FILE: src/styles/common.css =====
