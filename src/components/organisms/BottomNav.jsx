@@ -14,21 +14,18 @@ export default function BottomNav() {
   const location = useLocation();
 
   return (
-    <div className="fixed bottom-0 left-1/2 w-full max-w-[375px] -translate-x-1/2 bg-white border-t border-gray-200 flex justify-around py-3 z-50">
+    <div className="fixed bottom-0 left-1/2 w-full max-w-[375px] -translate-x-1/2 bg-white/80 backdrop-blur-md shadow-[0_-2px_8px_rgba(0,0,0,0.05)] border-t border-gray-200 flex justify-around py-2 z-50 rounded-t-xl">
       {navItems.map(({ icon: IconComponent, label, path }) => {
         const Icon = IconComponent;
+        const active = location.pathname === path;
         return (
           <button
             key={path}
             onClick={() => navigate(path)}
-            className="flex flex-col items-center gap-1 text-xs focus:outline-none"
+            className={`flex flex-col items-center gap-0.5 text-xs font-medium px-2 ${active ? 'text-primary' : 'text-gray-500 hover:text-primary'}`}
           >
-            <Icon
-              className={`text-xl ${location.pathname === path ? 'text-primary' : 'text-gray-500'}`}
-            />
-            <span className={location.pathname === path ? 'text-primary' : 'text-gray-500'}>
-              {label}
-            </span>
+            <Icon className="text-xl" />
+            <span>{label}</span>
           </button>
         );
       })}
