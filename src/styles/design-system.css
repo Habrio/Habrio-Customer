@@ -1,22 +1,13 @@
 /* src/styles/design-system.css */
 
 .ds-header {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 20px;
-}
-.ds-header-title {
-  margin: 0;
-  font-size: 20px;
-  font-weight: 600;
-  color: var(--text-primary);
-}
-.ds-header-back {
-  background: none;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-  color: var(--primary-color);
+  @apply flex items-center gap-4 mb-5;
 }
 
+.ds-header-title {
+  @apply m-0 text-lg font-semibold text-text-primary flex-1;
+}
+
+.ds-header-back {
+  @apply text-2xl text-primary hover:text-primary-dark bg-transparent border-none cursor-pointer;
+}

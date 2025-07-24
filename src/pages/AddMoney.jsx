@@ -64,62 +64,24 @@ export default function AddMoney() {
       <PageHeader title="Add Money" />
 
       {/* Add Money Card */}
-      <div style={{
-        background: 'var(--primary-gradient)',
-        borderRadius: '16px',
-        padding: '24px',
-        marginBottom: '24px',
-        color: 'white',
-        textAlign: 'center'
-      }}>
-        <div style={{ fontSize: '48px', marginBottom: '16px' }}>💰</div>
-        <h3 style={{ margin: '0 0 8px 0', fontSize: '18px', fontWeight: '600' }}>
-          Add Money to Wallet
-        </h3>
-        <p style={{ margin: 0, fontSize: '14px', opacity: 0.9 }}>
-          Secure and instant wallet recharge
-        </p>
+      <div className="bg-gradient-to-r from-primary to-primary-dark rounded-xl p-6 mb-6 text-white text-center">
+        <div className="text-5xl mb-4">💰</div>
+        <h3 className="font-semibold text-lg mb-1">Add Money to Wallet</h3>
+        <p className="text-sm opacity-90">Secure and instant wallet recharge</p>
       </div>
 
       {/* Amount Input */}
-      <div style={{
-        background: 'var(--background-soft)',
-        border: '1px solid var(--divider)',
-        borderRadius: '12px',
-        padding: '20px',
-        marginBottom: '24px'
-      }}>
-        <h3 style={{ margin: '0 0 16px 0', fontSize: '16px', fontWeight: '600' }}>
-          Enter Amount
-        </h3>
-        
-        <div style={{ position: 'relative', marginBottom: '16px' }}>
-          <span style={{
-            position: 'absolute',
-            left: '16px',
-            top: '50%',
-            transform: 'translateY(-50%)',
-            fontSize: '18px',
-            fontWeight: '600',
-            color: 'var(--text-secondary)'
-          }}>
-            ₹
-          </span>
+      <div className="bg-[var(--background-soft)] border border-[var(--divider)] rounded-xl p-5 mb-6">
+        <h3 className="font-semibold text-base mb-4">Enter Amount</h3>
+
+        <div className="relative mb-4">
+          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-lg font-semibold text-text-secondary">₹</span>
           <input
             type="number"
             placeholder="0"
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
-            style={{
-              width: '100%',
-              padding: '16px 16px 16px 40px',
-              border: '1px solid var(--divider)',
-              borderRadius: '12px',
-              fontSize: '20px',
-              fontWeight: '600',
-              textAlign: 'center',
-              background: 'white'
-            }}
+            className="w-full py-4 pl-10 pr-4 border border-[var(--divider)] rounded-lg text-xl font-semibold text-center bg-white"
           />
         </div>
 
@@ -128,25 +90,12 @@ export default function AddMoney() {
           <p style={{ margin: '0 0 12px 0', fontSize: '14px', fontWeight: '500', color: 'var(--text-secondary)' }}>
             Quick Select
           </p>
-          <div style={{ 
-            display: 'grid', 
-            gridTemplateColumns: 'repeat(3, 1fr)', 
-            gap: '8px'
-          }}>
+          <div className="grid grid-cols-3 gap-2">
             {quickAmounts.map((quickAmount) => (
               <button
                 key={quickAmount}
                 onClick={() => handleQuickAmount(quickAmount)}
-                style={{
-                  background: amount === quickAmount.toString() ? 'var(--primary-gradient)' : 'white',
-                  color: amount === quickAmount.toString() ? 'white' : 'var(--text-primary)',
-                  border: amount === quickAmount.toString() ? 'none' : '1px solid var(--divider)',
-                  borderRadius: '8px',
-                  padding: '12px 8px',
-                  fontSize: '14px',
-                  fontWeight: '500',
-                  cursor: 'pointer'
-                }}
+                className={`rounded-md py-3 text-sm font-medium border ${amount === quickAmount.toString() ? 'bg-primary text-white border-primary' : 'bg-white text-text-primary border-[var(--divider)]'}`}
               >
                 ₹{quickAmount}
               </button>
@@ -232,37 +181,17 @@ export default function AddMoney() {
       <button
         onClick={addMoney}
         disabled={loading || !amount || parseFloat(amount) < 1}
-        style={{
-          background: loading || !amount || parseFloat(amount) < 1 
-            ? 'var(--text-disabled)' 
-            : 'var(--primary-gradient)',
-          color: 'white',
-          border: 'none',
-          borderRadius: '12px',
-          padding: '16px',
-          fontSize: '18px',
-          fontWeight: '600',
-          cursor: loading || !amount || parseFloat(amount) < 1 ? 'not-allowed' : 'pointer',
-          width: '100%',
-          marginBottom: '20px',
-          opacity: loading || !amount || parseFloat(amount) < 1 ? 0.6 : 1
-        }}
+        className={`w-full rounded-lg py-4 text-lg font-semibold mb-5 text-white ${loading || !amount || parseFloat(amount) < 1 ? 'bg-text-disabled cursor-not-allowed opacity-60' : 'bg-gradient-to-r from-primary to-primary-dark'}`}
       >
         {loading ? 'Processing...' : `Add ₹${amount || '0'} to Wallet`}
       </button>
 
       {/* Terms */}
-      <p style={{ 
-        margin: '0 0 20px 0', 
-        fontSize: '11px', 
-        color: 'var(--text-secondary)', 
-        textAlign: 'center',
-        lineHeight: '1.4'
-      }}>
+      <p className="text-[11px] text-text-secondary text-center leading-tight mb-5">
         By proceeding, you agree to our{' '}
-        <span style={{ color: 'var(--primary-color)', fontWeight: '500' }}>Terms & Conditions</span>
+        <span className="text-primary font-medium">Terms & Conditions</span>
         {' '}and{' '}
-        <span style={{ color: 'var(--primary-color)', fontWeight: '500' }}>Refund Policy</span>
+        <span className="text-primary font-medium">Refund Policy</span>
       </p>
 
       {/* Bottom Navigation Placeholder */}
