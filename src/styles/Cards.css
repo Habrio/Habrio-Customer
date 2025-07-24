@@ -1,0 +1,160 @@
+/* Base Card */
+.card {
+  background: var(--background-soft);
+  border: 1px solid var(--divider);
+  border-radius: 12px;
+  padding: 12px;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.card[role="button"] {
+  cursor: pointer;
+}
+
+.card[role="button"]:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Wallet Card */
+.wallet-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--primary-gradient);
+  color: white;
+  border: none;
+}
+
+.wallet-icon {
+  font-size: 24px;
+}
+
+/* Search Card */
+.search-card {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.search-icon {
+  font-size: 16px;
+}
+
+.search-text {
+  color: var(--text-secondary);
+}
+
+/* Category Card */
+.category-card {
+  text-align: center;
+  padding: 16px 8px;
+}
+
+.category-icon {
+  font-size: 24px;
+  margin-bottom: 4px;
+}
+
+.category-name {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* Featured Shop Card */
+.featured-shop-card {
+  min-width: 140px;
+  text-align: center;
+  padding: 16px;
+}
+
+.featured-shop-icon {
+  width: 40px;
+  height: 40px;
+  background: var(--primary-gradient);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 18px;
+  margin: 0 auto 8px;
+}
+
+.featured-shop-name {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.featured-shop-type {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.featured-shop-status {
+  font-size: 10px;
+  margin-top: 8px;
+}
+
+.featured-shop-status.open {
+  color: var(--success-color);
+}
+
+.featured-shop-status.closed {
+  color: var(--error-color);
+}
+
+/* Nearby Shop Card */
+.nearby-shop-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nearby-shop-icon {
+  width: 48px;
+  height: 48px;
+  background: var(--primary-gradient);
+  border-radius: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 20px;
+}
+
+.nearby-shop-info h4 {
+  margin: 0 0 4px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.nearby-shop-info p {
+  margin: 0 0 4px;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.nearby-shop-tags span {
+  font-size: 12px;
+  margin-right: 8px;
+  font-weight: 500;
+}
+
+.nearby-shop-tags .open {
+  color: var(--success-color);
+}
+
+.nearby-shop-tags .closed {
+  color: var(--error-color);
+}
+
+.nearby-shop-tags .delivers {
+  color: var(--primary-color);
+}
+
+.nearby-shop-arrow {
+  margin-left: auto;
+  color: var(--text-secondary);
+}
