@@ -12,6 +12,7 @@ import { HiShoppingCart, HiAnnotation, HiCollection, HiDeviceMobile, HiCog, HiSp
 import { get } from '../utils/api';
 import '../styles/common.css';
 import '../styles/App.css';
+import '../styles/design-system.css';
 
 function Home() {
   const navigate = useNavigate();
@@ -85,7 +86,7 @@ function Home() {
   return (
     <div className="screen-content px-4 py-4">
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-6 bg-primary/5 p-4 rounded-lg">
         <div>
           <h2 className="text-xl font-semibold">Hello, {userProfile?.name || 'User'}! 👋</h2>
           <p className="text-sm text-gray-500 mt-1">
