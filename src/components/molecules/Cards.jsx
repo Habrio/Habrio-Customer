@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { HiChevronRight, HiCreditCard, HiStore, HiSearch } from 'react-icons/hi';
+import { HiChevronRight, HiCreditCard, HiShoppingBag, HiSearch } from 'react-icons/hi';
 
 function Card({ children, className = '', onClick }) {
   return (
@@ -32,7 +32,7 @@ export function FeaturedShopCard({ shop }) {
   const navigate = useNavigate();
   return (
     <Card className="w-40 flex-none" onClick={() => navigate(`/shop/${shop.id}`)}>
-      <HiStore className="text-3xl mb-2 text-primary" />
+      <HiShoppingBag className="text-3xl mb-2 text-primary" />
       <h4 className="font-semibold text-sm mb-1">{shop.shop_name}</h4>
       <p className="text-xs text-gray-500 mb-2">{shop.shop_type}</p>
       <div className={`text-xs font-medium ${shop.is_open ? 'text-green-600' : 'text-red-500'}`}>{shop.is_open ? 'Open' : 'Closed'}</div>
@@ -44,7 +44,7 @@ export function NearbyShopCard({ shop }) {
   const navigate = useNavigate();
   return (
     <Card className="flex items-center" onClick={() => navigate(`/shop/${shop.id}`)}>
-      <HiStore className="text-3xl text-primary mr-3" />
+      <HiShoppingBag className="text-3xl text-primary mr-3" />
       <div className="flex-1">
         <h4 className="font-medium">{shop.shop_name}</h4>
         <p className="text-xs text-gray-500">{shop.shop_type} • {shop.description}</p>
