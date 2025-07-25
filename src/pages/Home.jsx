@@ -85,15 +85,15 @@ function Home() {
   return (
     <div className="screen-content px-4 py-4">
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-6 bg-gradient-to-r from-primary to-primary-dark text-white p-4 rounded-xl">
         <div>
           <h2 className="text-xl font-semibold">Hello, {userProfile?.name || 'User'}! 👋</h2>
-          <p className="text-sm text-gray-500 mt-1">
+          <p className="text-sm text-white/80 mt-1">
             {userProfile?.society}, {userProfile?.city}
           </p>
         </div>
         <button
-          className="w-10 h-10 rounded-full bg-gradient-to-r from-green-400 to-blue-500 flex items-center justify-center text-white text-lg"
+          className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-white text-lg"
           onClick={() => navigate('/profile')}
         >
           <HiUser />
