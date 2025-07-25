@@ -2,7 +2,7 @@
 ===== FILE: src/App.jsx =====
 
 // src/App.jsx
-import { BrowserRouter } from 'react-router-dom';
+import { HashRouter } from 'react-router-dom';
 import AppRoutes from './router';
 
 // Global styles
@@ -10,192 +10,57 @@ import './styles/reset.css';
 import './styles/variables.css';
 import './styles/common.css';
 import './styles/App.css';
+import './styles/design-system.css';
 
 function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <AppRoutes />
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 
 export default App;
 
 
-===== FILE: src/components/BottomNav.jsx =====
+===== FILE: src/components/atoms/Button.jsx =====
 
-// src/components/BottomNav.jsx
-import { useNavigate, useLocation } from 'react-router-dom';
-
-export default function BottomNav() {
-  const navigate = useNavigate();
-  const location = useLocation();
-
-  const navItems = [
-    { icon: '🏠', label: 'Home', path: '/home' },
-    { icon: '🏪', label: 'Shops', path: '/shops' },
-    { icon: '🛒', label: 'Cart', path: '/cart' },
-    { icon: '📦', label: 'Orders', path: '/orders' },
-    { icon: '👤', label: 'Profile', path: '/profile' },
-  ];
-
-  return (
-    <div
-      style={{
-        position: 'fixed',
-        bottom: 0,
-        left: '50%',
-        transform: 'translateX(-50%)',
-        width: '100%',
-        maxWidth: '375px',
-        background: 'white',
-        borderTop: '1px solid var(--divider)',
-        display: 'flex',
-        justifyContent: 'space-around',
-        padding: '12px 0',
-        zIndex: 1000
-      }}
-    >
-      {navItems.map(item => (
-        <button
-          key={item.path}
-          onClick={() => navigate(item.path)}
-          style={{
-            background: 'none',
-            border: 'none',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: '4px',
-            fontSize: '12px',
-            color:
-              location.pathname === item.path
-                ? 'var(--primary-color)'
-                : 'var(--text-secondary)',
-            cursor: 'pointer'
-          }}
-        >
-          <span style={{ fontSize: '20px' }}>{item.icon}</span>
-          {item.label}
-        </button>
-      ))}
-    </div>
-  );
-}
-
-
-===== FILE: src/components/Cards.jsx =====
-
-// src/components/Cards.jsx
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import '../../styles/common.css';
 
-/** Base Card wrapper */
-function Card({ children, className = '', onClick }) {
+export default function Button({ children, className = '', ...props }) {
   return (
-    <div
-      className={`card ${className}`}
-      onClick={onClick}
-      role={onClick ? 'button' : undefined}
-    >
+    <button className={`btn btn-primary btn-full ${className}`} {...props}>
       {children}
-    </div>
+    </button>
   );
 }
 
-/** Category Card */
-export function CategoryCard({ icon, name, to }) {
-  const navigate = useNavigate();
+
+===== FILE: src/components/atoms/Icon.jsx =====
+
+import React from 'react';
+
+export default function Icon({ children, className = '' }) {
   return (
-    <Card
-      className="category-card"
-      onClick={() => to && navigate(to)}
-    >
-      <div className="category-icon">{icon}</div>
-      <div className="category-name">{name}</div>
-    </Card>
-  );
-}
-
-/** Featured Shop Card (horizontal scroll) */
-export function FeaturedShopCard({ shop }) {
-  const navigate = useNavigate();
-  return (
-    <Card
-      className="featured-shop-card"
-      onClick={() => navigate(`/shop/${shop.id}`)}
-    >
-      <div className="featured-shop-icon">🏪</div>
-      <h4 className="featured-shop-name">{shop.shop_name}</h4>
-      <p className="featured-shop-type">{shop.shop_type}</p>
-      <div
-        className={`featured-shop-status ${
-          shop.is_open ? 'open' : 'closed'
-        }`}
-      >
-        {shop.is_open ? 'Open' : 'Closed'}
-      </div>
-    </Card>
-  );
-}
-
-/** Nearby Shop Card (list) */
-export function NearbyShopCard({ shop }) {
-  const navigate = useNavigate();
-  return (
-    <Card
-      className="nearby-shop-card"
-      onClick={() => navigate(`/shop/${shop.id}`)}
-    >
-      <div className="nearby-shop-icon">🏪</div>
-      <div className="nearby-shop-info">
-        <h4>{shop.shop_name}</h4>
-        <p>{shop.shop_type} • {shop.description}</p>
-        <div className="nearby-shop-tags">
-          <span className={shop.is_open ? 'open' : 'closed'}>
-            {shop.is_open ? 'Open' : 'Closed'}
-          </span>
-          {shop.delivers && <span className="delivers">Delivers</span>}
-        </div>
-      </div>
-      <div className="nearby-shop-arrow">→</div>
-    </Card>
-  );
-}
-
-/** Wallet Balance Card (header) */
-export function WalletCard({ balance }) {
-  const navigate = useNavigate();
-  return (
-    <Card
-      className="wallet-card"
-      onClick={() => navigate('/wallet')}
-    >
-      <div>
-        <p>Wallet Balance</p>
-        <h3>₹{balance.toFixed(2)}</h3>
-      </div>
-      <div className="wallet-icon">💳</div>
-    </Card>
-  );
-}
-
-/** Search Bar Card */
-export function SearchCard({ placeholder = 'Search…', to }) {
-  const navigate = useNavigate();
-  return (
-    <Card
-      className="search-card"
-      onClick={() => to && navigate(to)}
-    >
-      <span className="search-icon">🔍</span>
-      <span className="search-text">{placeholder}</span>
-    </Card>
+    <span className={`inline-flex items-center justify-center ${className}`}>
+      {children}
+    </span>
   );
 }
 
 
-===== FILE: src/components/MobileLayout.jsx =====
+===== FILE: src/components/atoms/Input.jsx =====
+
+import React from 'react';
+import '../../styles/common.css';
+
+export default function Input({ className = '', ...props }) {
+  return <input className={`form-input ${className}`} {...props} />;
+}
+
+
+===== FILE: src/components/layout/MobileLayout.jsx =====
 
 // src/components/MobileLayout.jsx
 export default function MobileLayout({ children }) {
@@ -209,6 +74,168 @@ export default function MobileLayout({ children }) {
 }
 
 
+===== FILE: src/components/molecules/Cards.jsx =====
+
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { HiChevronRight, HiCreditCard, HiShoppingBag, HiSearch } from 'react-icons/hi';
+
+function Card({ children, className = '', onClick }) {
+  return (
+    <div
+      className={`bg-white rounded-lg shadow-sm p-4 ${onClick ? 'cursor-pointer' : ''} ${className}`}
+      onClick={onClick}
+      role={onClick ? 'button' : undefined}
+    >
+      {children}
+    </div>
+  );
+}
+
+export function CategoryCard({ icon: IconComponent, name, to }) {
+  const navigate = useNavigate();
+  const Icon = IconComponent;
+  return (
+    <Card
+      className="flex flex-col items-center justify-center w-20 flex-none"
+      onClick={() => to && navigate(to)}
+    >
+      <Icon className="text-2xl mb-1 text-primary" />
+      <div className="text-sm text-center text-gray-700">{name}</div>
+    </Card>
+  );
+}
+
+export function FeaturedShopCard({ shop }) {
+  const navigate = useNavigate();
+  return (
+    <Card className="w-40 flex-none" onClick={() => navigate(`/shop/${shop.id}`)}>
+      <HiShoppingBag className="text-3xl mb-2 text-primary" />
+      <h4 className="font-semibold text-sm mb-1">{shop.shop_name}</h4>
+      <p className="text-xs text-gray-500 mb-2">{shop.shop_type}</p>
+      <div className={`text-xs font-medium ${shop.is_open ? 'text-green-600' : 'text-red-500'}`}>{shop.is_open ? 'Open' : 'Closed'}</div>
+    </Card>
+  );
+}
+
+export function NearbyShopCard({ shop }) {
+  const navigate = useNavigate();
+  return (
+    <Card className="flex items-center" onClick={() => navigate(`/shop/${shop.id}`)}>
+      <HiShoppingBag className="text-3xl text-primary mr-3" />
+      <div className="flex-1">
+        <h4 className="font-medium">{shop.shop_name}</h4>
+        <p className="text-xs text-gray-500">{shop.shop_type} • {shop.description}</p>
+        <div className="flex items-center gap-2 mt-1">
+          <span className={`text-xs ${shop.is_open ? 'text-green-600' : 'text-red-500'}`}>{shop.is_open ? 'Open' : 'Closed'}</span>
+          {shop.delivers && <span className="text-xs text-blue-600">Delivers</span>}
+        </div>
+      </div>
+      <HiChevronRight className="text-xl text-gray-400" />
+    </Card>
+  );
+}
+
+export function WalletCard({ balance }) {
+  const navigate = useNavigate();
+  return (
+    <Card className="flex-1" onClick={() => navigate('/wallet')}>
+      <div>
+        <p className="text-xs text-gray-500">Wallet Balance</p>
+        <h3 className="text-lg font-semibold">₹{balance.toFixed(2)}</h3>
+      </div>
+      <HiCreditCard className="text-3xl text-primary ml-auto" />
+    </Card>
+  );
+}
+
+export function SearchCard({ placeholder = 'Search…', to }) {
+  const navigate = useNavigate();
+  return (
+    <Card className="flex-1 flex items-center gap-2" onClick={() => to && navigate(to)}>
+      <HiSearch className="text-gray-400" />
+      <span className="text-gray-500 text-sm">{placeholder}</span>
+    </Card>
+  );
+}
+
+
+===== FILE: src/components/molecules/PageHeader.jsx =====
+
+import React from 'react';
+import { HiArrowLeft } from 'react-icons/hi';
+import { useNavigate } from 'react-router-dom';
+import '../../styles/design-system.css';
+
+export default function PageHeader({ title, back = true }) {
+  const navigate = useNavigate();
+  return (
+    <div className="ds-header">
+      {back && (
+        <button className="ds-header-back" onClick={() => navigate(-1)}>
+          <HiArrowLeft />
+        </button>
+      )}
+      <h2 className="ds-header-title">{title}</h2>
+    </div>
+  );
+}
+
+
+===== FILE: src/components/molecules/SectionCard.jsx =====
+
+import React from 'react';
+import '../../styles/design-system.css';
+
+export default function SectionCard({ children, className = '' }) {
+  return (
+    <div
+      className={`bg-[var(--background-soft)] border border-[var(--divider)] rounded-lg p-4 mb-4 ${className}`}
+    >
+      {children}
+    </div>
+  );
+}
+
+
+===== FILE: src/components/organisms/BottomNav.jsx =====
+
+import { useNavigate, useLocation } from 'react-router-dom';
+import { HiHome, HiShoppingBag, HiShoppingCart, HiClipboardList, HiUser } from 'react-icons/hi';
+
+const navItems = [
+  { icon: HiHome, label: 'Home', path: '/home' },
+  { icon: HiShoppingBag, label: 'Shops', path: '/shops' },
+  { icon: HiShoppingCart, label: 'Cart', path: '/cart' },
+  { icon: HiClipboardList, label: 'Orders', path: '/orders' },
+  { icon: HiUser, label: 'Profile', path: '/profile' },
+];
+
+export default function BottomNav() {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  return (
+    <div className="fixed bottom-0 left-1/2 w-full max-w-[375px] -translate-x-1/2 bg-white/80 backdrop-blur-md shadow-[0_-2px_8px_rgba(0,0,0,0.05)] border-t border-gray-200 flex justify-around py-2 z-50 rounded-t-xl">
+      {navItems.map(({ icon: IconComponent, label, path }) => {
+        const Icon = IconComponent;
+        const active = location.pathname === path;
+        return (
+          <button
+            key={path}
+            onClick={() => navigate(path)}
+            className={`flex flex-col items-center gap-0.5 text-xs font-medium px-2 ${active ? 'text-primary' : 'text-gray-500 hover:text-primary'}`}
+          >
+            <Icon className="text-xl" />
+            <span>{label}</span>
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+
 ===== FILE: src/main.jsx =====
 
 // src/main.jsx
@@ -216,6 +243,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import "./styles/reset.css";
+import './styles/App.css';
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -226,33 +254,18 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 
 ===== FILE: src/pages/AboutHabrio.jsx =====
 
-import { useNavigate } from 'react-router-dom';
+
 import '../styles/common.css';
 import '../styles/App.css';
+import '../styles/design-system.css';
+import PageHeader from '../components/molecules/PageHeader';
 
 export default function AboutHabrio() {
-  const navigate = useNavigate();
 
   return (
     <div className="screen-content">
       {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
-        <button
-          onClick={() => navigate(-1)}
-          style={{
-            background: 'none',
-            border: 'none',
-            fontSize: '24px',
-            marginRight: '16px',
-            cursor: 'pointer'
-          }}
-        >
-          ←
-        </button>
-        <h2 style={{ margin: 0, fontSize: '20px', fontWeight: '600' }}>
-          About Habrio
-        </h2>
-      </div>
+      <PageHeader title="About Habrio" />
 
       {/* App Logo & Info */}
       <div style={{
@@ -518,6 +531,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/common.css';
 import '../styles/App.css';
+import '../styles/design-system.css';
+import PageHeader from '../components/molecules/PageHeader';
 
 export default function AddMoney() {
   const navigate = useNavigate();
@@ -575,81 +590,27 @@ export default function AddMoney() {
   return (
     <div className="screen-content">
       {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
-        <button
-          onClick={() => navigate(-1)}
-          style={{
-            background: 'none',
-            border: 'none',
-            fontSize: '24px',
-            marginRight: '16px',
-            cursor: 'pointer'
-          }}
-        >
-          ←
-        </button>
-        <h2 style={{ margin: 0, fontSize: '20px', fontWeight: '600' }}>
-          Add Money
-        </h2>
-      </div>
+      <PageHeader title="Add Money" />
 
       {/* Add Money Card */}
-      <div style={{
-        background: 'var(--primary-gradient)',
-        borderRadius: '16px',
-        padding: '24px',
-        marginBottom: '24px',
-        color: 'white',
-        textAlign: 'center'
-      }}>
-        <div style={{ fontSize: '48px', marginBottom: '16px' }}>💰</div>
-        <h3 style={{ margin: '0 0 8px 0', fontSize: '18px', fontWeight: '600' }}>
-          Add Money to Wallet
-        </h3>
-        <p style={{ margin: 0, fontSize: '14px', opacity: 0.9 }}>
-          Secure and instant wallet recharge
-        </p>
+      <div className="bg-gradient-to-r from-primary to-primary-dark rounded-xl p-6 mb-6 text-white text-center">
+        <div className="text-5xl mb-4">💰</div>
+        <h3 className="font-semibold text-lg mb-1">Add Money to Wallet</h3>
+        <p className="text-sm opacity-90">Secure and instant wallet recharge</p>
       </div>
 
       {/* Amount Input */}
-      <div style={{
-        background: 'var(--background-soft)',
-        border: '1px solid var(--divider)',
-        borderRadius: '12px',
-        padding: '20px',
-        marginBottom: '24px'
-      }}>
-        <h3 style={{ margin: '0 0 16px 0', fontSize: '16px', fontWeight: '600' }}>
-          Enter Amount
-        </h3>
-        
-        <div style={{ position: 'relative', marginBottom: '16px' }}>
-          <span style={{
-            position: 'absolute',
-            left: '16px',
-            top: '50%',
-            transform: 'translateY(-50%)',
-            fontSize: '18px',
-            fontWeight: '600',
-            color: 'var(--text-secondary)'
-          }}>
-            ₹
-          </span>
+      <div className="bg-[var(--background-soft)] border border-[var(--divider)] rounded-xl p-5 mb-6">
+        <h3 className="font-semibold text-base mb-4">Enter Amount</h3>
+
+        <div className="relative mb-4">
+          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-lg font-semibold text-text-secondary">₹</span>
           <input
             type="number"
             placeholder="0"
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
-            style={{
-              width: '100%',
-              padding: '16px 16px 16px 40px',
-              border: '1px solid var(--divider)',
-              borderRadius: '12px',
-              fontSize: '20px',
-              fontWeight: '600',
-              textAlign: 'center',
-              background: 'white'
-            }}
+            className="w-full py-4 pl-10 pr-4 border border-[var(--divider)] rounded-lg text-xl font-semibold text-center bg-white"
           />
         </div>
 
@@ -658,25 +619,12 @@ export default function AddMoney() {
           <p style={{ margin: '0 0 12px 0', fontSize: '14px', fontWeight: '500', color: 'var(--text-secondary)' }}>
             Quick Select
           </p>
-          <div style={{ 
-            display: 'grid', 
-            gridTemplateColumns: 'repeat(3, 1fr)', 
-            gap: '8px'
-          }}>
+          <div className="grid grid-cols-3 gap-2">
             {quickAmounts.map((quickAmount) => (
               <button
                 key={quickAmount}
                 onClick={() => handleQuickAmount(quickAmount)}
-                style={{
-                  background: amount === quickAmount.toString() ? 'var(--primary-gradient)' : 'white',
-                  color: amount === quickAmount.toString() ? 'white' : 'var(--text-primary)',
-                  border: amount === quickAmount.toString() ? 'none' : '1px solid var(--divider)',
-                  borderRadius: '8px',
-                  padding: '12px 8px',
-                  fontSize: '14px',
-                  fontWeight: '500',
-                  cursor: 'pointer'
-                }}
+                className={`rounded-md py-3 text-sm font-medium border ${amount === quickAmount.toString() ? 'bg-primary text-white border-primary' : 'bg-white text-text-primary border-[var(--divider)]'}`}
               >
                 ₹{quickAmount}
               </button>
@@ -762,37 +710,17 @@ export default function AddMoney() {
       <button
         onClick={addMoney}
         disabled={loading || !amount || parseFloat(amount) < 1}
-        style={{
-          background: loading || !amount || parseFloat(amount) < 1 
-            ? 'var(--text-disabled)' 
-            : 'var(--primary-gradient)',
-          color: 'white',
-          border: 'none',
-          borderRadius: '12px',
-          padding: '16px',
-          fontSize: '18px',
-          fontWeight: '600',
-          cursor: loading || !amount || parseFloat(amount) < 1 ? 'not-allowed' : 'pointer',
-          width: '100%',
-          marginBottom: '20px',
-          opacity: loading || !amount || parseFloat(amount) < 1 ? 0.6 : 1
-        }}
+        className={`w-full rounded-lg py-4 text-lg font-semibold mb-5 text-white ${loading || !amount || parseFloat(amount) < 1 ? 'bg-text-disabled cursor-not-allowed opacity-60' : 'bg-gradient-to-r from-primary to-primary-dark'}`}
       >
         {loading ? 'Processing...' : `Add ₹${amount || '0'} to Wallet`}
       </button>
 
       {/* Terms */}
-      <p style={{ 
-        margin: '0 0 20px 0', 
-        fontSize: '11px', 
-        color: 'var(--text-secondary)', 
-        textAlign: 'center',
-        lineHeight: '1.4'
-      }}>
+      <p className="text-[11px] text-text-secondary text-center leading-tight mb-5">
         By proceeding, you agree to our{' '}
-        <span style={{ color: 'var(--primary-color)', fontWeight: '500' }}>Terms & Conditions</span>
+        <span className="text-primary font-medium">Terms & Conditions</span>
         {' '}and{' '}
-        <span style={{ color: 'var(--primary-color)', fontWeight: '500' }}>Refund Policy</span>
+        <span className="text-primary font-medium">Refund Policy</span>
       </p>
 
       {/* Bottom Navigation Placeholder */}
@@ -807,6 +735,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/common.css';
 import '../styles/App.css';
+import '../styles/design-system.css';
 
 export default function BasicOnboarding() {
   const navigate = useNavigate();
@@ -906,6 +835,8 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/common.css';
 import '../styles/App.css';
+import '../styles/design-system.css';
+import PageHeader from '../components/molecules/PageHeader';
 
 export default function Cart() {
   const navigate = useNavigate();
@@ -1031,23 +962,8 @@ export default function Cart() {
   return (
     <div className="screen-content">
       {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
-        <button
-          onClick={() => navigate(-1)}
-          style={{
-            background: 'none',
-            border: 'none',
-            fontSize: '24px',
-            marginRight: '16px',
-            cursor: 'pointer'
-          }}
-        >
-          ←
-        </button>
-        <h2 style={{ margin: 0, fontSize: '20px', fontWeight: '600', flex: 1 }}>
-          My Cart ({cartItems.length})
-        </h2>
-        {cartItems.length > 0 && (
+      <PageHeader title={`My Cart (${cartItems.length})`} />
+      {cartItems.length > 0 && (
           <button
             onClick={clearCart}
             style={{
@@ -1062,7 +978,6 @@ export default function Cart() {
             Clear All
           </button>
         )}
-      </div>
 
       {cartItems.length === 0 ? (
         <div style={{ textAlign: 'center', padding: '40px 20px' }}>
@@ -1321,6 +1236,8 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/common.css';
 import '../styles/App.css';
+import '../styles/design-system.css';
+import PageHeader from '../components/molecules/PageHeader';
 
 export default function Checkout() {
   const navigate = useNavigate();
@@ -1437,23 +1354,7 @@ export default function Checkout() {
   return (
     <div className="screen-content">
       {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
-        <button
-          onClick={() => navigate(-1)}
-          style={{
-            background: 'none',
-            border: 'none',
-            fontSize: '24px',
-            marginRight: '16px',
-            cursor: 'pointer'
-          }}
-        >
-          ←
-        </button>
-        <h2 style={{ margin: 0, fontSize: '20px', fontWeight: '600' }}>
-          Checkout
-        </h2>
-      </div>
+      <PageHeader title="Checkout" />
 
       {/* Delivery Address */}
       <div style={{
@@ -1766,6 +1667,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/common.css';
 import '../styles/App.css';
+import '../styles/design-system.css';
 
 export default function ConsumerOnboarding() {
   const navigate = useNavigate();
@@ -1836,10 +1738,12 @@ import {
   CategoryCard,
   FeaturedShopCard,
   NearbyShopCard
-} from '../components/Cards';
+} from '../components/molecules/Cards';
+import { HiShoppingCart, HiAnnotation, HiCollection, HiDeviceMobile, HiCog, HiSparkles, HiUser } from 'react-icons/hi';
+import { get } from '../utils/api';
 import '../styles/common.css';
 import '../styles/App.css';
-import '../styles/Cards.css';
+import '../styles/design-system.css';
 
 function Home() {
   const navigate = useNavigate();
@@ -1849,7 +1753,6 @@ function Home() {
   const [loading, setLoading] = useState(true);
   const [walletBalance, setWalletBalance] = useState(0);
 
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
   const token = localStorage.getItem('auth_token');
 
   useEffect(() => {
@@ -1863,10 +1766,7 @@ function Home() {
 
   const fetchUserData = async () => {
     try {
-      const res = await fetch(`${backendUrl}/profile/me`, {
-        headers: { Authorization: token }
-      });
-      const { status, data } = await res.json();
+      const { status, data } = await get('/profile/me');
       if (status === 'success') setUserProfile(data);
     } catch (e) {
       console.error('Fetch profile error:', e);
@@ -1875,10 +1775,7 @@ function Home() {
 
   const fetchNearbyShops = async () => {
     try {
-      const res = await fetch(`${backendUrl}/shops?status=open`, {
-        headers: { Authorization: token }
-      });
-      const { status, shops } = await res.json();
+      const { status, shops } = await get('/shops?status=open');
       if (status === 'success') {
         setNearbyShops(shops.slice(0, 6));
         setFeaturedShops(shops.filter(s => s.featured).slice(0, 3));
@@ -1890,10 +1787,7 @@ function Home() {
 
   const fetchWalletBalance = async () => {
     try {
-      const res = await fetch(`${backendUrl}/wallet`, {
-        headers: { Authorization: token }
-      });
-      const { status, balance } = await res.json();
+      const { status, balance } = await get('/wallet');
       if (status === 'success') setWalletBalance(balance);
     } catch (e) {
       console.error('Fetch wallet error:', e);
@@ -1901,12 +1795,12 @@ function Home() {
   };
 
   const shopCategories = [
-    { name: 'Grocery', icon: '🛒', type: 'grocery' },
-    { name: 'Pharmacy', icon: '💊', type: 'pharmacy' },
-    { name: 'Restaurant', icon: '🍽️', type: 'restaurant' },
-    { name: 'Electronics', icon: '📱', type: 'electronics' },
-    { name: 'Fashion', icon: '👕', type: 'fashion' },
-    { name: 'Services', icon: '🔧', type: 'services' }
+    { name: 'Grocery', icon: HiShoppingCart, type: 'grocery' },
+    { name: 'Pharmacy', icon: HiAnnotation, type: 'pharmacy' },
+    { name: 'Restaurant', icon: HiCollection, type: 'restaurant' },
+    { name: 'Electronics', icon: HiDeviceMobile, type: 'electronics' },
+    { name: 'Fashion', icon: HiSparkles, type: 'fashion' },
+    { name: 'Services', icon: HiCog, type: 'services' }
   ];
 
   if (loading) {
@@ -1923,7 +1817,7 @@ function Home() {
   return (
     <div className="screen-content px-4 py-4">
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-6 bg-primary/5 p-4 rounded-lg">
         <div>
           <h2 className="text-xl font-semibold">Hello, {userProfile?.name || 'User'}! 👋</h2>
           <p className="text-sm text-gray-500 mt-1">
@@ -1934,7 +1828,7 @@ function Home() {
           className="w-10 h-10 rounded-full bg-gradient-to-r from-green-400 to-blue-500 flex items-center justify-center text-white text-lg"
           onClick={() => navigate('/profile')}
         >
-          👤
+          <HiUser />
         </button>
       </div>
 
@@ -1951,7 +1845,6 @@ function Home() {
           {shopCategories.map((cat) => (
             <CategoryCard
               key={cat.type}
-              className="flex-none"
               icon={cat.icon}
               name={cat.name}
               to={`/shops?type=${cat.type}`}
@@ -2000,6 +1893,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/common.css';
 import '../styles/App.css';
+import '../styles/design-system.css';
 
 export default function Login() {
   const [phone, setPhone] = useState('');
@@ -2095,6 +1989,8 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import '../styles/common.css';
 import '../styles/App.css';
+import '../styles/design-system.css';
+import PageHeader from '../components/molecules/PageHeader';
 
 export default function OrderDetail() {
   const { orderId } = useParams();
@@ -2249,23 +2145,7 @@ export default function OrderDetail() {
   return (
     <div className="screen-content">
       {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
-        <button
-          onClick={() => navigate(-1)}
-          style={{
-            background: 'none',
-            border: 'none',
-            fontSize: '24px',
-            marginRight: '16px',
-            cursor: 'pointer'
-          }}
-        >
-          ←
-        </button>
-        <h2 style={{ margin: 0, fontSize: '20px', fontWeight: '600', flex: 1 }}>
-          Order #{order.order_id}
-        </h2>
-      </div>
+      <PageHeader title={`Order #${order.order_id}`} />
 
       {/* Order Status */}
       <div style={{
@@ -2590,6 +2470,8 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/common.css';
 import '../styles/App.css';
+import '../styles/design-system.css';
+import PageHeader from '../components/molecules/PageHeader';
 
 export default function OrderHistory() {
   const navigate = useNavigate();
@@ -2676,23 +2558,7 @@ export default function OrderHistory() {
   return (
     <div className="screen-content">
       {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
-        <button
-          onClick={() => navigate(-1)}
-          style={{
-            background: 'none',
-            border: 'none',
-            fontSize: '24px',
-            marginRight: '16px',
-            cursor: 'pointer'
-          }}
-        >
-          ←
-        </button>
-        <h2 style={{ margin: 0, fontSize: '20px', fontWeight: '600' }}>
-          My Orders
-        </h2>
-      </div>
+      <PageHeader title="My Orders" />
 
       {/* Filter Tabs */}
       <div style={{ 
@@ -2917,6 +2783,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import '../styles/common.css';
 import '../styles/App.css';
+import '../styles/design-system.css';
 
 export default function OrderMessages() {
   const { orderId } = useParams();
@@ -3072,7 +2939,7 @@ export default function OrderMessages() {
           </div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            {messages.map((message, index) => {
+            {messages.map((message) => {
               const isMyMessage = message.sender_phone === userPhone;
               return (
                 <div
@@ -3209,9 +3076,9 @@ export default function OrderMessages() {
               'Please call before delivery',
               'Is this item fresh?',
               'Can you provide a substitute?'
-            ].map((quickMessage, index) => (
+            ].map((quickMessage) => (
               <button
-                key={index}
+                key={quickMessage}
                 onClick={() => setNewMessage(quickMessage)}
                 style={{
                   background: 'var(--background-soft)',
@@ -3239,6 +3106,7 @@ import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import '../styles/common.css';
 import '../styles/App.css';
+import '../styles/design-system.css';
 
 export default function Otp() {
   const [otp, setOtp] = useState('');
@@ -3281,21 +3149,9 @@ export default function Otp() {
         <span className="battery">🔋</span>
       </div>
       <div className="screen-content">
-        <div className="text-center mb-lg" style={{ paddingTop: 40 }}>
-          <div
-            style={{
-              background: 'var(--primary-gradient)',
-              width: 72,
-              height: 72,
-              borderRadius: 18,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              margin: '0 auto 20px',
-              boxShadow: '0 6px 16px rgba(255, 125, 30, 0.3)',
-            }}
-          >
-            <span style={{ fontSize: 30, color: 'white' }}>🔐</span>
+        <div className="text-center pt-10 mb-6">
+          <div className="bg-gradient-to-r from-primary to-primary-dark w-18 h-18 rounded-xl flex items-center justify-center mx-auto mb-5 shadow-lg">
+            <span className="text-white text-2xl">🔐</span>
           </div>
           <h2 className="title">Enter OTP</h2>
           <p className="subtitle">Sent to +91 {phone}</p>
@@ -3303,33 +3159,17 @@ export default function Otp() {
         <div className="form-group mb-md">
           <input
             type="tel"
-            className="otp-input"
+            className="w-full text-center text-xl tracking-widest p-3 border border-gray-300 rounded-lg"
             placeholder="Enter 6-digit code"
             maxLength="6"
             value={otp}
             onChange={e => setOtp(e.target.value)}
-            style={{
-              width: '100%',
-              textAlign: 'center',
-              fontSize: 20,
-              letterSpacing: '4px',
-              padding: 12,
-              border: '1px solid #ccc',
-              borderRadius: 8,
-            }}
           />
         </div>
         <button className="btn btn-primary btn-full btn-large" onClick={verifyOtp}>
           Verify OTP
         </button>
-        <p
-          style={{
-            fontSize: 12,
-            color: 'var(--text-secondary)',
-            textAlign: 'center',
-            marginTop: 20,
-          }}
-        >
+        <p className="text-xs text-text-secondary text-center mt-5">
           Didn’t receive the code?{' '}
           <a href="#" className="link">Resend</a>
         </p>
@@ -3345,6 +3185,8 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/common.css';
 import '../styles/App.css';
+import '../styles/design-system.css';
+import PageHeader from '../components/molecules/PageHeader';
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -3454,22 +3296,8 @@ export default function Profile() {
   return (
     <div className="screen-content">
       {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
-        <button
-          onClick={() => navigate(-1)}
-          style={{
-            background: 'none',
-            border: 'none',
-            fontSize: '24px',
-            marginRight: '16px',
-            cursor: 'pointer'
-          }}
-        >
-          ←
-        </button>
-        <h2 style={{ margin: 0, fontSize: '20px', fontWeight: '600', flex: 1 }}>
-          My Profile
-        </h2>
+      <div className="flex items-center justify-between mb-6">
+        <PageHeader title="My Profile" />
         {!editing && (
           <button
             onClick={handleEdit}
@@ -3869,6 +3697,8 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import '../styles/common.css';
 import '../styles/App.css';
+import '../styles/design-system.css';
+import PageHeader from '../components/molecules/PageHeader';
 
 export default function RateOrder() {
   const { orderId } = useParams();
@@ -4010,23 +3840,7 @@ export default function RateOrder() {
   return (
     <div className="screen-content">
       {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
-        <button
-          onClick={() => navigate(-1)}
-          style={{
-            background: 'none',
-            border: 'none',
-            fontSize: '24px',
-            marginRight: '16px',
-            cursor: 'pointer'
-          }}
-        >
-          ←
-        </button>
-        <h2 style={{ margin: 0, fontSize: '20px', fontWeight: '600' }}>
-          Rate Your Order
-        </h2>
-      </div>
+      <PageHeader title="Rate Your Order" />
 
       {/* Rating Header */}
       <div style={{
@@ -4216,6 +4030,8 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/common.css';
 import '../styles/App.css';
+import '../styles/design-system.css';
+import PageHeader from '../components/molecules/PageHeader';
 
 export default function SearchShops() {
   const navigate = useNavigate();
@@ -4281,23 +4097,7 @@ export default function SearchShops() {
   return (
     <div className="screen-content">
       {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
-        <button
-          onClick={() => navigate(-1)}
-          style={{
-            background: 'none',
-            border: 'none',
-            fontSize: '24px',
-            marginRight: '16px',
-            cursor: 'pointer'
-          }}
-        >
-          ←
-        </button>
-        <h2 style={{ margin: 0, fontSize: '20px', fontWeight: '600' }}>
-          Search Shops
-        </h2>
-      </div>
+      <PageHeader title="Search Shops" />
 
       {/* Search Bar */}
       <form onSubmit={handleSearch} style={{ marginBottom: '24px' }}>
@@ -4525,6 +4325,8 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import '../styles/common.css';
 import '../styles/App.css';
+import '../styles/design-system.css';
+import PageHeader from '../components/molecules/PageHeader';
 
 export default function ShopDetail() {
   const { shopId } = useParams();
@@ -4626,23 +4428,8 @@ export default function ShopDetail() {
   return (
     <div className="screen-content">
       {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
-        <button
-          onClick={() => navigate(-1)}
-          style={{
-            background: 'none',
-            border: 'none',
-            fontSize: '24px',
-            marginRight: '16px',
-            cursor: 'pointer'
-          }}
-        >
-          ←
-        </button>
-        <h2 style={{ margin: 0, fontSize: '20px', fontWeight: '600', flex: 1 }}>
-          {shop?.shop_name}
-        </h2>
-        {cartCount > 0 && (
+      <PageHeader title={shop?.shop_name || 'Shop'} />
+      {cartCount > 0 && (
           <button
             onClick={() => navigate('/cart')}
             style={{
@@ -4676,7 +4463,6 @@ export default function ShopDetail() {
             </span>
           </button>
         )}
-      </div>
 
       {/* Shop Info */}
       <div style={{
@@ -4829,6 +4615,7 @@ import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import '../styles/common.css';
 import '../styles/App.css';
+import '../styles/design-system.css';
 
 function ShopList() {
   const location = useLocation();
@@ -4979,6 +4766,8 @@ export default ShopList;
 import { useNavigate } from 'react-router-dom';
 import '../styles/common.css';
 import '../styles/App.css';
+import '../styles/design-system.css';
+import PageHeader from '../components/molecules/PageHeader';
 
 export default function Support() {
   const navigate = useNavigate();
@@ -5036,23 +4825,7 @@ export default function Support() {
   return (
     <div className="screen-content">
       {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
-        <button
-          onClick={() => navigate(-1)}
-          style={{
-            background: 'none',
-            border: 'none',
-            fontSize: '24px',
-            marginRight: '16px',
-            cursor: 'pointer'
-          }}
-        >
-          ←
-        </button>
-        <h2 style={{ margin: 0, fontSize: '20px', fontWeight: '600' }}>
-          Help & Support
-        </h2>
-      </div>
+      <PageHeader title="Help & Support" />
 
       {/* Support Header */}
       <div style={{
@@ -5241,6 +5014,7 @@ export default function Support() {
 import { useNavigate } from 'react-router-dom';
 import '../styles/common.css';
 import '../styles/App.css';
+import '../styles/design-system.css';
 
 export default function TitleScreen() {
   const navigate = useNavigate();
@@ -5302,6 +5076,8 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/common.css';
 import '../styles/App.css';
+import '../styles/design-system.css';
+import PageHeader from '../components/molecules/PageHeader';
 
 export default function Wallet() {
   const navigate = useNavigate();
@@ -5392,23 +5168,7 @@ export default function Wallet() {
   return (
     <div className="screen-content">
       {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
-        <button
-          onClick={() => navigate(-1)}
-          style={{
-            background: 'none',
-            border: 'none',
-            fontSize: '24px',
-            marginRight: '16px',
-            cursor: 'pointer'
-          }}
-        >
-          ←
-        </button>
-        <h2 style={{ margin: 0, fontSize: '20px', fontWeight: '600' }}>
-          My Wallet
-        </h2>
-      </div>
+      <PageHeader title="My Wallet" />
 
       {/* Wallet Balance Card */}
       <div style={{
@@ -5561,7 +5321,7 @@ export default function Wallet() {
           </div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            {transactions.map((transaction, index) => (
+            {transactions.map((transaction) => (
               <div
                 key={transaction.id}
                 style={{
@@ -5664,6 +5424,8 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/common.css';
 import '../styles/App.css';
+import '../styles/design-system.css';
+import PageHeader from '../components/molecules/PageHeader';
 
 export default function WalletHistory() {
   const navigate = useNavigate();
@@ -5746,23 +5508,7 @@ export default function WalletHistory() {
   return (
     <div className="screen-content">
       {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
-        <button
-          onClick={() => navigate(-1)}
-          style={{
-            background: 'none',
-            border: 'none',
-            fontSize: '24px',
-            marginRight: '16px',
-            cursor: 'pointer'
-          }}
-        >
-          ←
-        </button>
-        <h2 style={{ margin: 0, fontSize: '20px', fontWeight: '600' }}>
-          Transaction History
-        </h2>
-      </div>
+      <PageHeader title="Transaction History" />
 
       {/* Filter Tabs */}
       <div style={{ 
@@ -5946,8 +5692,8 @@ export default function WalletHistory() {
 
 // src/router.jsx
 import { Routes, Route } from 'react-router-dom';
-import MobileLayout from './components/MobileLayout';
-import BottomNav from './components/BottomNav';
+import MobileLayout from './components/layout/MobileLayout';
+import BottomNav from './components/organisms/BottomNav';
 
 // Auth & Onboarding (no layout)
 import Login from './pages/Login';
@@ -6024,6 +5770,11 @@ export default function AppRoutes() {
 ===== FILE: src/styles/App.css =====
 
 /* Root styles */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
 html, body, #root {
   height: 100%;
   width: 100%;
@@ -6465,6 +6216,23 @@ a.link {
 }
 
 
+===== FILE: src/styles/design-system.css =====
+
+/* src/styles/design-system.css */
+
+.ds-header {
+  @apply flex items-center gap-4 mb-5;
+}
+
+.ds-header-title {
+  @apply m-0 text-lg font-semibold text-text-primary flex-1;
+}
+
+.ds-header-back {
+  @apply text-2xl text-primary hover:text-primary-dark bg-transparent border-none cursor-pointer;
+}
+
+
 ===== FILE: src/styles/reset.css =====
 
 /* src/styles/reset.css */
@@ -6563,4 +6331,21 @@ body, html, #root {
   --btn-height: 44px;
   --transition-speed: 0.2s ease;
 }
+
+
+===== FILE: src/utils/api.js =====
+
+const baseUrl = import.meta.env.VITE_BACKEND_URL;
+
+export async function apiRequest(path, options = {}) {
+  const token = localStorage.getItem('auth_token');
+  const headers = { 'Content-Type': 'application/json', ...(options.headers || {}) };
+  if (token) headers['Authorization'] = token;
+
+  const res = await fetch(`${baseUrl}${path}`, { ...options, headers });
+  return res.json();
+}
+
+export const get = (path) => apiRequest(path);
+export const post = (path, body) => apiRequest(path, { method: 'POST', body: JSON.stringify(body) });
 
