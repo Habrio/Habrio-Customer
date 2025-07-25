@@ -1,7 +1,7 @@
-// src/router.jsx
+// File: src/router.jsx
 import { Routes, Route, Navigate } from "react-router-dom";
 
-// Pages (auto-imported as per your src/pages)
+// Pages (auto‐imported as per your src/pages)
 import TitleScreen from "./pages/TitleScreen";
 import Login from "./pages/Login";
 import Otp from "./pages/Otp";

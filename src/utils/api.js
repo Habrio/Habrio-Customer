@@ -1,45 +1,43 @@
+// File: src/utils/api.js
 const baseUrl = import.meta.env.VITE_BACKEND_URL;
 
-// Main API request utility with error handling
-export async function apiRequest(path, options = {}) {
+/**
+ * Core API request utility with standardized error handling
+ */
+export async function apiRequest(path, { method = 'GET', body, headers = {} } = {}) {
   const token = localStorage.getItem('auth_token');
-  const headers = { 'Content-Type': 'application/json', ...(options.headers || {}) };
-  if (token) headers['Authorization'] = token;
+  const commonHeaders = { 'Content-Type': 'application/json', ...headers };
+  if (token) commonHeaders['Authorization'] = token;
 
-  let res;
+  let response;
   try {
-    res = await fetch(`${baseUrl}${path}`, { ...options, headers });
-  } catch (err) {
-    // Network/connection error
-    return { status: 'error', message: 'Network error', error: err };
+    response = await fetch(`${baseUrl}${path}`, {
+      method,
+      headers: commonHeaders,
+      body,
+    });
+  } catch (error) {
+    return { ok: false, status: 'error', message: 'Network error', error };
   }
 
   let data;
   try {
-    data = await res.json();
+    data = await response.json();
   } catch {
-    // Response not JSON
-    return { status: 'error', message: 'Invalid server response', code: res.status };
+    return { ok: false, status: 'error', message: 'Invalid JSON response', httpStatus: response.status };
   }
 
-  // Optional: Attach HTTP status
-  data.httpStatus = res.status;
-  // Attach raw ok/fail
-  data.ok = res.ok;
+  data.httpStatus = response.status;
+  data.ok = response.ok;
 
-  // Standardize error shape
-  if (!res.ok && !data.status) {
+  if (!response.ok) {
     data.status = 'error';
     data.message = data.message || 'Something went wrong';
   }
+
   return data;
 }
 
-// Simple GET/POST wrappers
-export const get = (path) => apiRequest(path);
-
-export const post = (path, body) =>
-  apiRequest(path, { method: 'POST', body: JSON.stringify(body) });
-
-export const del = (path) =>
-  apiRequest(path, { method: 'DELETE' });
+export const get = (path, opts) => apiRequest(path, { ...opts, method: 'GET' });
+export const post = (path, body, opts) => apiRequest(path, { ...opts, method: 'POST', body: JSON.stringify(body) });
+export const del = (path, opts) => apiRequest(path, { ...opts, method: 'DELETE' });
