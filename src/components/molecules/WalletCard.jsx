@@ -1,4 +1,4 @@
-// src/components/molecules/WalletCard.jsx
+// File: src/components/molecules/WalletCard.jsx
 import React from "react";
 import clsx from "clsx";
 import Card from "./Card";
@@ -7,14 +7,15 @@ import Icon from "../atoms/Icon";
 /**
  * WalletCard molecule
  * Props:
- * - amount: string/number (main balance/value)
- * - label: string (e.g. "Wallet Balance")
- * - icon: ReactNode (optional, left side or top)
- * - color: 'primary' | 'accent' | 'gradient' | custom (bg color)
- * - info: string (optional extra info, e.g. "Expiring soon")
- * - cta: string (call to action, e.g. "Add Money")
- * - onCta: function (on click CTA)
- * - className: extra classes
+ * - amount: string | number
+ * - label: string
+ * - icon: ReactNode (optional wallet icon)
+ * - color: 'primary' | 'accent' | 'gradient' | 'default'
+ * - info: string (optional extra info)
+ * - cta: string (call-to-action text)
+ * - onCta: function (CTA click handler)
+ * - className: additional Tailwind utility classes
+ * - ...rest: other props
  */
 export default function WalletCard({
   amount,
@@ -27,13 +28,13 @@ export default function WalletCard({
   className = "",
   ...rest
 }) {
-  // Color map
   const colorMap = {
     primary: "bg-primary text-white",
     accent: "bg-accent text-white",
     gradient: "bg-gradient-to-tr from-primary to-accent text-white",
     default: "bg-background-soft text-text-primary",
   };
+
   return (
     <Card
       variant="default"
@@ -45,26 +46,23 @@ export default function WalletCard({
       )}
       {...rest}
     >
-      {/* Optional icon (wallet/cashback) */}
       {icon && (
         <span className="w-10 h-10 flex items-center justify-center bg-white/20 rounded-full mr-2">
           {icon}
         </span>
       )}
+
       <div className="flex-1 min-w-0">
-        {/* Label and amount */}
-        <div className="text-xs opacity-90">{label}</div>
+        <div className="text-sm font-medium opacity-90">{label}</div>
         <div className="text-2xl font-bold leading-tight">{amount}</div>
-        {info && (
-          <div className="text-xs opacity-80 mt-1">{info}</div>
-        )}
+        {info && <div className="text-sm opacity-80 mt-1">{info}</div>}
       </div>
-      {/* CTA Button */}
-      {cta && (
+
+      {cta && onCta && (
         <button
           type="button"
           onClick={onCta}
-          className="ml-2 px-3 py-1 text-xs font-semibold rounded-full bg-white/80 text-primary shadow hover:bg-white transition"
+          className="ml-2 px-3 py-1 text-xs font-semibold rounded-full bg-white/80 text-primary shadow-card hover:bg-white transition"
         >
           {cta}
         </button>

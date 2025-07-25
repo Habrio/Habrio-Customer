@@ -1,4 +1,4 @@
-// src/components/atoms/Loader.jsx
+// File: src/components/atoms/Loader.jsx
 import React from "react";
 import clsx from "clsx";
 
@@ -6,10 +6,16 @@ import clsx from "clsx";
  * Spinner loader atom
  * Props:
  * - size: number (px, default 24)
- * - color: Tailwind class ("text-primary", "text-white", etc.)
- * - className: extra classes
+ * - color: Tailwind text color class (e.g. "text-primary", "text-white")
+ * - className: additional Tailwind utility classes
+ * - ...rest: other props (aria-label, etc.)
  */
-export function Spinner({ size = 24, color = "text-primary", className = "", ...rest }) {
+export function Spinner({
+  size = 24,
+  color = "text-primary",
+  className = "",
+  ...rest
+}) {
   return (
     <svg
       width={size}
@@ -38,13 +44,15 @@ export function Spinner({ size = 24, color = "text-primary", className = "", ...
 }
 
 /**
- * Skeleton loader atom (for cards, lists, etc.)
+ * Skeleton loader atom
  * Props:
- * - width, height: size in px (default w-full h-4)
+ * - width: number|string (e.g. 200 or "100%"), optional
+ * - height: number|string (e.g. 20 or "1rem"), optional
  * - rounded: boolean (default true)
- * - className: extra classes
- * Usage:
- * <Skeleton width={200} height={40} />
+ * - className: additional Tailwind utility classes
+ * - ...rest: other props (aria-label, etc.)
+ *
+ * Usage: <Skeleton width={200} height={40} />
  */
 export function Skeleton({
   width,
@@ -61,8 +69,8 @@ export function Skeleton({
         className
       )}
       style={{
-        width: width ? (typeof width === "number" ? `${width}px` : width) : undefined,
-        height: height ? (typeof height === "number" ? `${height}px` : height) : undefined,
+        width: width ? (typeof width === 'number' ? `${width}px` : width) : undefined,
+        height: height ? (typeof height === 'number' ? `${height}px` : height) : undefined
       }}
       aria-label="Loading"
       {...rest}

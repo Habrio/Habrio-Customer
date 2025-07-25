@@ -1,4 +1,4 @@
-// src/components/molecules/SectionCard.jsx
+// File: src/components/molecules/SectionCard.jsx
 import React from "react";
 import clsx from "clsx";
 import Card from "./Card";
@@ -7,14 +7,14 @@ import { Heading, BodyText } from "../atoms/Typography";
 /**
  * SectionCard molecule
  * Props:
- * - title: string or node (section title)
- * - subtitle: string or node (optional subtext)
- * - action: node (optional action button/icon)
- * - children: section content
- * - variant: Card variant (default, outlined, soft, error, etc.)
- * - padding: Card padding ("sm", "md", "lg", or false)
- * - className: extra classes
- * - ...rest
+ * - title: string or ReactNode (optional section title)
+ * - subtitle: string or ReactNode (optional subtitle)
+ * - action: ReactNode (optional action button/icon)
+ * - children: ReactNode (section content)
+ * - variant: 'default' | 'outlined' | 'soft' | 'error' | 'success'
+ * - padding: 'sm' | 'md' | 'lg' | false
+ * - className: additional Tailwind utility classes
+ * - ...rest: other props
  */
 export default function SectionCard({
   title,
@@ -47,9 +47,7 @@ export default function SectionCard({
               </BodyText>
             )}
           </div>
-          {action && (
-            <div className="shrink-0">{action}</div>
-          )}
+          {action && <div className="shrink-0">{action}</div>}
         </div>
       )}
       <div>{children}</div>

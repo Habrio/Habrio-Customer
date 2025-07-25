@@ -1,9 +1,11 @@
-// src/components/atoms/Button.jsx
+// File: src/components/atoms/Button.jsx
 import React from "react";
 import clsx from "clsx";
 
-// Loader spinner atom (minimal, atomic)
-function Spinner({ className }) {
+/**
+ * Spinner icon for loading state
+ */
+function Spinner({ className = "" }) {
   return (
     <svg
       className={clsx("animate-spin h-5 w-5 text-white", className)}
@@ -14,8 +16,11 @@ function Spinner({ className }) {
     >
       <circle
         className="opacity-25"
-        cx="12" cy="12" r="10"
-        stroke="currentColor" strokeWidth="4"
+        cx="12"
+        cy="12"
+        r="10"
+        stroke="currentColor"
+        strokeWidth="4"
       />
       <path
         className="opacity-75"
@@ -27,17 +32,18 @@ function Spinner({ className }) {
 }
 
 /**
- * PRO Button atom
+ * Button atom
  * Props:
- * - children: text
+ * - children: text or node
  * - type: 'button' | 'submit'
  * - variant: 'primary' | 'secondary' | 'ghost'
- * - size: 'md' | 'lg' | 'sm'
+ * - size: 'sm' | 'md' | 'lg'
  * - fullWidth: boolean
  * - disabled: boolean
  * - loading: boolean
- * - leftIcon/rightIcon: <Icon />
- * - className: string (extra classes)
+ * - leftIcon: ReactNode
+ * - rightIcon: ReactNode
+ * - className: additional Tailwind utility classes
  * - ...rest: native button props
  */
 export default function Button({
@@ -53,36 +59,44 @@ export default function Button({
   className = "",
   ...rest
 }) {
-  // Style maps
-  const base = "inline-flex items-center justify-center font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-primary shadow-card";
-  const sizes = {
+  const baseClasses =
+    "inline-flex items-center justify-center font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-primary shadow-card";
+
+  const sizeMap = {
     sm: "h-9 px-3 text-sm rounded-md",
     md: "h-11 px-4 text-base rounded-lg",
     lg: "h-14 px-6 text-lg rounded-xl",
   };
-  const variants = {
-    primary: "bg-primary text-white hover:bg-primary-dark active:bg-primary-dark disabled:bg-text-disabled disabled:text-white",
-    secondary: "bg-white text-primary border border-primary hover:bg-primary/10 active:bg-primary/20 disabled:text-text-disabled disabled:border-gray-200",
-    ghost: "bg-transparent text-primary hover:bg-primary/10 active:bg-primary/20 disabled:text-text-disabled",
+
+  const variantMap = {
+    primary:
+      "bg-primary text-white hover:bg-primary-dark active:bg-primary-dark disabled:bg-text-secondary disabled:text-white",
+    secondary:
+      "bg-white text-primary border border-primary hover:bg-primary/10 active:bg-primary/20 disabled:text-text-secondary disabled:border-divider",
+    ghost:
+      "bg-transparent text-primary hover:bg-primary/10 active:bg-primary/20 disabled:text-text-secondary",
   };
+
+  const classes = clsx(
+    baseClasses,
+    sizeMap[size],
+    variantMap[variant],
+    fullWidth && "w-full",
+    (disabled || loading) && "opacity-60 cursor-not-allowed",
+    className
+  );
 
   return (
     <button
       type={type}
-      className={clsx(
-        base,
-        sizes[size],
-        variants[variant],
-        { "w-full": fullWidth, "opacity-60 cursor-not-allowed": disabled || loading },
-        className
-      )}
+      className={classes}
       disabled={disabled || loading}
       {...rest}
     >
       {loading && <Spinner className="mr-2" />}
-      {leftIcon && !loading && <span className="mr-2">{leftIcon}</span>}
+      {!loading && leftIcon && <span className="mr-2 flex-shrink-0">{leftIcon}</span>}
       {children}
-      {rightIcon && !loading && <span className="ml-2">{rightIcon}</span>}
+      {!loading && rightIcon && <span className="ml-2 flex-shrink-0">{rightIcon}</span>}
     </button>
   );
 }

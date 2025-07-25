@@ -1,27 +1,28 @@
-// src/components/atoms/Badge.jsx
+// File: src/components/atoms/Badge.jsx
 import React from "react";
 import clsx from "clsx";
 
 /**
  * Badge atom
  * Props:
- * - children: text or node (label)
- * - intent: 'success' | 'warning' | 'error' | 'info' | 'neutral' | custom (controls color)
+ * - children: label text or node
+ * - intent: 'success' | 'warning' | 'error' | 'info' | 'neutral'
  * - size: 'sm' | 'md'
- * - pill: boolean (full-rounded)
- * - icon: ReactNode (optional)
- * - className: extra Tailwind classes
- * - ...rest: extra props (aria-label, etc)
+ * - pill: boolean (full rounded)
+ * - icon: ReactNode (optional leading icon)
+ * - className: additional Tailwind utility classes
+ * - ...rest: other props (e.g. aria-label)
  */
-const intentMap = {
+
+const INTENT_CLASSES = {
   success: "bg-accent/20 text-accent",
   warning: "bg-warning/20 text-warning",
   error:   "bg-error/20 text-error",
-  info:    "bg-primary/10 text-primary",
-  neutral: "bg-background-soft text-text-secondary",
+  info:    "bg-info/20 text-info",
+  neutral: "bg-background-soft text-text-secondary"
 };
 
-const sizeMap = {
+const SIZE_CLASSES = {
   sm: "px-2 py-0.5 text-xs",
   md: "px-3 py-1 text-sm",
 };
@@ -35,19 +36,23 @@ export default function Badge({
   className = "",
   ...rest
 }) {
+  const intentClass = INTENT_CLASSES[intent] || INTENT_CLASSES.neutral;
+  const sizeClass = SIZE_CLASSES[size] || SIZE_CLASSES.sm;
+  const radiusClass = pill ? "rounded-full" : "rounded-md";
+
   return (
     <span
       className={clsx(
         "inline-flex items-center font-medium",
-        intentMap[intent] || intentMap.neutral,
-        sizeMap[size],
-        pill ? "rounded-full" : "rounded-md",
+        intentClass,
+        sizeClass,
+        radiusClass,
         className
       )}
-      aria-label={rest["aria-label"] || typeof children === "string" ? children : ""}
+      aria-label={rest["aria-label"] || (typeof children === "string" ? children : undefined)}
       {...rest}
     >
-      {icon && <span className="mr-1">{icon}</span>}
+      {icon && <span className="mr-1 flex-shrink-0">{icon}</span>}
       {children}
     </span>
   );

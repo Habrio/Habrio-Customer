@@ -1,4 +1,4 @@
-// src/components/molecules/PageHeader.jsx
+// File: src/components/molecules/PageHeader.jsx
 import React from "react";
 import clsx from "clsx";
 import Icon from "../atoms/Icon";
@@ -7,13 +7,13 @@ import { Heading, BodyText } from "../atoms/Typography";
 /**
  * PageHeader molecule
  * Props:
- * - title: string or node
- * - subtitle: string or node (optional)
- * - back: function (if provided, shows back arrow)
- * - action: node (right-side button/icon/avatar)
- * - sticky: boolean (makes header sticky at top)
- * - className: string
- * - ...rest
+ * - title: string or ReactNode
+ * - subtitle: string or ReactNode (optional)
+ * - back: function (optional, shows back arrow)
+ * - action: ReactNode (optional, right-side element)
+ * - sticky: boolean (default true, makes header sticky)
+ * - className: additional Tailwind utility classes
+ * - ...rest: other props
  */
 export default function PageHeader({
   title,
@@ -27,31 +27,28 @@ export default function PageHeader({
   return (
     <header
       className={clsx(
-        "w-full z-20 bg-background",
+        "w-full z-20 bg-background border-b border-divider",
         sticky && "sticky top-0",
-        "flex items-center min-h-[56px] px-4 md:px-8 py-2 border-b border-divider",
+        "flex items-center min-h-14 px-4 py-2",
         className
       )}
       {...rest}
     >
-      {/* Back button */}
       {back && (
         <button
           type="button"
-          aria-label="Back"
           onClick={back}
-          className="mr-3 flex items-center justify-center rounded-full w-9 h-9 hover:bg-background-soft focus:outline-none"
+          aria-label="Back"
+          className="mr-3 flex items-center justify-center w-9 h-9 rounded-md hover:bg-background-soft focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
         >
-          <Icon name="chevron-left" size={22} className="text-text-primary" />
+          <Icon name="chevron-left" size={22} />
         </button>
       )}
 
-      {/* Title and subtitle */}
-      <div className={clsx(
-        "flex-1 min-w-0",
-        (subtitle || action) && "flex flex-col"
-      )}>
-        <Heading level={2} className="truncate">{title}</Heading>
+      <div className={clsx("flex-1 min-w-0", (subtitle || action) && "flex flex-col")}>
+        <Heading level={2} className="truncate">
+          {title}
+        </Heading>
         {subtitle && (
           <BodyText size="sm" color="secondary" className="truncate mt-0.5">
             {subtitle}
@@ -59,10 +56,7 @@ export default function PageHeader({
         )}
       </div>
 
-      {/* Action (icon, button, avatar, etc.) */}
-      {action && (
-        <div className="ml-3 flex-shrink-0">{action}</div>
-      )}
+      {action && <div className="ml-3 flex-shrink-0">{action}</div>}
     </header>
   );
 }

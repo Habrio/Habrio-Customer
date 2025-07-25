@@ -1,25 +1,28 @@
-// src/components/atoms/Typography.jsx
+// File: src/components/atoms/Typography.jsx
 import React from "react";
 import clsx from "clsx";
 
 /**
  * Heading atom
  * Props:
- * - level: 1 | 2 | 3 | 4 (renders h1-h4)
+ * - level: 1 | 2 | 3 | 4
  * - children: node
- * - className: string
- * - ...rest: extra props
+ * - className: additional Tailwind utility classes
+ * - ...rest: other props
  */
 export function Heading({ level = 1, children, className = "", ...rest }) {
   const Tag = `h${level}`;
-  const styles = {
-    1: "text-2xl font-bold text-text-primary md:text-3xl",
-    2: "text-xl font-semibold text-text-primary md:text-2xl",
-    3: "text-lg font-semibold text-text-primary md:text-xl",
-    4: "text-base font-medium text-text-primary md:text-lg",
+  const sizes = {
+    1: "text-3xl font-semibold text-text-primary",
+    2: "text-2xl font-semibold text-text-primary",
+    3: "text-xl font-medium text-text-primary",
+    4: "text-lg font-medium text-text-primary",
   };
   return (
-    <Tag className={clsx(styles[level] || styles[1], className)} {...rest}>
+    <Tag
+      className={clsx(sizes[level] || sizes[1], className)}
+      {...rest}
+    >
       {children}
     </Tag>
   );
@@ -28,25 +31,24 @@ export function Heading({ level = 1, children, className = "", ...rest }) {
 /**
  * BodyText atom
  * Props:
- * - size: "sm" | "md" | "lg"
- * - color: "primary" | "secondary" | "error" | "success" | "muted"
- * - as: elementType (e.g., 'p', 'span', 'div')
- * - className: string
- * - ...rest
+ * - size: 'sm' | 'md' | 'lg'
+ * - color: 'primary' | 'secondary' | 'error' | 'success' | 'muted'
+ * - as: string (element type, e.g. 'p', 'span')
+ * - className: additional Tailwind utility classes
+ * - ...rest: other props
  */
 export function BodyText({
   size = "md",
   color = "primary",
-  as = "p",
+  as: Component = "p",
   className = "",
   children,
   ...rest
 }) {
-  const Tag = as;
   const sizeMap = {
-    sm: "text-xs md:text-sm",
+    sm: "text-sm",
     md: "text-base",
-    lg: "text-lg md:text-xl",
+    lg: "text-lg",
   };
   const colorMap = {
     primary: "text-text-primary",
@@ -56,19 +58,27 @@ export function BodyText({
     muted: "text-text-secondary opacity-80",
   };
   return (
-    <Tag className={clsx(sizeMap[size], colorMap[color], className)} {...rest}>
+    <Component
+      className={clsx(sizeMap[size], colorMap[color], className)}
+      {...rest}
+    >
       {children}
-    </Tag>
+    </Component>
   );
 }
 
 /**
  * Caption atom
- * For extra small helper or status text
+ * Props:
+ * - className: additional Tailwind utility classes
+ * - ...rest: other props
  */
 export function Caption({ children, className = "", ...rest }) {
   return (
-    <span className={clsx("text-xs text-text-secondary", className)} {...rest}>
+    <span
+      className={clsx("text-xs text-text-secondary", className)}
+      {...rest}
+    >
       {children}
     </span>
   );

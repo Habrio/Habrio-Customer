@@ -1,4 +1,4 @@
-// src/components/molecules/CategoryCard.jsx
+// File: src/components/molecules/CategoryCard.jsx
 import React from "react";
 import clsx from "clsx";
 import Card from "./Card";
@@ -6,12 +6,12 @@ import Card from "./Card";
 /**
  * CategoryCard molecule
  * Props:
- * - icon: ReactNode (SVG icon/image)
+ * - icon: ReactNode (SVG icon or image)
  * - label: string
- * - active: boolean (selected/highlighted)
+ * - active: boolean
  * - disabled: boolean
- * - onClick: function (optional, makes it clickable)
- * - className: string
+ * - onClick: function (optional)
+ * - className: additional Tailwind utility classes
  */
 export default function CategoryCard({
   icon,
@@ -29,8 +29,8 @@ export default function CategoryCard({
       clickable={!!onClick && !disabled}
       className={clsx(
         "flex flex-col items-center w-20 h-24 transition relative",
-        active ? "ring-2 ring-primary ring-inset" : "",
-        disabled ? "opacity-50 pointer-events-none" : "hover:-translate-y-1",
+        active ? "ring-2 ring-primary ring-inset" : "hover:-translate-y-1",
+        disabled && "opacity-50 pointer-events-none",
         className
       )}
       onClick={onClick}
@@ -41,7 +41,7 @@ export default function CategoryCard({
       <span
         className={clsx(
           "flex items-center justify-center w-12 h-12 rounded-full bg-primary/10 mb-2",
-          active ? "bg-primary/20" : ""
+          active && "bg-primary/20"
         )}
       >
         {icon}
@@ -49,8 +49,6 @@ export default function CategoryCard({
       <span className="text-xs font-medium text-center text-text-primary truncate">
         {label}
       </span>
-      {/* Optionally add badge or "new" label at top right */}
-      {/* <Badge intent="info" className="absolute top-2 right-2">NEW</Badge> */}
     </Card>
   );
 }

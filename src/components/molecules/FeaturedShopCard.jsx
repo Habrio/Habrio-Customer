@@ -1,4 +1,4 @@
-// src/components/molecules/FeaturedShopCard.jsx
+// File: src/components/molecules/FeaturedShopCard.jsx
 import React from "react";
 import clsx from "clsx";
 import Card from "./Card";
@@ -8,13 +8,13 @@ import Badge from "../atoms/Badge";
 /**
  * FeaturedShopCard molecule
  * Props:
- * - image: url (shop logo or photo)
+ * - image: string (shop logo or photo URL)
  * - name: string (shop name)
- * - category: string (e.g. "Groceries")
- * - status: "open" | "closed"
- * - onClick: function (for navigation)
- * - badge: string (e.g. "Featured", optional)
- * - className: extra classes
+ * - category: string
+ * - status: 'open' | 'closed'
+ * - badge: string (optional badge text)
+ * - onClick: function (optional click handler)
+ * - className: additional Tailwind utility classes
  */
 export default function FeaturedShopCard({
   image,
@@ -32,14 +32,13 @@ export default function FeaturedShopCard({
       padding="sm"
       clickable={!!onClick}
       className={clsx(
-        "flex flex-col items-center w-40 min-w-[160px] max-w-[180px] transition relative group",
+        "flex flex-col items-center w-40 min-w-[160px] max-w-[180px] transition group",
         "hover:shadow-elevated hover:-translate-y-1 active:scale-[0.98]",
         className
       )}
       onClick={onClick}
       {...rest}
     >
-      {/* Shop avatar or photo */}
       <Avatar
         src={image}
         alt={name}
@@ -47,23 +46,23 @@ export default function FeaturedShopCard({
         className="mb-2"
       />
 
-      {/* Badge for “Featured” */}
       {badge && (
-        <Badge intent="info" pill className="absolute top-2 left-2 z-10">
+        <Badge
+          intent="info"
+          pill
+          className="absolute top-2 left-2 z-10"
+        >
           {badge}
         </Badge>
       )}
 
-      {/* Shop name */}
-      <div className="text-sm font-semibold text-text-primary text-center truncate w-full">
+      <div className="text-base font-medium text-text-primary text-center truncate w-full">
         {name}
       </div>
-      {/* Category */}
-      <div className="text-xs text-text-secondary mt-1 mb-2 text-center truncate w-full">
+      <div className="text-sm text-text-secondary mt-1 mb-2 text-center truncate w-full">
         {category}
       </div>
 
-      {/* Shop status */}
       <Badge
         intent={status === "open" ? "success" : "error"}
         size="sm"
