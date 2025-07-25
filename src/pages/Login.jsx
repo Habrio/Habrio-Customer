@@ -14,7 +14,7 @@ export default function Login() {
 
   async function sendOtp() {
     if (!/^\d{10}$/.test(phone)) {
-      alert('Please enter a valid 10-digit phone number');
+      alert('Please enter a valid 10‑digit phone number');
       return;
     }
     setSending(true);
@@ -38,20 +38,40 @@ export default function Login() {
 
   return (
     <MobileLayout>
-      <ScreenContainer className="flex flex-col justify-center min-h-screen">
-        <div className="flex flex-col items-center mb-8 mt-8">
-          <div className="bg-gradient-to-r from-primary to-primary-dark w-20 h-20 rounded-2xl flex items-center justify-center shadow-lg mb-5">
-            <span className="text-white text-3xl">📲</span>
+      <ScreenContainer className="flex flex-col justify-center items-center h-full">
+        {/* Logo + Heading */}
+        <div className="flex flex-col items-center mb-8">
+          <div className="
+              bg-gradient-to-r from-primary to-primary-dark
+              w-20 h-20 rounded-2xl
+              flex items-center justify-center
+              shadow-lg mb-5
+            ">
+            <span className="text-onPrimary text-3xl">📲</span>
           </div>
-          <h2 className="text-2xl font-bold mb-1">Log in to Habrio</h2>
-          <p className="text-secondary text-sm mb-4">Enter your mobile number to continue</p>
+          <h2 className="text-2xl font-bold mb-1 text-text-primary">
+            Log in to Habrio
+          </h2>
+          <p className="text-sm text-text-secondary mb-4 text-center">
+            Enter your mobile number to continue
+          </p>
         </div>
+
+        {/* Form */}
         <form
-          className="flex flex-col gap-4"
-          onSubmit={e => { e.preventDefault(); sendOtp(); }}
+          onSubmit={(e) => {
+            e.preventDefault();
+            sendOtp();
+          }}
+          className="w-full space-y-4"
         >
-          <div className="flex gap-2 items-center">
-            <span className="bg-background-soft border border-divider rounded-lg px-3 py-2 font-semibold text-base">+91</span>
+          <div className="flex items-center gap-2">
+            <span className="
+                bg-background-soft border border-divider
+                rounded-lg px-3 py-2 font-semibold text-base
+              ">
+              +91
+            </span>
             <Input
               type="tel"
               maxLength={10}
@@ -59,24 +79,32 @@ export default function Login() {
               placeholder="9876543210"
               className="flex-1 text-lg"
               value={phone}
-              onChange={e => setPhone(e.target.value.replace(/\D/g, ''))}
+              onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))}
             />
           </div>
+
           <Button
             type="submit"
             size="lg"
-            className="w-full"
+            fullWidth
             disabled={sending || phone.length !== 10}
             loading={sending}
           >
             Send OTP
           </Button>
         </form>
-        <div className="mt-8 text-xs text-secondary text-center leading-relaxed">
+
+        {/* Terms & Privacy */}
+        <p className="mt-8 text-xs text-text-secondary text-center leading-relaxed">
           By continuing, you agree to our{' '}
-          <a href="#" className="text-primary underline font-medium">Terms & Conditions</a> and{' '}
-          <a href="#" className="text-primary underline font-medium">Privacy Policy</a>
-        </div>
+          <a href="#" className="text-primary underline font-medium">
+            Terms & Conditions
+          </a>{' '}
+          and{' '}
+          <a href="#" className="text-primary underline font-medium">
+            Privacy Policy
+          </a>
+        </p>
       </ScreenContainer>
     </MobileLayout>
   );
