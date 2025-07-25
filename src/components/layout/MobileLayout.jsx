@@ -1,8 +1,10 @@
-// MobileLayout.jsx
+// src/components/layout/MobileLayout.jsx
+import React from 'react';
+
 export default function MobileLayout({ children }) {
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-      <div className="w-full max-w-xs bg-white rounded-2xl shadow-lg overflow-hidden">
+    <div className="min-h-screen bg-background-default flex justify-center">
+      <div className="w-full max-w-md">
         {children}
       </div>
     </div>
