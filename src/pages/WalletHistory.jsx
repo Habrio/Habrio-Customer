@@ -1,9 +1,33 @@
-import { useState, useEffect } from 'react';
+// File: src/pages/WalletHistory.jsx
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../styles/common.css';
-import '../styles/App.css';
-import '../styles/design-system.css';
+import MobileLayout from '../components/layout/MobileLayout';
+import ScreenContainer from '../components/layout/ScreenContainer';
 import PageHeader from '../components/molecules/PageHeader';
+import Button from '../components/atoms/Button';
+import { Spinner } from '../components/atoms/Loader';
+import EmptyState from '../components/organisms/EmptyState';
+import { get } from '../utils/api';
+
+function getTransactionIcon(type) {
+  switch (type) {
+    case 'credit':
+    case 'recharge': return '💰';
+    case 'debit': return '💸';
+    case 'refund': return '↩️';
+    default: return '💳';
+  }
+}
+
+function getTransactionColor(type) {
+  switch (type) {
+    case 'credit':
+    case 'recharge':
+    case 'refund': return 'text-success';
+    case 'debit': return 'text-error';
+    default: return 'text-secondary';
+  }
+}
 
 export default function WalletHistory() {
   const navigate = useNavigate();
@@ -11,257 +35,140 @@ export default function WalletHistory() {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');
 
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
-  const token = localStorage.getItem('auth_token');
-
   useEffect(() => {
-    if (!token) {
-      navigate('/login');
-      return;
-    }
-    fetchTransactions();
-  }, []);
+    const token = localStorage.getItem('auth_token');
+    if (!token) return navigate('/login');
+    fetchTransactions(token);
+  }, [navigate]);
 
-  const fetchTransactions = async () => {
+  async function fetchTransactions(token) {
     try {
-      const res = await fetch(`${backendUrl}/wallet/history`, {
-        headers: { 'Authorization': token }
-      });
-      const data = await res.json();
-      if (data.status === 'success') {
-        setTransactions(data.transactions);
-      }
-    } catch (error) {
-      console.error('Error fetching transactions:', error);
+      const { status, transactions } = await get('/wallet/history', { token });
+      if (status === 'success') setTransactions(transactions);
+    } catch {
+      // fail silent
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
-  };
+  }
 
-  const getTransactionIcon = (type) => {
-    switch (type) {
-      case 'credit':
-      case 'recharge': return '💰';
-      case 'debit': return '💸';
-      case 'refund': return '↩️';
-      default: return '💳';
-    }
-  };
-
-  const getTransactionColor = (type) => {
-    switch (type) {
-      case 'credit':
-      case 'recharge':
-      case 'refund': return 'var(--success-color)';
-      case 'debit': return 'var(--error-color)';
-      default: return 'var(--text-secondary)';
-    }
-  };
-
-  const filteredTransactions = transactions.filter(transaction => {
+  const filteredTransactions = transactions.filter(t => {
     if (filter === 'all') return true;
-    if (filter === 'credit') return ['credit', 'recharge', 'refund'].includes(transaction.type);
-    if (filter === 'debit') return transaction.type === 'debit';
+    if (filter === 'credit') return ['credit', 'recharge', 'refund'].includes(t.type);
+    if (filter === 'debit') return t.type === 'debit';
     return true;
   });
 
+  // Group by date
+  const grouped = filteredTransactions.reduce((acc, tx) => {
+    const date = new Date(tx.created_at).toDateString();
+    if (!acc[date]) acc[date] = [];
+    acc[date].push(tx);
+    return acc;
+  }, {});
+
   if (loading) {
     return (
-      <div className="screen-content">
-        <div style={{ textAlign: 'center', marginTop: '40px' }}>
-          <div style={{ 
-            width: '40px', 
-            height: '40px', 
-            border: '3px solid var(--divider)', 
-            borderTop: '3px solid var(--primary-color)', 
-            borderRadius: '50%', 
-            animation: 'spin 1s linear infinite',
-            margin: '0 auto 20px'
-          }}></div>
-          <p>Loading transactions...</p>
-        </div>
-      </div>
+      <MobileLayout>
+        <PageHeader title="Transaction History" />
+        <ScreenContainer className="flex justify-center py-20">
+          <Spinner size={48} className="text-primary" />
+        </ScreenContainer>
+      </MobileLayout>
     );
   }
 
   return (
-    <div className="screen-content">
-      {/* Header */}
+    <MobileLayout>
       <PageHeader title="Transaction History" />
-
-      {/* Filter Tabs */}
-      <div style={{ 
-        display: 'flex', 
-        gap: '8px', 
-        marginBottom: '20px',
-        overflowX: 'auto',
-        paddingBottom: '8px'
-      }}>
-        {[
-          { key: 'all', label: 'All' },
-          { key: 'credit', label: 'Money In' },
-          { key: 'debit', label: 'Money Out' }
-        ].map((tab) => (
-          <button
-            key={tab.key}
-            onClick={() => setFilter(tab.key)}
-            style={{
-              background: filter === tab.key ? 'var(--primary-gradient)' : 'var(--background-soft)',
-              color: filter === tab.key ? 'white' : 'var(--text-primary)',
-              border: filter === tab.key ? 'none' : '1px solid var(--divider)',
-              borderRadius: '20px',
-              padding: '8px 16px',
-              fontSize: '14px',
-              fontWeight: '500',
-              cursor: 'pointer',
-              whiteSpace: 'nowrap',
-              minWidth: 'fit-content'
-            }}
-          >
-            {tab.label}
-          </button>
-        ))}
-      </div>
-
-      {/* Transactions List */}
-      {filteredTransactions.length === 0 ? (
-        <div style={{ textAlign: 'center', padding: '40px 20px' }}>
-          <div style={{ fontSize: '64px', marginBottom: '20px' }}>📝</div>
-          <h3 style={{ margin: '0 0 8px 0', fontSize: '18px', fontWeight: '600' }}>
-            No transactions found
-          </h3>
-          <p style={{ margin: '0 0 24px 0', color: 'var(--text-secondary)', fontSize: '14px' }}>
-            Your transaction history will appear here once you start using your wallet
-          </p>
-          <button
-            onClick={() => navigate('/wallet/add')}
-            style={{
-              background: 'var(--primary-gradient)',
-              color: 'white',
-              border: 'none',
-              borderRadius: '8px',
-              padding: '12px 24px',
-              fontSize: '16px',
-              fontWeight: '500',
-              cursor: 'pointer'
-            }}
-          >
-            Add Money
-          </button>
+      <ScreenContainer className="space-y-6">
+        {/* Filter Tabs */}
+        <div className="flex gap-2 pb-2 overflow-x-auto">
+          {[
+            { key: 'all', label: 'All' },
+            { key: 'credit', label: 'Money In' },
+            { key: 'debit', label: 'Money Out' }
+          ].map(tab => (
+            <Button
+              key={tab.key}
+              onClick={() => setFilter(tab.key)}
+              className={`whitespace-nowrap rounded-full ${filter === tab.key ? 'bg-primary text-white' : 'bg-background-soft text-text-primary border border-divider'}`}
+              size="sm"
+              variant={filter === tab.key ? 'primary' : 'soft'}
+            >
+              {tab.label}
+            </Button>
+          ))}
         </div>
-      ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          {/* Group by Date */}
-          {filteredTransactions.reduce((grouped, transaction) => {
-            const date = new Date(transaction.created_at).toDateString();
-            if (!grouped[date]) {
-              grouped[date] = [];
-            }
-            grouped[date].push(transaction);
-            return grouped;
-          }, {}) && 
-            Object.entries(
-              filteredTransactions.reduce((grouped, transaction) => {
-                const date = new Date(transaction.created_at).toDateString();
-                if (!grouped[date]) {
-                  grouped[date] = [];
-                }
-                grouped[date].push(transaction);
-                return grouped;
-              }, {})
-            ).map(([date, dayTransactions]) => (
-              <div key={date} style={{ marginBottom: '16px' }}>
-                <h4 style={{ 
-                  margin: '0 0 8px 0', 
-                  fontSize: '14px', 
-                  fontWeight: '600',
-                  color: 'var(--text-secondary)',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.5px'
-                }}>
+
+        {/* Transactions List */}
+        {filteredTransactions.length === 0 ? (
+          <EmptyState
+            icon="📝"
+            title="No transactions found"
+            description="Your transaction history will appear here once you start using your wallet"
+            actionLabel="Add Money"
+            onAction={() => navigate('/wallet/add')}
+          />
+        ) : (
+          <div className="flex flex-col gap-6">
+            {Object.entries(grouped).map(([date, txs]) => (
+              <div key={date}>
+                <h4 className="text-xs font-semibold text-secondary uppercase mb-2 tracking-wide">
                   {new Date(date).toLocaleDateString('en-IN', {
                     day: 'numeric',
                     month: 'short',
                     year: 'numeric'
                   })}
                 </h4>
-                
-                {dayTransactions.map((transaction) => (
-                  <div
-                    key={transaction.id}
-                    style={{
-                      background: 'var(--background-soft)',
-                      border: '1px solid var(--divider)',
-                      borderRadius: '12px',
-                      padding: '16px',
-                      marginBottom: '8px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '12px'
-                    }}
-                  >
-                    <div style={{
-                      width: '48px',
-                      height: '48px',
-                      background: 'white',
-                      borderRadius: '24px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontSize: '20px'
-                    }}>
-                      {getTransactionIcon(transaction.type)}
+                <div className="flex flex-col gap-2">
+                  {txs.map(tx => (
+                    <div
+                      key={tx.id}
+                      className="flex items-center gap-3 bg-background-soft border border-divider rounded-lg p-4"
+                    >
+                      <div className="w-12 h-12 flex items-center justify-center bg-white rounded-full text-xl">
+                        {getTransactionIcon(tx.type)}
+                      </div>
+                      <div className="flex-1">
+                        <p className="font-semibold capitalize">
+                          {tx.type === 'recharge'
+                            ? 'Money Added'
+                            : tx.type === 'debit'
+                            ? 'Payment'
+                            : tx.type === 'refund'
+                            ? 'Refund Received'
+                            : tx.type === 'credit'
+                            ? 'Money Credited'
+                            : tx.type}
+                        </p>
+                        <p className="text-xs text-secondary">{tx.reference || 'Wallet transaction'}</p>
+                        <p className="text-xs text-secondary">
+                          {new Date(tx.created_at).toLocaleTimeString('en-IN', {
+                            hour: '2-digit',
+                            minute: '2-digit'
+                          })}
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <p className={`font-bold text-base ${getTransactionColor(tx.type)}`}>
+                          {tx.type === 'debit' ? '-' : '+'}₹{parseFloat(tx.amount).toFixed(2)}
+                        </p>
+                        <span className={`text-xs uppercase font-bold px-2 py-1 rounded 
+                          ${tx.status === 'success'
+                            ? 'bg-success/10 text-success'
+                            : 'bg-error/10 text-error'}`}>
+                          {tx.status}
+                        </span>
+                      </div>
                     </div>
-                    
-                    <div style={{ flex: 1 }}>
-                      <p style={{ margin: '0 0 4px 0', fontSize: '16px', fontWeight: '600', textTransform: 'capitalize' }}>
-                        {transaction.type === 'recharge' ? 'Money Added' : 
-                         transaction.type === 'debit' ? 'Payment' :
-                         transaction.type === 'refund' ? 'Refund Received' : 
-                         transaction.type === 'credit' ? 'Money Credited' : transaction.type}
-                      </p>
-                      <p style={{ margin: '0 0 4px 0', fontSize: '14px', color: 'var(--text-secondary)' }}>
-                        {transaction.reference || 'Wallet transaction'}
-                      </p>
-                      <p style={{ margin: 0, fontSize: '12px', color: 'var(--text-secondary)' }}>
-                        {new Date(transaction.created_at).toLocaleTimeString('en-IN', {
-                          hour: '2-digit',
-                          minute: '2-digit'
-                        })}
-                      </p>
-                    </div>
-                    
-                    <div style={{ textAlign: 'right' }}>
-                      <p style={{ 
-                        margin: '0 0 4px 0', 
-                        fontSize: '18px', 
-                        fontWeight: '700',
-                        color: getTransactionColor(transaction.type)
-                      }}>
-                        {transaction.type === 'debit' ? '-' : '+'}₹{parseFloat(transaction.amount).toFixed(2)}
-                      </p>
-                      <p style={{ 
-                        margin: 0, 
-                        fontSize: '10px', 
-                        color: transaction.status === 'success' ? 'var(--success-color)' : 'var(--error-color)',
-                        textTransform: 'uppercase',
-                        fontWeight: '600',
-                        padding: '2px 6px',
-                        borderRadius: '4px',
-                        background: transaction.status === 'success' ? 'rgba(0, 199, 117, 0.1)' : 'rgba(255, 59, 48, 0.1)'
-                      }}>
-                        {transaction.status}
-                      </p>
-                    </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            ))
-          }
-        </div>
-      )}
-
-      {/* Bottom Navigation Placeholder */}
-      <div style={{ height: '80px' }}></div>
-    </div>
+            ))}
+          </div>
+        )}
+      </ScreenContainer>
+    </MobileLayout>
   );
 }

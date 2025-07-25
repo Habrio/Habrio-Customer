@@ -1,9 +1,33 @@
-import { useState, useEffect } from 'react';
+// File: src/pages/Wallet.jsx
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../styles/common.css';
-import '../styles/App.css';
-import '../styles/design-system.css';
+import MobileLayout from '../components/layout/MobileLayout';
+import ScreenContainer from '../components/layout/ScreenContainer';
 import PageHeader from '../components/molecules/PageHeader';
+import Button from '../components/atoms/Button';
+import { Spinner } from '../components/atoms/Loader';
+import EmptyState from '../components/organisms/EmptyState';
+import { get } from '../utils/api';
+
+function getTransactionIcon(type) {
+  switch (type) {
+    case 'credit':
+    case 'recharge': return '💰';
+    case 'debit': return '💸';
+    case 'refund': return '↩️';
+    default: return '💳';
+  }
+}
+
+function getTransactionColor(type) {
+  switch (type) {
+    case 'credit':
+    case 'recharge':
+    case 'refund': return 'text-success';
+    case 'debit': return 'text-error';
+    default: return 'text-secondary';
+  }
+}
 
 export default function Wallet() {
   const navigate = useNavigate();
@@ -11,335 +35,161 @@ export default function Wallet() {
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
-  const token = localStorage.getItem('auth_token');
-
   useEffect(() => {
-    if (!token) {
-      navigate('/login');
-      return;
-    }
-    fetchWallet();
-    fetchTransactions();
-  }, []);
+    const token = localStorage.getItem('auth_token');
+    if (!token) return navigate('/login');
+    fetchWallet(token);
+    fetchTransactions(token);
+  }, [navigate]);
 
-  const fetchWallet = async () => {
+  async function fetchWallet(token) {
     try {
-      const res = await fetch(`${backendUrl}/wallet`, {
-        headers: { 'Authorization': token }
-      });
-      const data = await res.json();
-      if (data.status === 'success') {
-        setBalance(data.balance);
-      }
-    } catch (error) {
-      console.error('Error fetching wallet:', error);
+      const { status, balance } = await get('/wallet', { token });
+      if (status === 'success') setBalance(balance);
+    } catch {
+      // fail silent
     }
-  };
+  }
 
-  const fetchTransactions = async () => {
+  async function fetchTransactions(token) {
     try {
-      const res = await fetch(`${backendUrl}/wallet/history`, {
-        headers: { 'Authorization': token }
-      });
-      const data = await res.json();
-      if (data.status === 'success') {
-        setTransactions(data.transactions.slice(0, 5)); // Show only recent 5
-      }
-    } catch (error) {
-      console.error('Error fetching transactions:', error);
+      const { status, transactions } = await get('/wallet/history', { token });
+      if (status === 'success') setTransactions(transactions.slice(0, 5));
+    } catch {
+      // fail silent
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
-  };
-
-  const getTransactionIcon = (type) => {
-    switch (type) {
-      case 'credit':
-      case 'recharge': return '💰';
-      case 'debit': return '💸';
-      case 'refund': return '↩️';
-      default: return '💳';
-    }
-  };
-
-  const getTransactionColor = (type) => {
-    switch (type) {
-      case 'credit':
-      case 'recharge':
-      case 'refund': return 'var(--success-color)';
-      case 'debit': return 'var(--error-color)';
-      default: return 'var(--text-secondary)';
-    }
-  };
+  }
 
   if (loading) {
     return (
-      <div className="screen-content">
-        <div style={{ textAlign: 'center', marginTop: '40px' }}>
-          <div style={{ 
-            width: '40px', 
-            height: '40px', 
-            border: '3px solid var(--divider)', 
-            borderTop: '3px solid var(--primary-color)', 
-            borderRadius: '50%', 
-            animation: 'spin 1s linear infinite',
-            margin: '0 auto 20px'
-          }}></div>
-          <p>Loading wallet...</p>
-        </div>
-      </div>
+      <MobileLayout>
+        <PageHeader title="My Wallet" />
+        <ScreenContainer className="flex justify-center py-20">
+          <Spinner size={48} className="text-primary" />
+        </ScreenContainer>
+      </MobileLayout>
     );
   }
 
   return (
-    <div className="screen-content">
-      {/* Header */}
+    <MobileLayout>
       <PageHeader title="My Wallet" />
+      <ScreenContainer className="space-y-6">
 
-      {/* Wallet Balance Card */}
-      <div style={{
-        background: 'var(--primary-gradient)',
-        borderRadius: '16px',
-        padding: '24px',
-        marginBottom: '24px',
-        color: 'white',
-        position: 'relative',
-        overflow: 'hidden'
-      }}>
-        {/* Background decoration */}
-        <div style={{
-          position: 'absolute',
-          top: '-50px',
-          right: '-50px',
-          width: '150px',
-          height: '150px',
-          background: 'rgba(255, 255, 255, 0.1)',
-          borderRadius: '50%'
-        }}></div>
-        
-        <div style={{ position: 'relative', zIndex: 1 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-            <span style={{ fontSize: '24px' }}>💳</span>
-            <span style={{ fontSize: '16px', opacity: 0.9 }}>Wallet Balance</span>
+        {/* Wallet Balance Card */}
+        <div className="relative bg-gradient-to-r from-primary to-primary-dark rounded-xl p-6 text-white overflow-hidden mb-4">
+          <div className="absolute -top-16 -right-12 w-44 h-44 bg-white/10 rounded-full"></div>
+          <div className="relative z-10">
+            <div className="flex items-center gap-3 mb-2">
+              <span className="text-2xl">💳</span>
+              <span className="opacity-90 font-medium">Wallet Balance</span>
+            </div>
+            <h1 className="text-3xl font-bold mb-4">₹{balance.toFixed(2)}</h1>
+            <div className="flex gap-2">
+              <Button onClick={() => navigate('/wallet/add')} size="sm" variant="white">+ Add Money</Button>
+              <Button onClick={() => navigate('/wallet/history')} size="sm" variant="outline-white">View History</Button>
+            </div>
           </div>
-          
-          <h1 style={{ margin: '0 0 20px 0', fontSize: '32px', fontWeight: '700' }}>
-            ₹{balance.toFixed(2)}
-          </h1>
-          
-          <button
-            onClick={() => navigate('/wallet/add')}
-            style={{
-              background: 'rgba(255, 255, 255, 0.2)',
-              color: 'white',
-              border: '1px solid rgba(255, 255, 255, 0.3)',
-              borderRadius: '8px',
-              padding: '10px 20px',
-              fontSize: '14px',
-              fontWeight: '500',
-              cursor: 'pointer',
-              marginRight: '12px'
-            }}
-          >
-            + Add Money
-          </button>
-          
-          <button
-            onClick={() => navigate('/wallet/history')}
-            style={{
-              background: 'transparent',
-              color: 'white',
-              border: '1px solid rgba(255, 255, 255, 0.3)',
-              borderRadius: '8px',
-              padding: '10px 20px',
-              fontSize: '14px',
-              fontWeight: '500',
-              cursor: 'pointer'
-            }}
-          >
-            View History
-          </button>
         </div>
-      </div>
 
-      {/* Quick Actions */}
-      <div style={{ marginBottom: '24px' }}>
-        <h3 style={{ margin: '0 0 16px 0', fontSize: '18px', fontWeight: '600' }}>
-          Quick Actions
-        </h3>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px' }}>
-          <button
-            onClick={() => navigate('/wallet/add')}
-            style={{
-              background: 'var(--background-soft)',
-              border: '1px solid var(--divider)',
-              borderRadius: '12px',
-              padding: '16px',
-              cursor: 'pointer',
-              textAlign: 'center'
-            }}
-          >
-            <div style={{ fontSize: '24px', marginBottom: '8px' }}>💰</div>
-            <p style={{ margin: '0 0 4px 0', fontSize: '14px', fontWeight: '600' }}>Add Money</p>
-            <p style={{ margin: 0, fontSize: '12px', color: 'var(--text-secondary)' }}>
-              Top up your wallet
-            </p>
-          </button>
-          
-          <button
-            onClick={() => navigate('/wallet/history')}
-            style={{
-              background: 'var(--background-soft)',
-              border: '1px solid var(--divider)',
-              borderRadius: '12px',
-              padding: '16px',
-              cursor: 'pointer',
-              textAlign: 'center'
-            }}
-          >
-            <div style={{ fontSize: '24px', marginBottom: '8px' }}>📊</div>
-            <p style={{ margin: '0 0 4px 0', fontSize: '14px', fontWeight: '600' }}>Transaction History</p>
-            <p style={{ margin: 0, fontSize: '12px', color: 'var(--text-secondary)' }}>
-              View all transactions
-            </p>
-          </button>
-        </div>
-      </div>
-
-      {/* Recent Transactions */}
-      <div style={{ marginBottom: '24px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-          <h3 style={{ margin: 0, fontSize: '18px', fontWeight: '600' }}>
-            Recent Transactions
-          </h3>
-          {transactions.length > 0 && (
-            <button
-              onClick={() => navigate('/wallet/history')}
-              style={{
-                background: 'none',
-                border: 'none',
-                color: 'var(--primary-color)',
-                fontSize: '14px',
-                fontWeight: '500',
-                cursor: 'pointer'
-              }}
+        {/* Quick Actions */}
+        <div>
+          <h3 className="text-lg font-semibold mb-3">Quick Actions</h3>
+          <div className="grid grid-cols-2 gap-3">
+            <Button
+              onClick={() => navigate('/wallet/add')}
+              className="flex flex-col items-center gap-2 p-4"
+              variant="soft"
             >
-              View All
-            </button>
+              <span className="text-2xl">💰</span>
+              <span className="font-semibold text-base">Add Money</span>
+              <span className="text-xs text-secondary">Top up your wallet</span>
+            </Button>
+            <Button
+              onClick={() => navigate('/wallet/history')}
+              className="flex flex-col items-center gap-2 p-4"
+              variant="soft"
+            >
+              <span className="text-2xl">📊</span>
+              <span className="font-semibold text-base">Transaction History</span>
+              <span className="text-xs text-secondary">View all transactions</span>
+            </Button>
+          </div>
+        </div>
+
+        {/* Recent Transactions */}
+        <div>
+          <div className="flex justify-between items-center mb-3">
+            <h3 className="text-lg font-semibold">Recent Transactions</h3>
+            {transactions.length > 0 && (
+              <Button onClick={() => navigate('/wallet/history')} size="sm" variant="link">
+                View All
+              </Button>
+            )}
+          </div>
+          {transactions.length === 0 ? (
+            <EmptyState
+              icon="📝"
+              title="No transactions yet"
+              description="Your transaction history will appear here"
+            />
+          ) : (
+            <div className="flex flex-col gap-2">
+              {transactions.map(tx => (
+                <div
+                  key={tx.id}
+                  className="flex items-center gap-3 bg-background-soft border border-divider rounded-lg p-4"
+                >
+                  <div className="w-10 h-10 flex items-center justify-center rounded-full bg-white text-lg">
+                    {getTransactionIcon(tx.type)}
+                  </div>
+                  <div className="flex-1">
+                    <p className="font-semibold text-base capitalize">
+                      {tx.type === 'recharge'
+                        ? 'Money Added'
+                        : tx.type === 'debit'
+                        ? 'Payment'
+                        : tx.type === 'refund'
+                        ? 'Refund'
+                        : tx.type}
+                    </p>
+                    <p className="text-xs text-secondary">{tx.reference || 'Wallet transaction'}</p>
+                    <p className="text-xs text-secondary">
+                      {new Date(tx.created_at).toLocaleDateString('en-IN', {
+                        day: 'numeric',
+                        month: 'short',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      })}
+                    </p>
+                  </div>
+                  <div className="text-right">
+                    <p className={`font-bold text-base ${getTransactionColor(tx.type)}`}>
+                      {tx.type === 'debit' ? '-' : '+'}₹{tx.amount}
+                    </p>
+                    <p className="text-xs text-success uppercase font-semibold">{tx.status}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
           )}
         </div>
 
-        {transactions.length === 0 ? (
-          <div style={{
-            background: 'var(--background-soft)',
-            border: '1px solid var(--divider)',
-            borderRadius: '12px',
-            padding: '32px 20px',
-            textAlign: 'center'
-          }}>
-            <div style={{ fontSize: '48px', marginBottom: '16px' }}>📝</div>
-            <h4 style={{ margin: '0 0 8px 0', fontSize: '16px', fontWeight: '600' }}>
-              No transactions yet
-            </h4>
-            <p style={{ margin: 0, fontSize: '14px', color: 'var(--text-secondary)' }}>
-              Your transaction history will appear here
-            </p>
-          </div>
-        ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            {transactions.map((transaction) => (
-              <div
-                key={transaction.id}
-                style={{
-                  background: 'var(--background-soft)',
-                  border: '1px solid var(--divider)',
-                  borderRadius: '12px',
-                  padding: '16px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '12px'
-                }}
-              >
-                <div style={{
-                  width: '40px',
-                  height: '40px',
-                  background: 'white',
-                  borderRadius: '20px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: '18px'
-                }}>
-                  {getTransactionIcon(transaction.type)}
-                </div>
-                
-                <div style={{ flex: 1 }}>
-                  <p style={{ margin: '0 0 4px 0', fontSize: '14px', fontWeight: '600', textTransform: 'capitalize' }}>
-                    {transaction.type === 'recharge' ? 'Money Added' : 
-                     transaction.type === 'debit' ? 'Payment' :
-                     transaction.type === 'refund' ? 'Refund' : transaction.type}
-                  </p>
-                  <p style={{ margin: '0 0 2px 0', fontSize: '12px', color: 'var(--text-secondary)' }}>
-                    {transaction.reference || 'Wallet transaction'}
-                  </p>
-                  <p style={{ margin: 0, fontSize: '11px', color: 'var(--text-secondary)' }}>
-                    {new Date(transaction.created_at).toLocaleDateString('en-IN', {
-                      day: 'numeric',
-                      month: 'short',
-                      hour: '2-digit',
-                      minute: '2-digit'
-                    })}
-                  </p>
-                </div>
-                
-                <div style={{ textAlign: 'right' }}>
-                  <p style={{ 
-                    margin: '0 0 2px 0', 
-                    fontSize: '16px', 
-                    fontWeight: '600',
-                    color: getTransactionColor(transaction.type)
-                  }}>
-                    {transaction.type === 'debit' ? '-' : '+'}₹{transaction.amount}
-                  </p>
-                  <p style={{ 
-                    margin: 0, 
-                    fontSize: '10px', 
-                    color: 'var(--success-color)',
-                    textTransform: 'uppercase',
-                    fontWeight: '500'
-                  }}>
-                    {transaction.status}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-
-      {/* Safety Notice */}
-      <div style={{
-        background: 'rgba(252, 100, 79, 0.1)',
-        border: '1px solid rgba(252, 100, 79, 0.2)',
-        borderRadius: '12px',
-        padding: '16px',
-        marginBottom: '20px'
-      }}>
-        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-          <span style={{ fontSize: '16px', marginTop: '2px' }}>🔒</span>
-          <div>
-            <h4 style={{ margin: '0 0 4px 0', fontSize: '14px', fontWeight: '600', color: 'var(--primary-color)' }}>
-              Your money is safe
-            </h4>
-            <p style={{ margin: 0, fontSize: '12px', color: 'var(--text-secondary)', lineHeight: '1.4' }}>
-              All transactions are secured with bank-grade encryption. Your wallet balance is protected and can be refunded anytime.
-            </p>
+        {/* Safety Notice */}
+        <div className="bg-error/10 border border-error/20 rounded-lg p-4">
+          <div className="flex items-start gap-3">
+            <span className="text-base mt-1">🔒</span>
+            <div>
+              <h4 className="text-sm font-semibold text-primary mb-1">Your money is safe</h4>
+              <p className="text-xs text-secondary leading-normal">
+                All transactions are secured with bank-grade encryption. Your wallet balance is protected and can be refunded anytime.
+              </p>
+            </div>
           </div>
         </div>
-      </div>
-
-      {/* Bottom Navigation Placeholder */}
-      <div style={{ height: '80px' }}></div>
-    </div>
+      </ScreenContainer>
+    </MobileLayout>
   );
 }

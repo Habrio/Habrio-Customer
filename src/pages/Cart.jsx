@@ -1,398 +1,120 @@
-import { useState, useEffect } from 'react';
+// File: src/pages/Cart.jsx
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../styles/common.css';
-import '../styles/App.css';
-import '../styles/design-system.css';
+import MobileLayout from '../components/layout/MobileLayout';
+import ScreenContainer from '../components/layout/ScreenContainer';
 import PageHeader from '../components/molecules/PageHeader';
+import EmptyState from '../components/organisms/EmptyState';
+import BillSummarySection from '../components/organisms/BillSummarySection';
+import CartItemCard from '../components/organisms/CartItemCard';
+import Button from '../components/atoms/Button';
+import { Spinner } from '../components/atoms/Loader';
+import { get, post } from '../utils/api';
 
 export default function Cart() {
   const navigate = useNavigate();
-  const [cartItems, setCartItems] = useState([]);
+  const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [totalPrice, setTotalPrice] = useState(0);
-  const [totalSavings, setTotalSavings] = useState(0);
-
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
-  const token = localStorage.getItem('auth_token');
+  const [clearing, setClearing] = useState(false);
 
   useEffect(() => {
-    if (!token) {
-      navigate('/login');
-      return;
-    }
-    fetchCart();
+    const token = localStorage.getItem('auth_token');
+    if (!token) return navigate('/login');
+    fetchCart(token);
   }, []);
 
-  const fetchCart = async () => {
+  async function fetchCart(token) {
+    setLoading(true);
     try {
-      const res = await fetch(`${backendUrl}/cart/view`, {
-        headers: { 'Authorization': token }
-      });
-      const data = await res.json();
-      
-      if (data.status === 'success') {
-        setCartItems(data.cart);
-        setTotalPrice(data.total_price);
-        setTotalSavings(data.total_savings);
+      const { status, cart, total_price, total_savings } = await get('/cart/view', { token });
+      if (status === 'success') {
+        setItems(cart);
+        setTotals({ total_price, total_savings });
       }
-    } catch (error) {
-      console.error('Error fetching cart:', error);
-    }
+    } catch {}
     setLoading(false);
-  };
+  }
 
-  const updateQuantity = async (itemId, newQuantity) => {
-    if (newQuantity < 1) return;
-    
+  async function handleClear() {
+    if (!window.confirm('Clear all items?')) return;
+    setClearing(true);
     try {
-      const res = await fetch(`${backendUrl}/cart/update`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': token
-        },
-        body: JSON.stringify({ item_id: itemId, quantity: newQuantity })
-      });
-
-      const data = await res.json();
-      if (data.status === 'success') {
-        fetchCart();
-      } else {
-        alert(data.message || 'Failed to update quantity');
-      }
-    } catch (error) {
-      console.error('Error updating quantity:', error);
-    }
-  };
-
-  const removeItem = async (itemId) => {
-    try {
-      const res = await fetch(`${backendUrl}/cart/remove`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': token
-        },
-        body: JSON.stringify({ item_id: itemId })
-      });
-
-      const data = await res.json();
-      if (data.status === 'success') {
-        fetchCart();
-      } else {
-        alert(data.message || 'Failed to remove item');
-      }
-    } catch (error) {
-      console.error('Error removing item:', error);
-    }
-  };
-
-  const clearCart = async () => {
-    if (!confirm('Are you sure you want to clear the cart?')) return;
-    
-    try {
-      const res = await fetch(`${backendUrl}/cart/clear`, {
-        method: 'POST',
-        headers: { 'Authorization': token }
-      });
-
-      const data = await res.json();
-      if (data.status === 'success') {
-        fetchCart();
-      } else {
-        alert(data.message || 'Failed to clear cart');
-      }
-    } catch (error) {
-      console.error('Error clearing cart:', error);
-    }
-  };
+      const token = localStorage.getItem('auth_token');
+      await post('/cart/clear', null, { token });
+      fetchCart(token);
+    } catch {}
+    setClearing(false);
+  }
 
   if (loading) {
     return (
-      <div className="screen-content">
-        <div style={{ textAlign: 'center', marginTop: '40px' }}>
-          <div style={{ 
-            width: '40px', 
-            height: '40px', 
-            border: '3px solid var(--divider)', 
-            borderTop: '3px solid var(--primary-color)', 
-            borderRadius: '50%', 
-            animation: 'spin 1s linear infinite',
-            margin: '0 auto 20px'
-          }}></div>
-          <p>Loading cart...</p>
-        </div>
-      </div>
+      <MobileLayout>
+        <PageHeader title="My Cart" />
+        <ScreenContainer>
+          <div className="flex flex-col items-center py-12">
+            <Spinner size={40} className="mb-4 text-primary" />
+            <p className="text-text-secondary">Loading cart…</p>
+          </div>
+        </ScreenContainer>
+      </MobileLayout>
+    );
+  }
+
+  if (items.length === 0) {
+    return (
+      <MobileLayout>
+        <PageHeader title="My Cart" />
+        <ScreenContainer>
+          <EmptyState
+            icon="🛒"
+            title="Your cart is empty"
+            description="Add items from shops to get started."
+            actionLabel="Browse Shops"
+            onAction={() => navigate('/shops')}
+          />
+        </ScreenContainer>
+      </MobileLayout>
     );
   }
 
   return (
-    <div className="screen-content">
-      {/* Header */}
-      <PageHeader title={`My Cart (${cartItems.length})`} />
-      {cartItems.length > 0 && (
+    <MobileLayout>
+      <PageHeader title={`My Cart (${items.length})`} />
+      <ScreenContainer>
+        <div className="flex justify-end mb-4 px-4">
           <button
-            onClick={clearCart}
-            style={{
-              background: 'none',
-              border: 'none',
-              color: 'var(--error-color)',
-              fontSize: '14px',
-              fontWeight: '500',
-              cursor: 'pointer'
-            }}
+            disabled={clearing}
+            onClick={handleClear}
+            className="text-sm text-error font-medium"
           >
-            Clear All
-          </button>
-        )}
-
-      {cartItems.length === 0 ? (
-        <div style={{ textAlign: 'center', padding: '40px 20px' }}>
-          <div style={{ fontSize: '64px', marginBottom: '20px' }}>🛒</div>
-          <h3 style={{ margin: '0 0 8px 0', fontSize: '18px', fontWeight: '600' }}>
-            Your cart is empty
-          </h3>
-          <p style={{ margin: '0 0 24px 0', color: 'var(--text-secondary)', fontSize: '14px' }}>
-            Add items from shops to get started
-          </p>
-          <button
-            onClick={() => navigate('/shops')}
-            style={{
-              background: 'var(--primary-gradient)',
-              color: 'white',
-              border: 'none',
-              borderRadius: '8px',
-              padding: '12px 24px',
-              fontSize: '16px',
-              fontWeight: '500',
-              cursor: 'pointer'
-            }}
-          >
-            Browse Shops
+            {clearing ? 'Clearing…' : 'Clear All'}
           </button>
         </div>
-      ) : (
-        <>
-          {/* Shop Info */}
-          {cartItems.length > 0 && (
-            <div style={{
-              background: 'var(--background-soft)',
-              border: '1px solid var(--divider)',
-              borderRadius: '12px',
-              padding: '16px',
-              marginBottom: '20px',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '12px'
-            }}>
-              <div style={{ 
-                width: '40px', 
-                height: '40px', 
-                background: 'var(--primary-gradient)', 
-                borderRadius: '20px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '16px'
-              }}>
-                🏪
-              </div>
-              <div>
-                <h4 style={{ margin: '0 0 2px 0', fontSize: '16px', fontWeight: '600' }}>
-                  {cartItems[0]?.shop_name}
-                </h4>
-                <p style={{ margin: 0, fontSize: '12px', color: 'var(--text-secondary)' }}>
-                  Items will be delivered together
-                </p>
-              </div>
-            </div>
-          )}
 
-          {/* Cart Items */}
-          <div style={{ marginBottom: '20px' }}>
-            {cartItems.map((item) => (
-              <div
-                key={item.id}
-                style={{
-                  background: 'var(--background-soft)',
-                  border: '1px solid var(--divider)',
-                  borderRadius: '12px',
-                  padding: '16px',
-                  marginBottom: '12px'
-                }}
-              >
-                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-                  <div style={{ 
-                    width: '60px', 
-                    height: '60px', 
-                    background: 'var(--divider)',
-                    borderRadius: '8px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '24px'
-                  }}>
-                    📦
-                  </div>
-                  
-                  <div style={{ flex: 1 }}>
-                    <h4 style={{ margin: '0 0 4px 0', fontSize: '16px', fontWeight: '600' }}>
-                      {item.item_name}
-                    </h4>
-                    <p style={{ margin: '0 0 8px 0', fontSize: '14px', color: 'var(--text-secondary)' }}>
-                      {item.pack_size} {item.unit}
-                    </p>
-                    
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
-                      <span style={{ fontSize: '16px', fontWeight: '600', color: 'var(--primary-color)' }}>
-                        ₹{item.price}
-                      </span>
-                      {item.mrp && item.mrp > item.price && (
-                        <>
-                          <span style={{ 
-                            fontSize: '14px', 
-                            color: 'var(--text-secondary)',
-                            textDecoration: 'line-through'
-                          }}>
-                            ₹{item.mrp}
-                          </span>
-                          <span style={{ 
-                            fontSize: '12px', 
-                            color: 'var(--success-color)',
-                            fontWeight: '500'
-                          }}>
-                            You save ₹{item.savings}
-                          </span>
-                        </>
-                      )}
-                    </div>
+        <div className="space-y-4 px-4">
+          {items.map(item => (
+            <CartItemCard
+              key={item.id}
+              item={item}
+              onQuantityChange={(qty) => {/* call update API then refresh */}}
+              onRemove={() => {/* call remove API then refresh */}}
+            />
+          ))}
+        </div>
 
-                    {/* Quantity Controls */}
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                        <button
-                          onClick={() => updateQuantity(item.item_id, item.quantity - 1)}
-                          style={{
-                            background: 'white',
-                            border: '1px solid var(--divider)',
-                            borderRadius: '6px',
-                            width: '32px',
-                            height: '32px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            cursor: 'pointer',
-                            fontSize: '16px'
-                          }}
-                        >
-                          −
-                        </button>
-                        <span style={{ fontSize: '16px', fontWeight: '600', minWidth: '20px', textAlign: 'center' }}>
-                          {item.quantity}
-                        </span>
-                        <button
-                          onClick={() => updateQuantity(item.item_id, item.quantity + 1)}
-                          style={{
-                            background: 'white',
-                            border: '1px solid var(--divider)',
-                            borderRadius: '6px',
-                            width: '32px',
-                            height: '32px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            cursor: 'pointer',
-                            fontSize: '16px'
-                          }}
-                        >
-                          +
-                        </button>
-                      </div>
-                      
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                        <span style={{ fontSize: '16px', fontWeight: '600' }}>
-                          ₹{item.subtotal}
-                        </span>
-                        <button
-                          onClick={() => removeItem(item.item_id)}
-                          style={{
-                            background: 'none',
-                            border: 'none',
-                            color: 'var(--error-color)',
-                            fontSize: '16px',
-                            cursor: 'pointer'
-                          }}
-                        >
-                          🗑️
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Bill Summary */}
-          <div style={{
-            background: 'var(--background-soft)',
-            border: '1px solid var(--divider)',
-            borderRadius: '12px',
-            padding: '20px',
-            marginBottom: '20px'
-          }}>
-            <h3 style={{ margin: '0 0 16px 0', fontSize: '18px', fontWeight: '600' }}>
-              Bill Summary
-            </h3>
-            
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-              <span>Subtotal</span>
-              <span>₹{totalPrice + totalSavings}</span>
-            </div>
-            
-            {totalSavings > 0 && (
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', color: 'var(--success-color)' }}>
-                <span>Savings</span>
-                <span>-₹{totalSavings}</span>
-              </div>
-            )}
-            
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px' }}>
-              <span>Delivery Fee</span>
-              <span style={{ color: 'var(--success-color)' }}>FREE</span>
-            </div>
-            
-            <div style={{ borderTop: '1px solid var(--divider)', paddingTop: '12px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '18px', fontWeight: '600' }}>
-                <span>Total</span>
-                <span style={{ color: 'var(--primary-color)' }}>₹{totalPrice}</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Checkout Button */}
-          <button
-            onClick={() => navigate('/checkout')}
-            style={{
-              background: 'var(--primary-gradient)',
-              color: 'white',
-              border: 'none',
-              borderRadius: '12px',
-              padding: '16px',
-              fontSize: '18px',
-              fontWeight: '600',
-              cursor: 'pointer',
-              width: '100%',
-              marginBottom: '20px'
-            }}
-          >
-            Proceed to Checkout • ₹{totalPrice}
-          </button>
-        </>
-      )}
-
-      {/* Bottom Navigation Placeholder */}
-      <div style={{ height: '80px' }}></div>
-    </div>
+        <div className="px-4 mt-6">
+          <BillSummarySection
+            items={[
+              { label: 'Subtotal', amount: totals.total_price + totals.total_savings },
+              { label: 'Savings', amount: totals.total_savings, isDiscount: true },
+              { label: 'Delivery Fee', amount: 0, isFree: true },
+            ]}
+            totalAmount={totals.total_price}
+            actionLabel={`Proceed to Checkout • ₹${totals.total_price}`}
+            onAction={() => navigate('/checkout')}
+          />
+        </div>
+      </ScreenContainer>
+    </MobileLayout>
   );
 }

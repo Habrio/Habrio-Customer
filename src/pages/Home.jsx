@@ -1,156 +1,186 @@
-// src/pages/Home.jsx
-import { useState, useEffect } from 'react';
+// File: src/pages/Home.jsx
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  WalletCard,
-  SearchCard,
-  CategoryCard,
-  FeaturedShopCard,
-  NearbyShopCard
-} from '../components/molecules/Cards';
-import { HiShoppingCart, HiAnnotation, HiCollection, HiDeviceMobile, HiCog, HiSparkles, HiUser } from 'react-icons/hi';
+import MobileLayout from '../components/layout/MobileLayout';
+import ScreenContainer from '../components/layout/ScreenContainer';
+import HeroSection from '../components/organisms/HeroSection';
+import ShopListSection from '../components/organisms/ShopListSection';
+import WalletCard from '../components/molecules/WalletCard';
+import SearchBar from '../components/molecules/SearchBar';
+import CategoryCard from '../components/molecules/CategoryCard';
+import FeaturedShopCard from '../components/molecules/FeaturedShopCard';
+import NearbyShopCard from '../components/molecules/NearbyShopCard';
+import EmptyState from '../components/organisms/EmptyState';
 import { get } from '../utils/api';
-import '../styles/common.css';
-import '../styles/App.css';
-import '../styles/design-system.css';
+import {
+  HiShoppingCart,
+  HiAnnotation,
+  HiCollection,
+  HiDeviceMobile,
+  HiCog,
+  HiSparkles,
+  HiUser
+} from 'react-icons/hi';
 
-function Home() {
+export default function Home() {
   const navigate = useNavigate();
-  const [userProfile, setUserProfile] = useState(null);
-  const [nearbyShops, setNearbyShops] = useState([]);
-  const [featuredShops, setFeaturedShops] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null);
   const [walletBalance, setWalletBalance] = useState(0);
+  const [featuredShops, setFeaturedShops] = useState([]);
+  const [nearbyShops, setNearbyShops] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState('');
+  const [searching, setSearching] = useState(false);
 
-  const token = localStorage.getItem('auth_token');
+  const shopCategories = [
+    { name: 'Grocery', icon: <HiShoppingCart />, type: 'grocery' },
+    { name: 'Pharmacy', icon: <HiAnnotation />, type: 'pharmacy' },
+    { name: 'Restaurant', icon: <HiCollection />, type: 'restaurant' },
+    { name: 'Electronics', icon: <HiDeviceMobile />, type: 'electronics' },
+    { name: 'Fashion', icon: <HiSparkles />, type: 'fashion' },
+    { name: 'Services', icon: <HiCog />, type: 'services' },
+  ];
 
   useEffect(() => {
+    const token = localStorage.getItem('auth_token');
     if (!token) return navigate('/login');
-    Promise.all([
-      fetchUserData(),
-      fetchNearbyShops(),
-      fetchWalletBalance()
-    ]).finally(() => setLoading(false));
+    Promise.all([fetchProfile(), fetchWallet(), fetchShops()]).finally(() =>
+      setLoading(false)
+    );
   }, []);
 
-  const fetchUserData = async () => {
+  async function fetchProfile() {
     try {
       const { status, data } = await get('/profile/me');
-      if (status === 'success') setUserProfile(data);
-    } catch (e) {
-      console.error('Fetch profile error:', e);
-    }
-  };
+      if (status === 'success') setUser(data);
+    } catch {}
+  }
 
-  const fetchNearbyShops = async () => {
-    try {
-      const { status, shops } = await get('/shops?status=open');
-      if (status === 'success') {
-        setNearbyShops(shops.slice(0, 6));
-        setFeaturedShops(shops.filter(s => s.featured).slice(0, 3));
-      }
-    } catch (e) {
-      console.error('Fetch shops error:', e);
-    }
-  };
-
-  const fetchWalletBalance = async () => {
+  async function fetchWallet() {
     try {
       const { status, balance } = await get('/wallet');
       if (status === 'success') setWalletBalance(balance);
-    } catch (e) {
-      console.error('Fetch wallet error:', e);
+    } catch {}
+  }
+
+  async function fetchShops() {
+    try {
+      const { status, shops } = await get('/shops?status=open');
+      if (status === 'success') {
+        setFeaturedShops(shops.filter(s => s.featured).slice(0, 3));
+        setNearbyShops(shops.slice(0, 6));
+      }
+    } catch {}
+  }
+
+  function handleSearchSubmit(value) {
+    if (value.trim()) {
+      navigate(`/shops/search?q=${encodeURIComponent(value)}`);
     }
-  };
-
-  const shopCategories = [
-    { name: 'Grocery', icon: HiShoppingCart, type: 'grocery' },
-    { name: 'Pharmacy', icon: HiAnnotation, type: 'pharmacy' },
-    { name: 'Restaurant', icon: HiCollection, type: 'restaurant' },
-    { name: 'Electronics', icon: HiDeviceMobile, type: 'electronics' },
-    { name: 'Fashion', icon: HiSparkles, type: 'fashion' },
-    { name: 'Services', icon: HiCog, type: 'services' }
-  ];
-
-  if (loading) {
-    return (
-      <div className="screen-content px-4">
-        <div className="loader-center">
-          <div className="spinner" />
-          <p>Loading...</p>
-        </div>
-      </div>
-    );
   }
 
   return (
-    <div className="screen-content px-4 py-4">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-6 bg-primary/5 p-4 rounded-lg">
-        <div>
-          <h2 className="text-xl font-semibold">Hello, {userProfile?.name || 'User'}! 👋</h2>
-          <p className="text-sm text-gray-500 mt-1">
-            {userProfile?.society}, {userProfile?.city}
-          </p>
+    <MobileLayout>
+      <ScreenContainer>
+        {/* Hero with greeting, location, avatar, and search */}
+        <HeroSection
+          greeting={`Hello, ${user?.name || 'User'}! 👋`}
+          subtext={`${user?.society}, ${user?.city}`}
+          avatar={<HiUser />}
+          action={
+            <SearchBar
+              value={search}
+              onChange={v => setSearch(v)}
+              onSearch={handleSearchSubmit}
+              loading={searching}
+              placeholder="Search shops or items…"
+            />
+          }
+        />
+
+        {/* Wallet Card */}
+        <div className="px-4 -mt-8 mb-6">
+          <WalletCard
+            amount={`₹${walletBalance.toFixed(2)}`}
+            label="Wallet Balance"
+            icon={<HiShoppingCart className="text-white" />}
+            color="gradient"
+            cta="Add Money"
+            onCta={() => navigate('/wallet/add')}
+          />
         </div>
-        <button
-          className="w-10 h-10 rounded-full bg-gradient-to-r from-green-400 to-blue-500 flex items-center justify-center text-white text-lg"
-          onClick={() => navigate('/profile')}
+
+        {/* Categories */}
+        <ShopListSection
+          title="Categories"
+          layout="horizontal"
+          empty={<EmptyState title="No Categories" />}
         >
-          <HiUser />
-        </button>
-      </div>
-
-      {/* Wallet & Search */}
-      <div className="flex space-x-4 mb-6">
-        <WalletCard balance={walletBalance} />
-        <SearchCard to="/shops/search" placeholder="Search for shops, items…" />
-      </div>
-
-      {/* Categories (Horizontal Scroll) */}
-      <section className="mb-6">
-        <h3 className="text-lg font-semibold mb-3">Categories</h3>
-        <div className="flex space-x-4 overflow-x-auto pb-2">
-          {shopCategories.map((cat) => (
+          {shopCategories.map(cat => (
             <CategoryCard
               key={cat.type}
               icon={cat.icon}
-              name={cat.name}
-              to={`/shops?type=${cat.type}`}
+              label={cat.name}
+              active={false}
+              onClick={() => navigate(`/shops?type=${cat.type}`)}
             />
           ))}
-        </div>
-      </section>
+        </ShopListSection>
 
-      {/* Featured Shops */}
-      {featuredShops.length > 0 && (
-        <section className="mb-6">
-          <h3 className="text-lg font-semibold mb-3">Featured Shops</h3>
-          <div className="flex space-x-3 overflow-x-auto pb-2">
-            {featuredShops.map((shop) => (
-              <FeaturedShopCard key={shop.id} shop={shop} />
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* Nearby Shops */}
-      <section className="mb-6">
-        <div className="flex items-center justify-between mb-3">
-          <h3 className="text-lg font-semibold">Nearby Shops</h3>
-          <button
-            className="text-sm font-medium text-green-600"
-            onClick={() => navigate('/shops')}
-          >View All</button>
-        </div>
-        <div className="space-y-3">
-          {nearbyShops.map((shop) => (
-            <NearbyShopCard key={shop.id} shop={shop} />
+        {/* Featured Shops */}
+        <ShopListSection
+          title="Featured Shops"
+          layout="horizontal"
+          empty={<EmptyState title="No Featured Shops" />}
+          action={
+            <button
+              className="text-primary text-sm font-medium"
+              onClick={() => navigate('/shops')}
+            >
+              See All
+            </button>
+          }
+        >
+          {featuredShops.map(shop => (
+            <FeaturedShopCard
+              key={shop.id}
+              image={shop.logo_url}
+              name={shop.shop_name}
+              category={shop.shop_type}
+              status={shop.is_open ? 'open' : 'closed'}
+              badge={shop.verified ? 'Verified' : undefined}
+              onClick={() => navigate(`/shop/${shop.id}`)}
+            />
           ))}
-        </div>
-      </section>
-    </div>
+        </ShopListSection>
+
+        {/* Nearby Shops */}
+        <ShopListSection
+          title="Nearby Shops"
+          empty={<EmptyState title="No Nearby Shops" />}
+          action={
+            <button
+              className="text-primary text-sm font-medium"
+              onClick={() => navigate('/shops')}
+            >
+              View All
+            </button>
+          }
+        >
+          {nearbyShops.map(shop => (
+            <NearbyShopCard
+              key={shop.id}
+              image={shop.logo_url}
+              name={shop.shop_name}
+              category={shop.shop_type}
+              address={shop.society}
+              status={shop.is_open ? 'open' : 'closed'}
+              delivers={shop.delivers}
+              onClick={() => navigate(`/shop/${shop.id}`)}
+            />
+          ))}
+        </ShopListSection>
+      </ScreenContainer>
+    </MobileLayout>
   );
 }
-
-export default Home;

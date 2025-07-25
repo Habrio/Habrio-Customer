@@ -1,428 +1,157 @@
-import { useState, useEffect } from 'react';
+// File: src/pages/Checkout.jsx
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../styles/common.css';
-import '../styles/App.css';
-import '../styles/design-system.css';
+import MobileLayout from '../components/layout/MobileLayout';
+import ScreenContainer from '../components/layout/ScreenContainer';
 import PageHeader from '../components/molecules/PageHeader';
+import SectionCard from '../components/molecules/SectionCard';
+import Button from '../components/atoms/Button';
+import { BodyText, Heading } from '../components/atoms/Typography';
+import EmptyState from '../components/organisms/EmptyState';
+import PaymentMethodSelector from '../components/organisms/PaymentMethodSelector';
+import OrderSummarySection from '../components/organisms/OrderSummarySection';
+import { get, post } from '../utils/api';
 
 export default function Checkout() {
   const navigate = useNavigate();
-  const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [totalPrice, setTotalPrice] = useState(0);
-  const [totalSavings, setTotalSavings] = useState(0);
+  const [cartItems, setCartItems] = useState([]);
   const [walletBalance, setWalletBalance] = useState(0);
   const [paymentMode, setPaymentMode] = useState('wallet');
   const [deliveryNotes, setDeliveryNotes] = useState('');
   const [placing, setPlacing] = useState(false);
-
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
-  const token = localStorage.getItem('auth_token');
+  const [summary, setSummary] = useState({ subtotal: 0, savings: 0, total: 0 });
 
   useEffect(() => {
-    if (!token) {
-      navigate('/login');
-      return;
-    }
-    fetchCart();
-    fetchWallet();
+    const token = localStorage.getItem('auth_token');
+    if (!token) return navigate('/login');
+    Promise.all([loadCart(token), loadWallet(token)]).finally(() =>
+      setLoading(false)
+    );
   }, []);
 
-  const fetchCart = async () => {
+  async function loadCart(token) {
     try {
-      const res = await fetch(`${backendUrl}/cart/view`, {
-        headers: { 'Authorization': token }
-      });
-      const data = await res.json();
-      
-      if (data.status === 'success') {
-        setCartItems(data.cart);
-        setTotalPrice(data.total_price);
-        setTotalSavings(data.total_savings);
-        
-        if (data.cart.length === 0) {
-          navigate('/cart');
-        }
+      const { status, cart, total_price, total_savings } = await get('/cart/view', { token });
+      if (status === 'success') {
+        if (cart.length === 0) navigate('/cart');
+        setCartItems(cart);
+        setSummary({
+          subtotal: total_price + total_savings,
+          savings: total_savings,
+          total: total_price,
+        });
       }
-    } catch (error) {
-      console.error('Error fetching cart:', error);
-    }
-    setLoading(false);
-  };
+    } catch {}
+  }
 
-  const fetchWallet = async () => {
+  async function loadWallet(token) {
     try {
-      const res = await fetch(`${backendUrl}/wallet`, {
-        headers: { 'Authorization': token }
-      });
-      const data = await res.json();
-      if (data.status === 'success') {
-        setWalletBalance(data.balance);
-      }
-    } catch (error) {
-      console.error('Error fetching wallet:', error);
-    }
-  };
+      const { status, balance } = await get('/wallet', { token });
+      if (status === 'success') setWalletBalance(balance);
+    } catch {}
+  }
 
-  const placeOrder = async () => {
-    if (paymentMode === 'wallet' && walletBalance < totalPrice) {
-      alert('Insufficient wallet balance. Please add money to your wallet.');
-      return;
+  async function handlePlaceOrder() {
+    if (paymentMode === 'wallet' && walletBalance < summary.total) {
+      return alert('Insufficient wallet balance. Please add money.');
     }
-
     setPlacing(true);
     try {
-      const res = await fetch(`${backendUrl}/order/confirm`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': token
-        },
-        body: JSON.stringify({
-          payment_mode: paymentMode,
-          delivery_notes: deliveryNotes
-        })
-      });
-
-      const data = await res.json();
-      if (data.status === 'success') {
-        alert('Order placed successfully!');
-        navigate(`/order/${data.order_id}`);
+      const token = localStorage.getItem('auth_token');
+      const body = { payment_mode: paymentMode, delivery_notes: deliveryNotes };
+      const { status, order_id, message } = await post('/order/confirm', body, { token });
+      if (status === 'success') {
+        navigate(`/order/${order_id}`);
       } else {
-        alert(data.message || 'Failed to place order');
+        alert(message || 'Failed to place order');
       }
-    } catch (error) {
-      console.error('Error placing order:', error);
+    } catch {
       alert('Something went wrong. Please try again.');
+    } finally {
+      setPlacing(false);
     }
-    setPlacing(false);
-  };
+  }
 
   if (loading) {
     return (
-      <div className="screen-content">
-        <div style={{ textAlign: 'center', marginTop: '40px' }}>
-          <div style={{ 
-            width: '40px', 
-            height: '40px', 
-            border: '3px solid var(--divider)', 
-            borderTop: '3px solid var(--primary-color)', 
-            borderRadius: '50%', 
-            animation: 'spin 1s linear infinite',
-            margin: '0 auto 20px'
-          }}></div>
-          <p>Loading checkout...</p>
-        </div>
-      </div>
+      <MobileLayout>
+        <PageHeader title="Checkout" />
+        <ScreenContainer className="flex-center">
+          <Heading level={3}>Loading checkout…</Heading>
+        </ScreenContainer>
+      </MobileLayout>
     );
   }
 
   return (
-    <div className="screen-content">
-      {/* Header */}
+    <MobileLayout>
       <PageHeader title="Checkout" />
+      <ScreenContainer className="space-y-6">
+        {/* Delivery Address */}
+        <SectionCard>
+          <Heading level={4}>Delivery Address</Heading>
+          <BodyText className="mt-1 text-text-secondary">
+            Your registered address will be used for delivery.
+          </BodyText>
+        </SectionCard>
 
-      {/* Delivery Address */}
-      <div style={{
-        background: 'var(--background-soft)',
-        border: '1px solid var(--divider)',
-        borderRadius: '12px',
-        padding: '16px',
-        marginBottom: '20px'
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
-          <span style={{ fontSize: '16px' }}>📍</span>
-          <h3 style={{ margin: 0, fontSize: '16px', fontWeight: '600' }}>Delivery Address</h3>
-        </div>
-        <p style={{ margin: '0 0 4px 28px', fontSize: '14px', fontWeight: '500' }}>
-          Home Address
-        </p>
-        <p style={{ margin: '0 0 8px 28px', fontSize: '14px', color: 'var(--text-secondary)' }}>
-          Your registered address will be used for delivery
-        </p>
-      </div>
+        {/* Order Items */}
+        <OrderSummarySection items={cartItems} />
 
-      {/* Order Items */}
-      <div style={{
-        background: 'var(--background-soft)',
-        border: '1px solid var(--divider)',
-        borderRadius: '12px',
-        padding: '16px',
-        marginBottom: '20px'
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
-          <h3 style={{ margin: 0, fontSize: '16px', fontWeight: '600' }}>
-            Order Items ({cartItems.length})
-          </h3>
-          <button
-            onClick={() => navigate('/cart')}
-            style={{
-              background: 'none',
-              border: 'none',
-              color: 'var(--primary-color)',
-              fontSize: '14px',
-              fontWeight: '500',
-              cursor: 'pointer'
-            }}
-          >
-            Edit
-          </button>
-        </div>
-        
-        {cartItems.slice(0, 3).map((item, index) => (
-          <div
-            key={item.id}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '12px',
-              padding: '8px 0',
-              borderBottom: index < Math.min(cartItems.length, 3) - 1 ? '1px solid var(--divider)' : 'none'
-            }}
-          >
-            <div style={{ 
-              width: '40px', 
-              height: '40px', 
-              background: 'var(--divider)',
-              borderRadius: '6px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '16px'
-            }}>
-              📦
-            </div>
-            <div style={{ flex: 1 }}>
-              <p style={{ margin: '0 0 2px 0', fontSize: '14px', fontWeight: '500' }}>
-                {item.item_name}
-              </p>
-              <p style={{ margin: 0, fontSize: '12px', color: 'var(--text-secondary)' }}>
-                Qty: {item.quantity} • ₹{item.price} each
-              </p>
-            </div>
-            <span style={{ fontSize: '14px', fontWeight: '600' }}>
-              ₹{item.subtotal}
-            </span>
-          </div>
-        ))}
-        
-        {cartItems.length > 3 && (
-          <p style={{ margin: '8px 0 0 52px', fontSize: '12px', color: 'var(--text-secondary)' }}>
-            +{cartItems.length - 3} more items
-          </p>
-        )}
-      </div>
-
-      {/* Payment Method */}
-      <div style={{
-        background: 'var(--background-soft)',
-        border: '1px solid var(--divider)',
-        borderRadius: '12px',
-        padding: '16px',
-        marginBottom: '20px'
-      }}>
-        <h3 style={{ margin: '0 0 16px 0', fontSize: '16px', fontWeight: '600' }}>
-          Payment Method
-        </h3>
-        
-        {/* Wallet Option */}
-        <div
-          onClick={() => setPaymentMode('wallet')}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '12px',
-            padding: '12px',
-            borderRadius: '8px',
-            border: paymentMode === 'wallet' ? '2px solid var(--primary-color)' : '1px solid var(--divider)',
-            background: paymentMode === 'wallet' ? 'rgba(252, 100, 79, 0.1)' : 'white',
-            cursor: 'pointer',
-            marginBottom: '8px'
-          }}
-        >
-          <div style={{
-            width: '20px',
-            height: '20px',
-            borderRadius: '50%',
-            border: '2px solid var(--primary-color)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}>
-            {paymentMode === 'wallet' && (
-              <div style={{
-                width: '10px',
-                height: '10px',
-                borderRadius: '50%',
-                background: 'var(--primary-color)'
-              }}></div>
-            )}
-          </div>
-          <div style={{ flex: 1 }}>
-            <p style={{ margin: '0 0 2px 0', fontSize: '14px', fontWeight: '500' }}>
-              💳 Wallet
-            </p>
-            <p style={{ margin: 0, fontSize: '12px', color: walletBalance >= totalPrice ? 'var(--success-color)' : 'var(--error-color)' }}>
-              Balance: ₹{walletBalance.toFixed(2)}
-              {walletBalance < totalPrice && ' (Insufficient balance)'}
-            </p>
-          </div>
-        </div>
-
-        {/* Cash on Delivery Option */}
-        <div
-          onClick={() => setPaymentMode('cash')}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '12px',
-            padding: '12px',
-            borderRadius: '8px',
-            border: paymentMode === 'cash' ? '2px solid var(--primary-color)' : '1px solid var(--divider)',
-            background: paymentMode === 'cash' ? 'rgba(252, 100, 79, 0.1)' : 'white',
-            cursor: 'pointer'
-          }}
-        >
-          <div style={{
-            width: '20px',
-            height: '20px',
-            borderRadius: '50%',
-            border: '2px solid var(--primary-color)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}>
-            {paymentMode === 'cash' && (
-              <div style={{
-                width: '10px',
-                height: '10px',
-                borderRadius: '50%',
-                background: 'var(--primary-color)'
-              }}></div>
-            )}
-          </div>
-          <div>
-            <p style={{ margin: '0 0 2px 0', fontSize: '14px', fontWeight: '500' }}>
-              💵 Cash on Delivery
-            </p>
-            <p style={{ margin: 0, fontSize: '12px', color: 'var(--text-secondary)' }}>
-              Pay when you receive your order
-            </p>
-          </div>
-        </div>
-
-        {/* Add Money to Wallet */}
-        {paymentMode === 'wallet' && walletBalance < totalPrice && (
-          <button
-            onClick={() => navigate('/wallet/add')}
-            style={{
-              background: 'var(--primary-gradient)',
-              color: 'white',
-              border: 'none',
-              borderRadius: '8px',
-              padding: '8px 16px',
-              fontSize: '14px',
-              fontWeight: '500',
-              cursor: 'pointer',
-              marginTop: '12px',
-              width: '100%'
-            }}
-          >
-            Add Money to Wallet
-          </button>
-        )}
-      </div>
-
-      {/* Delivery Instructions */}
-      <div style={{
-        background: 'var(--background-soft)',
-        border: '1px solid var(--divider)',
-        borderRadius: '12px',
-        padding: '16px',
-        marginBottom: '20px'
-      }}>
-        <h3 style={{ margin: '0 0 12px 0', fontSize: '16px', fontWeight: '600' }}>
-          Delivery Instructions (Optional)
-        </h3>
-        <textarea
-          placeholder="Add any special instructions for delivery..."
-          value={deliveryNotes}
-          onChange={(e) => setDeliveryNotes(e.target.value)}
-          style={{
-            width: '100%',
-            minHeight: '80px',
-            padding: '12px',
-            border: '1px solid var(--divider)',
-            borderRadius: '8px',
-            fontSize: '14px',
-            resize: 'vertical',
-            fontFamily: 'inherit'
-          }}
+        {/* Payment Method */}
+        <PaymentMethodSelector
+          walletBalance={walletBalance}
+          value={paymentMode}
+          onChange={setPaymentMode}
+          onAddMoney={() => navigate('/wallet/add')}
         />
-      </div>
 
-      {/* Bill Summary */}
-      <div style={{
-        background: 'var(--background-soft)',
-        border: '1px solid var(--divider)',
-        borderRadius: '12px',
-        padding: '20px',
-        marginBottom: '20px'
-      }}>
-        <h3 style={{ margin: '0 0 16px 0', fontSize: '18px', fontWeight: '600' }}>
-          Bill Summary
-        </h3>
-        
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-          <span>Subtotal</span>
-          <span>₹{totalPrice + totalSavings}</span>
-        </div>
-        
-        {totalSavings > 0 && (
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', color: 'var(--success-color)' }}>
-            <span>Savings</span>
-            <span>-₹{totalSavings}</span>
+        {/* Delivery Notes */}
+        <SectionCard title="Delivery Instructions (Optional)">
+          <textarea
+            rows={3}
+            value={deliveryNotes}
+            onChange={e => setDeliveryNotes(e.target.value)}
+            className="w-full p-3 border border-gray-300 rounded"
+            placeholder="Any special instructions…"
+          />
+        </SectionCard>
+
+        {/* Bill Summary */}
+        <SectionCard>
+          <div className="space-y-2">
+            <div className="flex justify-between">
+              <BodyText>Subtotal</BodyText>
+              <BodyText>₹{summary.subtotal}</BodyText>
+            </div>
+            {summary.savings > 0 && (
+              <div className="flex justify-between text-success">
+                <BodyText>Savings</BodyText>
+                <BodyText>-₹{summary.savings}</BodyText>
+              </div>
+            )}
+            <div className="flex justify-between">
+              <BodyText>Delivery Fee</BodyText>
+              <BodyText>FREE</BodyText>
+            </div>
+            <hr />
+            <div className="flex justify-between font-semibold text-lg">
+              <BodyText>Total</BodyText>
+              <BodyText>₹{summary.total}</BodyText>
+            </div>
           </div>
-        )}
-        
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px' }}>
-          <span>Delivery Fee</span>
-          <span style={{ color: 'var(--success-color)' }}>FREE</span>
-        </div>
-        
-        <div style={{ borderTop: '1px solid var(--divider)', paddingTop: '12px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '18px', fontWeight: '600' }}>
-            <span>Total Amount</span>
-            <span style={{ color: 'var(--primary-color)' }}>₹{totalPrice}</span>
-          </div>
-        </div>
-      </div>
+        </SectionCard>
 
-      {/* Place Order Button */}
-      <button
-        onClick={placeOrder}
-        disabled={placing || (paymentMode === 'wallet' && walletBalance < totalPrice)}
-        style={{
-          background: placing || (paymentMode === 'wallet' && walletBalance < totalPrice) 
-            ? 'var(--text-disabled)' 
-            : 'var(--primary-gradient)',
-          color: 'white',
-          border: 'none',
-          borderRadius: '12px',
-          padding: '16px',
-          fontSize: '18px',
-          fontWeight: '600',
-          cursor: placing || (paymentMode === 'wallet' && walletBalance < totalPrice) ? 'not-allowed' : 'pointer',
-          width: '100%',
-          marginBottom: '20px',
-          opacity: placing || (paymentMode === 'wallet' && walletBalance < totalPrice) ? 0.6 : 1
-        }}
-      >
-        {placing ? 'Placing Order...' : `Place Order • ₹${totalPrice}`}
-      </button>
-
-      {/* Bottom Navigation Placeholder */}
-      <div style={{ height: '80px' }}></div>
-    </div>
+        {/* Place Order */}
+        <Button
+          onClick={handlePlaceOrder}
+          disabled={placing || (paymentMode === 'wallet' && walletBalance < summary.total)}
+          className="w-full"
+        >
+          {placing ? 'Placing Order…' : `Place Order • ₹${summary.total}`}
+        </Button>
+      </ScreenContainer>
+    </MobileLayout>
   );
 }

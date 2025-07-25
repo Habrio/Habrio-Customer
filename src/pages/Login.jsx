@@ -1,19 +1,23 @@
-import { useState } from 'react';
+// File: src/pages/Login.jsx
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../styles/common.css';
-import '../styles/App.css';
-import '../styles/design-system.css';
+import MobileLayout from '../components/layout/MobileLayout';
+import ScreenContainer from '../components/layout/ScreenContainer';
+import Button from '../components/atoms/Button';
+import Input from '../components/atoms/Input';
 
 export default function Login() {
   const [phone, setPhone] = useState('');
+  const [sending, setSending] = useState(false);
   const navigate = useNavigate();
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
-  const sendOtp = async () => {
+  async function sendOtp() {
     if (!/^\d{10}$/.test(phone)) {
       alert('Please enter a valid 10-digit phone number');
       return;
     }
+    setSending(true);
     try {
       const res = await fetch(`${backendUrl}/send-otp`, {
         method: 'POST',
@@ -29,64 +33,51 @@ export default function Login() {
     } catch {
       alert('Something went wrong while sending OTP');
     }
-  };
+    setSending(false);
+  }
 
   return (
-    <div className="mobile-screen fade-in">
-      <div className="status-bar">
-        <span className="time">9:41</span>
-        <span className="battery">🔋</span>
-      </div>
-      <div className="screen-content">
-        <div className="text-center mb-lg" style={{ paddingTop: 48 }}>
-          <div
-            style={{
-              background: 'var(--primary-gradient)',
-              width: 80,
-              height: 80,
-              borderRadius: 20,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              margin: '0 auto 24px',
-              boxShadow: '0 8px 18px rgba(255, 145, 0, 0.35)',
-            }}
-          >
-            <span style={{ fontSize: 36, color: 'white' }}>📲</span>
+    <MobileLayout>
+      <ScreenContainer className="flex flex-col justify-center min-h-screen">
+        <div className="flex flex-col items-center mb-8 mt-8">
+          <div className="bg-gradient-to-r from-primary to-primary-dark w-20 h-20 rounded-2xl flex items-center justify-center shadow-lg mb-5">
+            <span className="text-white text-3xl">📲</span>
           </div>
-          <h2 className="title" style={{ fontSize: 22 }}>Log in to Habrio</h2>
-          <p className="subtitle">Enter your mobile number to continue</p>
+          <h2 className="text-2xl font-bold mb-1">Log in to Habrio</h2>
+          <p className="text-secondary text-sm mb-4">Enter your mobile number to continue</p>
         </div>
-        <div className="form-group mb-md">
-          <div className="phone-input-group">
-            <div className="country-code">+91</div>
-            <input
+        <form
+          className="flex flex-col gap-4"
+          onSubmit={e => { e.preventDefault(); sendOtp(); }}
+        >
+          <div className="flex gap-2 items-center">
+            <span className="bg-background-soft border border-divider rounded-lg px-3 py-2 font-semibold text-base">+91</span>
+            <Input
               type="tel"
-              className="phone-input"
+              maxLength={10}
+              autoFocus
               placeholder="9876543210"
-              maxLength="10"
+              className="flex-1 text-lg"
               value={phone}
-              onChange={e => setPhone(e.target.value)}
+              onChange={e => setPhone(e.target.value.replace(/\D/g, ''))}
             />
           </div>
-        </div>
-        <button className="btn btn-primary btn-full btn-large" onClick={sendOtp}>
-          Send OTP
-        </button>
-        <p
-          style={{
-            fontSize: 12,
-            color: 'var(--text-secondary)',
-            textAlign: 'center',
-            lineHeight: 1.5,
-            marginTop: 24,
-          }}
-        >
+          <Button
+            type="submit"
+            size="lg"
+            className="w-full"
+            disabled={sending || phone.length !== 10}
+            loading={sending}
+          >
+            Send OTP
+          </Button>
+        </form>
+        <div className="mt-8 text-xs text-secondary text-center leading-relaxed">
           By continuing, you agree to our{' '}
-          <a href="#" className="link">Terms & Conditions</a> and{' '}
-          <a href="#" className="link">Privacy Policy</a>
-        </p>
-      </div>
-    </div>
+          <a href="#" className="text-primary underline font-medium">Terms & Conditions</a> and{' '}
+          <a href="#" className="text-primary underline font-medium">Privacy Policy</a>
+        </div>
+      </ScreenContainer>
+    </MobileLayout>
   );
 }

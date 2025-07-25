@@ -1,9 +1,21 @@
-import { useState, useEffect } from 'react';
+// File: src/pages/OrderDetail.jsx
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import '../styles/common.css';
-import '../styles/App.css';
-import '../styles/design-system.css';
+import MobileLayout from '../components/layout/MobileLayout';
+import ScreenContainer from '../components/layout/ScreenContainer';
 import PageHeader from '../components/molecules/PageHeader';
+import Button from '../components/atoms/Button';
+import { Spinner } from '../components/atoms/Loader';
+import EmptyState from '../components/organisms/EmptyState';
+import { get, post } from '../utils/api';
+
+const STATUS_META = {
+  pending: { icon: '⏳', color: 'text-warning' },
+  accepted: { icon: '✅', color: 'text-info' },
+  confirmed: { icon: '📦', color: 'text-info' },
+  delivered: { icon: '🎉', color: 'text-success' },
+  cancelled: { icon: '❌', color: 'text-error' },
+};
 
 export default function OrderDetail() {
   const { orderId } = useParams();
@@ -12,467 +24,211 @@ export default function OrderDetail() {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
-  const token = localStorage.getItem('auth_token');
-
   useEffect(() => {
-    if (!token) {
-      navigate('/login');
-      return;
-    }
-    fetchOrderDetails();
-    fetchMessages();
+    const token = localStorage.getItem('auth_token');
+    if (!token) return navigate('/login');
+    fetchOrder(token);
+    fetchMsgs(token);
+    // eslint-disable-next-line
   }, [orderId]);
 
-  const fetchOrderDetails = async () => {
+  async function fetchOrder(token) {
+    setLoading(true);
     try {
-      // Get order from history
-      const res = await fetch(`${backendUrl}/order/history`, {
-        headers: { 'Authorization': token }
-      });
-      const data = await res.json();
-      
-      if (data.status === 'success') {
-        const orderDetail = data.orders.find(o => o.order_id === parseInt(orderId));
-        if (orderDetail) {
-          setOrder(orderDetail);
-        } else {
-          alert('Order not found');
-          navigate('/orders');
-        }
+      const res = await get('/order/history', { token });
+      if (res.status === 'success') {
+        const found = res.orders.find(o => `${o.order_id}` === `${orderId}`);
+        setOrder(found || null);
       }
-    } catch (error) {
-      console.error('Error fetching order details:', error);
-    }
+    } catch {}
     setLoading(false);
-  };
+  }
 
-  const fetchMessages = async () => {
+  async function fetchMsgs(token) {
     try {
-      const res = await fetch(`${backendUrl}/order/consumer/messages/${orderId}`, {
-        headers: { 'Authorization': token }
-      });
-      const data = await res.json();
-      if (data.status === 'success') {
-        setMessages(data.messages);
-      }
-    } catch (error) {
-      console.error('Error fetching messages:', error);
-    }
-  };
+      const res = await get(`/order/consumer/messages/${orderId}`, { token });
+      if (res.status === 'success') setMessages(res.messages || []);
+    } catch {}
+  }
 
-  const cancelOrder = async () => {
-    if (!confirm('Are you sure you want to cancel this order?')) return;
-    
+  async function cancelOrder() {
+    if (!window.confirm('Are you sure you want to cancel this order?')) return;
     try {
-      const res = await fetch(`${backendUrl}/order/consumer/cancel/${orderId}`, {
-        method: 'POST',
-        headers: { 'Authorization': token }
-      });
-
-      const data = await res.json();
-      if (data.status === 'success') {
+      const token = localStorage.getItem('auth_token');
+      const res = await post(`/order/consumer/cancel/${orderId}`, {}, { token });
+      if (res.status === 'success') {
         alert('Order cancelled successfully');
-        fetchOrderDetails();
+        fetchOrder(token);
       } else {
-        alert(data.message || 'Failed to cancel order');
+        alert(res.message || 'Failed to cancel order');
       }
-    } catch (error) {
-      console.error('Error cancelling order:', error);
+    } catch {
       alert('Something went wrong. Please try again.');
     }
-  };
-
-  const getStatusColor = (status) => {
-    switch (status) {
-      case 'pending': return 'var(--warning-color)';
-      case 'accepted': return 'var(--info-color)';
-      case 'confirmed': return 'var(--info-color)';
-      case 'delivered': return 'var(--success-color)';
-      case 'cancelled': return 'var(--error-color)';
-      default: return 'var(--text-secondary)';
-    }
-  };
-
-  const getStatusIcon = (status) => {
-    switch (status) {
-      case 'pending': return '⏳';
-      case 'accepted': return '✅';
-      case 'confirmed': return '📦';
-      case 'delivered': return '🎉';
-      case 'cancelled': return '❌';
-      default: return '📋';
-    }
-  };
+  }
 
   if (loading) {
     return (
-      <div className="screen-content">
-        <div style={{ textAlign: 'center', marginTop: '40px' }}>
-          <div style={{ 
-            width: '40px', 
-            height: '40px', 
-            border: '3px solid var(--divider)', 
-            borderTop: '3px solid var(--primary-color)', 
-            borderRadius: '50%', 
-            animation: 'spin 1s linear infinite',
-            margin: '0 auto 20px'
-          }}></div>
-          <p>Loading order details...</p>
-        </div>
-      </div>
+      <MobileLayout>
+        <PageHeader title="Order Details" />
+        <ScreenContainer className="flex justify-center py-20">
+          <Spinner size={48} className="text-primary" />
+        </ScreenContainer>
+      </MobileLayout>
     );
   }
 
   if (!order) {
     return (
-      <div className="screen-content">
-        <div style={{ textAlign: 'center', padding: '40px 20px' }}>
-          <div style={{ fontSize: '64px', marginBottom: '20px' }}>📦</div>
-          <h3 style={{ margin: '0 0 8px 0', fontSize: '18px', fontWeight: '600' }}>
-            Order not found
-          </h3>
-          <p style={{ margin: '0 0 24px 0', color: 'var(--text-secondary)', fontSize: '14px' }}>
-            The order you're looking for doesn't exist
-          </p>
-          <button
-            onClick={() => navigate('/orders')}
-            style={{
-              background: 'var(--primary-gradient)',
-              color: 'white',
-              border: 'none',
-              borderRadius: '8px',
-              padding: '12px 24px',
-              fontSize: '16px',
-              fontWeight: '500',
-              cursor: 'pointer'
-            }}
-          >
-            Back to Orders
-          </button>
-        </div>
-      </div>
+      <MobileLayout>
+        <PageHeader title="Order Details" />
+        <ScreenContainer>
+          <EmptyState
+            icon="📦"
+            title="Order not found"
+            description="The order you're looking for doesn't exist."
+            actionLabel="Back to Orders"
+            onAction={() => navigate('/orders')}
+          />
+        </ScreenContainer>
+      </MobileLayout>
     );
   }
 
+  const meta = STATUS_META[order.status] || { icon: '📋', color: 'text-secondary' };
+  const orderAmount = order.final_amount || order.total_amount;
+  const items = order.items || [];
+
   return (
-    <div className="screen-content">
-      {/* Header */}
+    <MobileLayout>
       <PageHeader title={`Order #${order.order_id}`} />
+      <ScreenContainer className="space-y-6">
 
-      {/* Order Status */}
-      <div style={{
-        background: 'var(--background-soft)',
-        border: '1px solid var(--divider)',
-        borderRadius: '12px',
-        padding: '20px',
-        marginBottom: '20px',
-        textAlign: 'center'
-      }}>
-        <div style={{ fontSize: '48px', marginBottom: '12px' }}>
-          {getStatusIcon(order.status)}
-        </div>
-        <h3 style={{ 
-          margin: '0 0 4px 0', 
-          fontSize: '18px', 
-          fontWeight: '600',
-          color: getStatusColor(order.status),
-          textTransform: 'capitalize'
-        }}>
-          {order.status}
-        </h3>
-        <p style={{ margin: '0 0 12px 0', fontSize: '14px', color: 'var(--text-secondary)' }}>
-          Order placed on {new Date(order.created_at).toLocaleDateString('en-IN', {
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-          })}
-        </p>
-        
-        {/* Status Timeline */}
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', marginTop: '16px' }}>
-          {['pending', 'accepted', 'confirmed', 'delivered'].map((status, index) => {
-            const isActive = ['pending', 'accepted', 'confirmed', 'delivered'].indexOf(order.status) >= index;
-            const isCancelled = order.status === 'cancelled';
-            
-            return (
-              <div
-                key={status}
-                style={{
-                  width: '12px',
-                  height: '12px',
-                  borderRadius: '50%',
-                  background: isCancelled 
-                    ? 'var(--error-color)' 
-                    : isActive 
-                      ? 'var(--primary-color)' 
-                      : 'var(--divider)'
-                }}
-              />
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Order Items */}
-      <div style={{
-        background: 'var(--background-soft)',
-        border: '1px solid var(--divider)',
-        borderRadius: '12px',
-        padding: '16px',
-        marginBottom: '20px'
-      }}>
-        <h3 style={{ margin: '0 0 16px 0', fontSize: '16px', fontWeight: '600' }}>
-          Order Items ({order.items.length})
-        </h3>
-        
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-          <div style={{ 
-            width: '40px', 
-            height: '40px', 
-            background: 'var(--primary-gradient)', 
-            borderRadius: '20px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: '16px'
-          }}>
-            🏪
+        {/* Status Section */}
+        <div className="bg-background-soft border border-divider rounded-lg p-6 text-center">
+          <div className="text-4xl mb-2">
+            {meta.icon}
           </div>
-          <div>
-            <p style={{ margin: '0 0 2px 0', fontSize: '14px', fontWeight: '600' }}>
-              Shop #{order.shop_id}
-            </p>
-            <p style={{ margin: 0, fontSize: '12px', color: 'var(--text-secondary)' }}>
-              Items delivered together
-            </p>
+          <div className={`font-bold text-lg capitalize mb-2 ${meta.color}`}>
+            {order.status}
+          </div>
+          <div className="text-sm text-secondary mb-3">
+            Order placed on {new Date(order.created_at).toLocaleString('en-IN', {
+              day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
+            })}
+          </div>
+          <div className="flex justify-center gap-2 mt-3">
+            {['pending', 'accepted', 'confirmed', 'delivered'].map((stat, idx) => {
+              const active = ['pending', 'accepted', 'confirmed', 'delivered'].indexOf(order.status) >= idx;
+              const cancelled = order.status === 'cancelled';
+              return (
+                <span
+                  key={stat}
+                  className={`w-3 h-3 rounded-full ${cancelled
+                    ? 'bg-error'
+                    : active ? 'bg-primary' : 'bg-divider'
+                  }`}
+                />
+              );
+            })}
           </div>
         </div>
 
-        {order.items.map((item, index) => (
-          <div
-            key={index}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '12px',
-              padding: '12px 0',
-              borderBottom: index < order.items.length - 1 ? '1px solid var(--divider)' : 'none'
-            }}
-          >
-            <div style={{ 
-              width: '48px', 
-              height: '48px', 
-              background: 'var(--divider)',
-              borderRadius: '8px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '20px'
-            }}>
-              📦
+        {/* Items Section */}
+        <div className="bg-background-soft border border-divider rounded-lg p-4">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-10 h-10 flex items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary-dark text-white text-xl">
+              🏪
             </div>
-            <div style={{ flex: 1 }}>
-              <h4 style={{ margin: '0 0 4px 0', fontSize: '14px', fontWeight: '600' }}>
-                {item.name}
-              </h4>
-              <p style={{ margin: 0, fontSize: '12px', color: 'var(--text-secondary)' }}>
-                Qty: {item.quantity} × ₹{item.unit_price}
-              </p>
+            <div>
+              <div className="font-semibold text-sm">Shop #{order.shop_id}</div>
+              <div className="text-xs text-secondary">Items delivered together</div>
             </div>
-            <span style={{ fontSize: '14px', fontWeight: '600' }}>
-              ₹{item.subtotal}
+          </div>
+          <div className="divide-y divide-divider">
+            {items.map((item, idx) => (
+              <div key={idx} className="flex items-center gap-3 py-2">
+                <div className="w-12 h-12 flex items-center justify-center rounded bg-divider text-xl">📦</div>
+                <div className="flex-1">
+                  <div className="font-medium text-sm">{item.name}</div>
+                  <div className="text-xs text-secondary">Qty: {item.quantity} × ₹{item.unit_price}</div>
+                </div>
+                <div className="font-semibold text-base">₹{item.subtotal}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Payment & Delivery */}
+        <div className="bg-background-soft border border-divider rounded-lg p-4">
+          <div className="font-semibold mb-2">Payment & Delivery</div>
+          <div className="flex justify-between text-sm mb-1">
+            <span>Payment Method</span>
+            <span className="font-medium">
+              {order.payment_mode === 'wallet' ? '💳 Wallet' : '💵 Cash on Delivery'}
             </span>
           </div>
-        ))}
-      </div>
-
-      {/* Payment & Delivery */}
-      <div style={{
-        background: 'var(--background-soft)',
-        border: '1px solid var(--divider)',
-        borderRadius: '12px',
-        padding: '16px',
-        marginBottom: '20px'
-      }}>
-        <h3 style={{ margin: '0 0 16px 0', fontSize: '16px', fontWeight: '600' }}>
-          Payment & Delivery
-        </h3>
-        
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px' }}>
-          <span style={{ fontSize: '14px' }}>Payment Method</span>
-          <span style={{ fontSize: '14px', fontWeight: '500' }}>
-            {order.payment_mode === 'wallet' ? '💳 Wallet' : '💵 Cash on Delivery'}
-          </span>
-        </div>
-        
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px' }}>
-          <span style={{ fontSize: '14px' }}>Payment Status</span>
-          <span style={{ 
-            fontSize: '12px', 
-            padding: '2px 8px',
-            borderRadius: '4px',
-            background: order.payment_status === 'paid' ? 'var(--success-color)' : 'var(--warning-color)',
-            color: 'white',
-            textTransform: 'capitalize'
-          }}>
-            {order.payment_status}
-          </span>
-        </div>
-        
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px' }}>
-          <span style={{ fontSize: '14px' }}>Total Amount</span>
-          <span style={{ fontSize: '16px', fontWeight: '600', color: 'var(--primary-color)' }}>
-            ₹{order.final_amount || order.total_amount}
-          </span>
-        </div>
-        
-        {order.delivery_notes && (
-          <div style={{ marginTop: '12px', paddingTop: '12px', borderTop: '1px solid var(--divider)' }}>
-            <p style={{ margin: '0 0 4px 0', fontSize: '14px', fontWeight: '500' }}>
-              Delivery Notes:
-            </p>
-            <p style={{ margin: 0, fontSize: '14px', color: 'var(--text-secondary)' }}>
-              {order.delivery_notes}
-            </p>
-          </div>
-        )}
-      </div>
-
-      {/* Action Buttons */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '20px' }}>
-        {order.status === 'pending' && (
-          <button
-            onClick={cancelOrder}
-            style={{
-              background: 'none',
-              border: '1px solid var(--error-color)',
-              color: 'var(--error-color)',
-              borderRadius: '8px',
-              padding: '12px',
-              fontSize: '16px',
-              fontWeight: '500',
-              cursor: 'pointer'
-            }}
-          >
-            Cancel Order
-          </button>
-        )}
-        
-        {order.status === 'delivered' && (
-          <div style={{ display: 'flex', gap: '12px' }}>
-            <button
-              onClick={() => navigate(`/order/${order.order_id}/rate`)}
-              style={{
-                flex: 1,
-                background: 'var(--primary-gradient)',
-                color: 'white',
-                border: 'none',
-                borderRadius: '8px',
-                padding: '12px',
-                fontSize: '16px',
-                fontWeight: '500',
-                cursor: 'pointer'
-              }}
-            >
-              Rate Order
-            </button>
-            <button
-              onClick={() => navigate(`/order/${order.order_id}/return`)}
-              style={{
-                flex: 1,
-                background: 'none',
-                border: '1px solid var(--primary-color)',
-                color: 'var(--primary-color)',
-                borderRadius: '8px',
-                padding: '12px',
-                fontSize: '16px',
-                fontWeight: '500',
-                cursor: 'pointer'
-              }}
-            >
-              Return Items
-            </button>
-          </div>
-        )}
-        
-        <button
-          onClick={() => navigate(`/order/${order.order_id}/messages`)}
-          style={{
-            background: 'none',
-            border: '1px solid var(--divider)',
-            color: 'var(--text-primary)',
-            borderRadius: '8px',
-            padding: '12px',
-            fontSize: '16px',
-            fontWeight: '500',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '8px'
-          }}
-        >
-          💬 View Messages
-          {messages.length > 0 && (
-            <span style={{
-              background: 'var(--primary-color)',
-              color: 'white',
-              borderRadius: '50%',
-              width: '20px',
-              height: '20px',
-              fontSize: '12px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}>
-              {messages.length}
+          <div className="flex justify-between text-sm mb-1">
+            <span>Payment Status</span>
+            <span className={`px-2 py-1 text-xs rounded ${order.payment_status === 'paid' ? 'bg-success text-white' : 'bg-warning text-white'}`}>
+              {order.payment_status}
             </span>
+          </div>
+          <div className="flex justify-between text-sm mb-1">
+            <span>Total Amount</span>
+            <span className="font-bold text-primary text-base">₹{orderAmount}</span>
+          </div>
+          {order.delivery_notes && (
+            <div className="mt-3 pt-2 border-t border-divider text-sm">
+              <span className="font-medium">Delivery Notes:</span>
+              <div className="text-secondary">{order.delivery_notes}</div>
+            </div>
           )}
-        </button>
-      </div>
-
-      {/* Help Section */}
-      <div style={{
-        background: 'rgba(252, 100, 79, 0.1)',
-        border: '1px solid rgba(252, 100, 79, 0.2)',
-        borderRadius: '12px',
-        padding: '16px',
-        marginBottom: '20px'
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <span style={{ fontSize: '20px' }}>🤝</span>
-          <div>
-            <h4 style={{ margin: '0 0 4px 0', fontSize: '14px', fontWeight: '600' }}>
-              Need Help with this Order?
-            </h4>
-            <p style={{ margin: 0, fontSize: '12px', color: 'var(--text-secondary)' }}>
-              Our support team is here to help with any questions or issues
-            </p>
-          </div>
         </div>
-        <button
-          onClick={() => navigate('/support')}
-          style={{
-            background: 'var(--primary-color)',
-            color: 'white',
-            border: 'none',
-            borderRadius: '6px',
-            padding: '8px 16px',
-            fontSize: '12px',
-            fontWeight: '500',
-            cursor: 'pointer',
-            marginTop: '12px'
-          }}
-        >
-          Contact Support
-        </button>
-      </div>
 
-      {/* Bottom Navigation Placeholder */}
-      <div style={{ height: '80px' }}></div>
-    </div>
+        {/* Action Buttons */}
+        <div className="flex flex-col gap-3">
+          {order.status === 'pending' && (
+            <Button variant="outline-danger" onClick={cancelOrder}>Cancel Order</Button>
+          )}
+          {order.status === 'delivered' && (
+            <div className="flex gap-3">
+              <Button className="flex-1" onClick={() => navigate(`/order/${order.order_id}/rate`)}>Rate Order</Button>
+              <Button variant="outline" className="flex-1" onClick={() => navigate(`/order/${order.order_id}/return`)}>Return Items</Button>
+            </div>
+          )}
+          <Button
+            variant="outline"
+            onClick={() => navigate(`/order/${order.order_id}/messages`)}
+            className="flex items-center gap-2"
+          >
+            💬 View Messages
+            {messages.length > 0 && (
+              <span className="ml-1 bg-primary text-white rounded-full px-2 text-xs">{messages.length}</span>
+            )}
+          </Button>
+        </div>
+
+        {/* Help Section */}
+        <div className="bg-warning/10 border border-warning/30 rounded-lg p-4">
+          <div className="flex items-center gap-3 mb-2">
+            <span className="text-lg">🤝</span>
+            <div>
+              <div className="font-semibold text-sm">Need Help with this Order?</div>
+              <div className="text-xs text-secondary">
+                Our support team is here to help with any questions or issues.
+              </div>
+            </div>
+          </div>
+          <Button
+            size="sm"
+            onClick={() => navigate('/support')}
+            className="mt-2"
+          >
+            Contact Support
+          </Button>
+        </div>
+      </ScreenContainer>
+    </MobileLayout>
   );
 }

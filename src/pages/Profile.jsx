@@ -1,9 +1,14 @@
-import { useState, useEffect } from 'react';
+// File: src/pages/Profile.jsx
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../styles/common.css';
-import '../styles/App.css';
-import '../styles/design-system.css';
+import MobileLayout from '../components/layout/MobileLayout';
+import ScreenContainer from '../components/layout/ScreenContainer';
 import PageHeader from '../components/molecules/PageHeader';
+import Input from '../components/atoms/Input';
+import Button from '../components/atoms/Button';
+import { Spinner } from '../components/atoms/Loader';
+import EmptyState from '../components/organisms/EmptyState';
+import { get, post } from '../utils/api';
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -12,498 +17,200 @@ export default function Profile() {
   const [editing, setEditing] = useState(false);
   const [editData, setEditData] = useState({});
 
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
-  const token = localStorage.getItem('auth_token');
-
   useEffect(() => {
-    if (!token) {
-      navigate('/login');
-      return;
-    }
+    const token = localStorage.getItem('auth_token');
+    if (!token) return navigate('/login');
     fetchProfile();
-  }, []);
+  }, [navigate]);
 
-  const fetchProfile = async () => {
+  async function fetchProfile() {
     try {
-      const res = await fetch(`${backendUrl}/profile/me`, {
-        headers: { 'Authorization': token }
-      });
-      const data = await res.json();
-      
-      if (data.status === 'success') {
-        setProfile(data.data);
-        setEditData(data.data);
+      const { status, data } = await get('/profile/me', { token: localStorage.getItem('auth_token') });
+      if (status === 'success') {
+        setProfile(data);
+        setEditData(data);
       }
-    } catch (error) {
-      console.error('Error fetching profile:', error);
+    } catch {
+      alert('Failed to load profile');
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
-  };
+  }
 
-  const handleEdit = () => {
+  function startEdit() {
     setEditing(true);
     setEditData({ ...profile });
-  };
+  }
 
-  const handleCancel = () => {
+  function cancelEdit() {
     setEditing(false);
     setEditData({ ...profile });
-  };
+  }
 
-  const handleSave = async () => {
+  async function saveEdit() {
     try {
-      const res = await fetch(`${backendUrl}/profile/edit`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': token
-        },
-        body: JSON.stringify(editData)
-      });
-
-      const data = await res.json();
-      if (data.status === 'success') {
+      const { status, message } = await post('/profile/edit', editData, { token: localStorage.getItem('auth_token') });
+      if (status === 'success') {
         setProfile(editData);
         setEditing(false);
-        alert('Profile updated successfully!');
+        alert('Profile updated');
       } else {
-        alert(data.message || 'Failed to update profile');
+        alert(message || 'Failed to update profile');
       }
-    } catch (error) {
-      console.error('Error updating profile:', error);
-      alert('Something went wrong. Please try again.');
+    } catch {
+      alert('Something went wrong');
     }
-  };
+  }
 
-  const handleLogout = async () => {
-    if (!confirm('Are you sure you want to logout?')) return;
-    
+  async function logout() {
+    if (!window.confirm('Logout?')) return;
     try {
-      await fetch(`${backendUrl}/logout`, {
-        method: 'POST',
-        headers: { 'Authorization': token }
-      });
-    } catch (error) {
-      console.error('Logout error:', error);
-    }
-    
+      await post('/logout', {}, { token: localStorage.getItem('auth_token') });
+    } catch {}
     localStorage.removeItem('auth_token');
     navigate('/login');
-  };
+  }
 
   if (loading) {
     return (
-      <div className="screen-content">
-        <div style={{ textAlign: 'center', marginTop: '40px' }}>
-          <div style={{ 
-            width: '40px', 
-            height: '40px', 
-            border: '3px solid var(--divider)', 
-            borderTop: '3px solid var(--primary-color)', 
-            borderRadius: '50%', 
-            animation: 'spin 1s linear infinite',
-            margin: '0 auto 20px'
-          }}></div>
-          <p>Loading profile...</p>
-        </div>
-      </div>
+      <MobileLayout>
+        <PageHeader title="My Profile" />
+        <ScreenContainer className="flex justify-center py-20">
+          <Spinner size={48} className="text-primary" />
+        </ScreenContainer>
+      </MobileLayout>
+    );
+  }
+
+  if (!profile) {
+    return (
+      <MobileLayout>
+        <PageHeader title="My Profile" />
+        <ScreenContainer className="py-20">
+          <EmptyState
+            icon="👤"
+            title="Profile not found"
+            description="Unable to load your profile."
+            action={{ label: 'Go to Login', onClick: () => navigate('/login') }}
+          />
+        </ScreenContainer>
+      </MobileLayout>
     );
   }
 
   return (
-    <div className="screen-content">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <PageHeader title="My Profile" />
+    <MobileLayout>
+      <PageHeader title="My Profile" />
+      <ScreenContainer className="space-y-6">
         {!editing && (
-          <button
-            onClick={handleEdit}
+          <Button onClick={startEdit} className="w-fit ml-auto">
+            Edit
+          </Button>
+        )}
+
+        {/* Profile Header */}
+        <div className="bg-background-soft p-6 rounded-lg text-center space-y-2">
+          <div
+            className="w-20 h-20 rounded-full bg-gradient-to-r from-primary to-primary-dark mx-auto flex items-center justify-center text-white text-4xl"
             style={{
-              background: 'none',
-              border: 'none',
-              color: 'var(--primary-color)',
-              fontSize: '14px',
-              fontWeight: '500',
-              cursor: 'pointer'
+              backgroundImage: profile.profile_image_url
+                ? `url(${profile.profile_image_url})`
+                : undefined,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
             }}
           >
-            Edit
-          </button>
-        )}
-      </div>
-
-      {/* Profile Header */}
-      <div style={{
-        background: 'var(--background-soft)',
-        border: '1px solid var(--divider)',
-        borderRadius: '16px',
-        padding: '24px',
-        marginBottom: '24px',
-        textAlign: 'center'
-      }}>
-        <div style={{
-          width: '80px',
-          height: '80px',
-          background: profile?.profile_image_url ? `url(${profile.profile_image_url})` : 'var(--primary-gradient)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          borderRadius: '40px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          margin: '0 auto 16px',
-          fontSize: '32px',
-          color: 'white'
-        }}>
-          {!profile?.profile_image_url && '👤'}
-        </div>
-        
-        <h3 style={{ margin: '0 0 4px 0', fontSize: '20px', fontWeight: '600' }}>
-          {profile?.name || 'User'}
-        </h3>
-        <p style={{ margin: '0 0 8px 0', fontSize: '14px', color: 'var(--text-secondary)' }}>
-          {profile?.phone}
-        </p>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
-          <span style={{ fontSize: '12px' }}>📍</span>
-          <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
-            {profile?.flat_number}, {profile?.society}, {profile?.city}
-          </span>
-        </div>
-      </div>
-
-      {/* Profile Details */}
-      <div style={{
-        background: 'var(--background-soft)',
-        border: '1px solid var(--divider)',
-        borderRadius: '12px',
-        marginBottom: '24px'
-      }}>
-        <div style={{ padding: '16px 20px', borderBottom: '1px solid var(--divider)' }}>
-          <h3 style={{ margin: 0, fontSize: '16px', fontWeight: '600' }}>
-            Personal Information
-          </h3>
-        </div>
-        
-        <div style={{ padding: '20px' }}>
-          {/* Name */}
-          <div style={{ marginBottom: '20px' }}>
-            <label style={{ 
-              display: 'block', 
-              marginBottom: '6px', 
-              fontSize: '14px', 
-              fontWeight: '500',
-              color: 'var(--text-secondary)'
-            }}>
-              Full Name
-            </label>
+            {!profile.profile_image_url && '👤'}
+          </div>
+          <div className="space-y-1">
             {editing ? (
-              <input
-                type="text"
+              <Input
                 value={editData.name || ''}
-                onChange={(e) => setEditData({ ...editData, name: e.target.value })}
-                style={{
-                  width: '100%',
-                  padding: '12px',
-                  border: '1px solid var(--divider)',
-                  borderRadius: '8px',
-                  fontSize: '16px'
-                }}
+                onChange={e => setEditData({ ...editData, name: e.target.value })}
+                placeholder="Full Name"
+                className="mx-auto w-full max-w-xs"
               />
             ) : (
-              <p style={{ margin: 0, fontSize: '16px', fontWeight: '500' }}>
-                {profile?.name || 'Not provided'}
-              </p>
+              <h2 className="text-xl font-semibold">{profile.name || 'User'}</h2>
             )}
-          </div>
-
-          {/* Phone */}
-          <div style={{ marginBottom: '20px' }}>
-            <label style={{ 
-              display: 'block', 
-              marginBottom: '6px', 
-              fontSize: '14px', 
-              fontWeight: '500',
-              color: 'var(--text-secondary)'
-            }}>
-              Phone Number
-            </label>
-            <p style={{ margin: 0, fontSize: '16px', fontWeight: '500' }}>
-              {profile?.phone}
+            <p className="text-sm text-secondary">{profile.phone}</p>
+            <p className="text-xs text-secondary">
+              📍 {profile.flat_number}, {profile.society}, {profile.city}
             </p>
           </div>
+        </div>
 
+        {/* Details */}
+        <div className="bg-background-soft p-6 rounded-lg space-y-4">
           {/* Gender */}
-          <div style={{ marginBottom: '20px' }}>
-            <label style={{ 
-              display: 'block', 
-              marginBottom: '6px', 
-              fontSize: '14px', 
-              fontWeight: '500',
-              color: 'var(--text-secondary)'
-            }}>
-              Gender
-            </label>
+          <div>
+            <p className="text-sm text-secondary mb-1">Gender</p>
             {editing ? (
               <select
                 value={editData.gender || ''}
-                onChange={(e) => setEditData({ ...editData, gender: e.target.value })}
-                style={{
-                  width: '100%',
-                  padding: '12px',
-                  border: '1px solid var(--divider)',
-                  borderRadius: '8px',
-                  fontSize: '16px'
-                }}
+                onChange={e => setEditData({ ...editData, gender: e.target.value })}
+                className="w-full p-2 border border-divider rounded"
               >
-                <option value="">Select Gender</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Other">Other</option>
+                <option value="">Select</option>
+                {['Male','Female','Other'].map(g => (
+                  <option key={g} value={g}>{g}</option>
+                ))}
               </select>
             ) : (
-              <p style={{ margin: 0, fontSize: '16px', fontWeight: '500' }}>
-                {profile?.gender || 'Not provided'}
-              </p>
+              <p className="font-medium">{profile.gender || 'Not provided'}</p>
             )}
           </div>
 
           {/* Date of Birth */}
-          <div style={{ marginBottom: '20px' }}>
-            <label style={{ 
-              display: 'block', 
-              marginBottom: '6px', 
-              fontSize: '14px', 
-              fontWeight: '500',
-              color: 'var(--text-secondary)'
-            }}>
-              Date of Birth
-            </label>
+          <div>
+            <p className="text-sm text-secondary mb-1">Date of Birth</p>
             {editing ? (
-              <input
+              <Input
                 type="date"
                 value={editData.date_of_birth || ''}
-                onChange={(e) => setEditData({ ...editData, date_of_birth: e.target.value })}
-                style={{
-                  width: '100%',
-                  padding: '12px',
-                  border: '1px solid var(--divider)',
-                  borderRadius: '8px',
-                  fontSize: '16px'
-                }}
+                onChange={e => setEditData({ ...editData, date_of_birth: e.target.value })}
+                className="w-full"
               />
             ) : (
-              <p style={{ margin: 0, fontSize: '16px', fontWeight: '500' }}>
-                {profile?.date_of_birth || 'Not provided'}
-              </p>
+              <p className="font-medium">{profile.date_of_birth || 'Not provided'}</p>
             )}
           </div>
 
           {/* Flat Number */}
-          <div style={{ marginBottom: editing ? '20px' : '0' }}>
-            <label style={{ 
-              display: 'block', 
-              marginBottom: '6px', 
-              fontSize: '14px', 
-              fontWeight: '500',
-              color: 'var(--text-secondary)'
-            }}>
-              Flat/House Number
-            </label>
+          <div>
+            <p className="text-sm text-secondary mb-1">Flat / House No.</p>
             {editing ? (
-              <input
-                type="text"
+              <Input
                 value={editData.flat_number || ''}
-                onChange={(e) => setEditData({ ...editData, flat_number: e.target.value })}
-                style={{
-                  width: '100%',
-                  padding: '12px',
-                  border: '1px solid var(--divider)',
-                  borderRadius: '8px',
-                  fontSize: '16px'
-                }}
+                onChange={e => setEditData({ ...editData, flat_number: e.target.value })}
+                placeholder="e.g. A-302"
+                className="w-full"
               />
             ) : (
-              <p style={{ margin: 0, fontSize: '16px', fontWeight: '500' }}>
-                {profile?.flat_number || 'Not provided'}
-              </p>
+              <p className="font-medium">{profile.flat_number || 'Not provided'}</p>
             )}
           </div>
 
-          {/* Edit Actions */}
+          {/* Save / Cancel */}
           {editing && (
-            <div style={{ display: 'flex', gap: '12px', marginTop: '24px' }}>
-              <button
-                onClick={handleCancel}
-                style={{
-                  flex: 1,
-                  background: 'none',
-                  border: '1px solid var(--divider)',
-                  color: 'var(--text-secondary)',
-                  borderRadius: '8px',
-                  padding: '12px',
-                  fontSize: '16px',
-                  fontWeight: '500',
-                  cursor: 'pointer'
-                }}
-              >
+            <div className="flex gap-2">
+              <Button onClick={cancelEdit} className="flex-1 btn-secondary">
                 Cancel
-              </button>
-              <button
-                onClick={handleSave}
-                style={{
-                  flex: 1,
-                  background: 'var(--primary-gradient)',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '8px',
-                  padding: '12px',
-                  fontSize: '16px',
-                  fontWeight: '500',
-                  cursor: 'pointer'
-                }}
-              >
-                Save Changes
-              </button>
+              </Button>
+              <Button onClick={saveEdit} className="flex-1" disabled={!editData.name || !editData.flat_number}>
+                Save
+              </Button>
             </div>
           )}
         </div>
-      </div>
 
-      {/* Quick Actions */}
-      {!editing && (
-        <div style={{ marginBottom: '24px' }}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            <button
-              onClick={() => navigate('/wallet')}
-              style={{
-                background: 'var(--background-soft)',
-                border: '1px solid var(--divider)',
-                borderRadius: '12px',
-                padding: '16px 20px',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '12px',
-                textAlign: 'left'
-              }}
-            >
-              <span style={{ fontSize: '20px' }}>💳</span>
-              <div style={{ flex: 1 }}>
-                <p style={{ margin: '0 0 2px 0', fontSize: '16px', fontWeight: '500' }}>
-                  My Wallet
-                </p>
-                <p style={{ margin: 0, fontSize: '12px', color: 'var(--text-secondary)' }}>
-                  Manage your wallet and transactions
-                </p>
-              </div>
-              <span style={{ fontSize: '16px', color: 'var(--text-secondary)' }}>→</span>
-            </button>
-
-            <button
-              onClick={() => navigate('/orders')}
-              style={{
-                background: 'var(--background-soft)',
-                border: '1px solid var(--divider)',
-                borderRadius: '12px',
-                padding: '16px 20px',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '12px',
-                textAlign: 'left'
-              }}
-            >
-              <span style={{ fontSize: '20px' }}>📦</span>
-              <div style={{ flex: 1 }}>
-                <p style={{ margin: '0 0 2px 0', fontSize: '16px', fontWeight: '500' }}>
-                  My Orders
-                </p>
-                <p style={{ margin: 0, fontSize: '12px', color: 'var(--text-secondary)' }}>
-                  Track and manage your orders
-                </p>
-              </div>
-              <span style={{ fontSize: '16px', color: 'var(--text-secondary)' }}>→</span>
-            </button>
-
-            <button
-              onClick={() => navigate('/support')}
-              style={{
-                background: 'var(--background-soft)',
-                border: '1px solid var(--divider)',
-                borderRadius: '12px',
-                padding: '16px 20px',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '12px',
-                textAlign: 'left'
-              }}
-            >
-              <span style={{ fontSize: '20px' }}>❓</span>
-              <div style={{ flex: 1 }}>
-                <p style={{ margin: '0 0 2px 0', fontSize: '16px', fontWeight: '500' }}>
-                  Help & Support
-                </p>
-                <p style={{ margin: 0, fontSize: '12px', color: 'var(--text-secondary)' }}>
-                  Get help and contact support
-                </p>
-              </div>
-              <span style={{ fontSize: '16px', color: 'var(--text-secondary)' }}>→</span>
-            </button>
-
-            <button
-              onClick={() => navigate('/about')}
-              style={{
-                background: 'var(--background-soft)',
-                border: '1px solid var(--divider)',
-                borderRadius: '12px',
-                padding: '16px 20px',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '12px',
-                textAlign: 'left'
-              }}
-            >
-              <span style={{ fontSize: '20px' }}>ℹ️</span>
-              <div style={{ flex: 1 }}>
-                <p style={{ margin: '0 0 2px 0', fontSize: '16px', fontWeight: '500' }}>
-                  About Habrio
-                </p>
-                <p style={{ margin: 0, fontSize: '12px', color: 'var(--text-secondary)' }}>
-                  App info and terms
-                </p>
-              </div>
-              <span style={{ fontSize: '16px', color: 'var(--text-secondary)' }}>→</span>
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Logout Button */}
-      {!editing && (
-        <button
-          onClick={handleLogout}
-          style={{
-            background: 'none',
-            border: '1px solid var(--error-color)',
-            color: 'var(--error-color)',
-            borderRadius: '12px',
-            padding: '16px',
-            fontSize: '16px',
-            fontWeight: '500',
-            cursor: 'pointer',
-            width: '100%',
-            marginBottom: '20px'
-          }}
-        >
-          Logout
-        </button>
-      )}
-
-      {/* Bottom Navigation Placeholder */}
-      <div style={{ height: '80px' }}></div>
-    </div>
-  );
+        {/* Logout */}
+        {!editing && (
+          <Button onClick={logout} className="btn-secondary">
+            Logout
+          </Button>
+        )}
+      </ScreenContainer>
+    </MobileLayout>
+);
 }

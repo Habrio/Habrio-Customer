@@ -1,42 +1,36 @@
-import { useState } from 'react';
+// File: src/pages/BasicOnboarding.jsx
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../styles/common.css';
-import '../styles/App.css';
-import '../styles/design-system.css';
+import MobileLayout from '../components/layout/MobileLayout';
+import ScreenContainer from '../components/layout/ScreenContainer';
+import PageHeader from '../components/molecules/PageHeader';
+import SectionCard from '../components/molecules/SectionCard';
+import Input from '../components/atoms/Input';
+import Button from '../components/atoms/Button';
+import { BodyText, Heading } from '../components/atoms/Typography';
+import EmptyState from '../components/organisms/EmptyState';
 
 export default function BasicOnboarding() {
   const navigate = useNavigate();
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
   const [data, setData] = useState({ name: '', city: '', society: '' });
+  const [submitting, setSubmitting] = useState(false);
 
-  const handleChange = e => {
+  function handleChange(e) {
     setData(prev => ({ ...prev, [e.target.name]: e.target.value.trimStart() }));
-  };
+  }
 
-  const submit = async () => {
+  async function handleSubmit() {
     const token = localStorage.getItem('auth_token');
-    if (!token) {
-      alert('Missing login token. Please login again.');
-      return;
-    }
     const { name, city, society } = data;
-    if (!name || !city || !society) {
-      alert('All fields are required');
-      return;
-    }
+    if (!token) return alert('Missing login token. Please login again.');
+    if (!name || !city || !society) return alert('All fields are required');
+
+    setSubmitting(true);
     try {
-      const res = await fetch(`${backendUrl}/onboarding/basic`, {
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/onboarding/basic`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': token
-        },
-        body: JSON.stringify({
-          name: name.trim(),
-          city: city.trim(),
-          society: society.trim(),
-          role: 'consumer'
-        })
+        headers: { 'Content-Type': 'application/json', Authorization: token },
+        body: JSON.stringify({ name, city, society, role: 'consumer' }),
       });
       const result = await res.json();
       if (result.status === 'success') {
@@ -46,51 +40,64 @@ export default function BasicOnboarding() {
       }
     } catch {
       alert('Something went wrong. Please try again.');
+    } finally {
+      setSubmitting(false);
     }
-  };
+  }
 
   return (
-    <div className="mobile-screen fade-in">
-      <div className="status-bar">
-        <span className="time">9:41</span>
-        <span className="battery">🔋</span>
-      </div>
-      <div className="screen-content">
-        <h2 className="title text-center mb-lg">Tell us about yourself</h2>
-        <div className="form-group">
-          <label className="form-label">Full Name</label>
-          <input
-            name="name"
-            className="form-input"
-            placeholder="Ashish Dabas"
-            value={data.name}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="form-group">
-          <label className="form-label">City</label>
-          <input
-            name="city"
-            className="form-input"
-            placeholder="Noida"
-            value={data.city}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="form-group">
-          <label className="form-label">Society</label>
-          <input
-            name="society"
-            className="form-input"
-            placeholder="Hyde Park"
-            value={data.society}
-            onChange={handleChange}
-          />
-        </div>
-        <button className="btn btn-primary btn-full btn-large" onClick={submit}>
-          Complete
-        </button>
-      </div>
-    </div>
+    <MobileLayout>
+      <PageHeader back={null} title="Tell us about yourself" />
+      <ScreenContainer>
+        <SectionCard>
+          <div className="space-y-4">
+            <div>
+              <Heading level={2} className="text-center">
+                Basic Details
+              </Heading>
+              <BodyText size="sm" color="secondary" className="text-center">
+                Help us get to know you better
+              </BodyText>
+            </div>
+            <div className="space-y-3">
+              <div>
+                <BodyText size="sm" className="mb-1">Full Name</BodyText>
+                <Input
+                  name="name"
+                  placeholder="Ashish Dabas"
+                  value={data.name}
+                  onChange={handleChange}
+                />
+              </div>
+              <div>
+                <BodyText size="sm" className="mb-1">City</BodyText>
+                <Input
+                  name="city"
+                  placeholder="Noida"
+                  value={data.city}
+                  onChange={handleChange}
+                />
+              </div>
+              <div>
+                <BodyText size="sm" className="mb-1">Society</BodyText>
+                <Input
+                  name="society"
+                  placeholder="Hyde Park"
+                  value={data.society}
+                  onChange={handleChange}
+                />
+              </div>
+            </div>
+            <Button
+              className="w-full mt-4"
+              onClick={handleSubmit}
+              disabled={submitting}
+            >
+              {submitting ? 'Submitting...' : 'Complete'}
+            </Button>
+          </div>
+        </SectionCard>
+      </ScreenContainer>
+    </MobileLayout>
   );
 }

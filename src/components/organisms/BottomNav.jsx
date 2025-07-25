@@ -1,34 +1,73 @@
-import { useNavigate, useLocation } from 'react-router-dom';
-import { HiHome, HiShoppingBag, HiShoppingCart, HiClipboardList, HiUser } from 'react-icons/hi';
+// src/components/organisms/BottomNav.jsx
+import React from "react";
+import clsx from "clsx";
+import Icon from "../atoms/Icon";
+import Badge from "../atoms/Badge";
 
-const navItems = [
-  { icon: HiHome, label: 'Home', path: '/home' },
-  { icon: HiShoppingBag, label: 'Shops', path: '/shops' },
-  { icon: HiShoppingCart, label: 'Cart', path: '/cart' },
-  { icon: HiClipboardList, label: 'Orders', path: '/orders' },
-  { icon: HiUser, label: 'Profile', path: '/profile' },
+// Tab config array makes this scalable!
+const TABS = [
+  { key: "home", label: "Home", icon: "home", route: "/" },
+  { key: "shops", label: "Shops", icon: "store", route: "/shops" },
+  { key: "orders", label: "Orders", icon: "clipboard-list", route: "/orders" },
+  { key: "cart", label: "Cart", icon: "shopping-cart", route: "/cart", badgeKey: "cartCount" },
+  { key: "profile", label: "Profile", icon: "user", route: "/profile" },
 ];
 
-export default function BottomNav() {
-  const navigate = useNavigate();
-  const location = useLocation();
-
+/**
+ * BottomNav organism
+ * Props:
+ * - active: string (active tab key)
+ * - badgeData: object { [badgeKey]: number }
+ * - onNavigate: function(tab.route)
+ * - className: extra Tailwind classes
+ */
+export default function BottomNav({
+  active = "home",
+  badgeData = {},
+  onNavigate,
+  className = "",
+  ...rest
+}) {
   return (
-    <div className="fixed bottom-0 left-1/2 w-full max-w-[375px] -translate-x-1/2 bg-white/80 backdrop-blur-md shadow-[0_-2px_8px_rgba(0,0,0,0.05)] border-t border-gray-200 flex justify-around py-2 z-50 rounded-t-xl">
-      {navItems.map(({ icon: IconComponent, label, path }) => {
-        const Icon = IconComponent;
-        const active = location.pathname === path;
-        return (
-          <button
-            key={path}
-            onClick={() => navigate(path)}
-            className={`flex flex-col items-center gap-0.5 text-xs font-medium px-2 ${active ? 'text-primary' : 'text-gray-500 hover:text-primary'}`}
-          >
-            <Icon className="text-xl" />
-            <span>{label}</span>
-          </button>
-        );
-      })}
-    </div>
+    <nav
+      className={clsx(
+        "fixed bottom-0 left-0 right-0 z-30 bg-background border-t border-divider shadow-card",
+        "flex justify-between items-center h-16 px-2 md:hidden",
+        "transition-all",
+        "safe-bottom",
+        className
+      )}
+      aria-label="Main Navigation"
+      {...rest}
+    >
+      {TABS.map((tab) => (
+        <button
+          key={tab.key}
+          type="button"
+          aria-label={tab.label}
+          aria-current={active === tab.key ? "page" : undefined}
+          className={clsx(
+            "flex flex-col items-center justify-center flex-1 h-full outline-none transition",
+            active === tab.key
+              ? "text-primary font-bold"
+              : "text-text-secondary font-medium hover:text-primary"
+          )}
+          onClick={() => onNavigate?.(tab.route, tab.key)}
+        >
+          <span className="relative">
+            <Icon name={tab.icon} size={24} />
+            {/* Badge support (e.g., cart count) */}
+            {tab.badgeKey && badgeData[tab.badgeKey] > 0 && (
+              <span className="absolute -top-2 -right-2">
+                <Badge intent="error" size="sm" pill>
+                  {badgeData[tab.badgeKey]}
+                </Badge>
+              </span>
+            )}
+          </span>
+          <span className="text-xs mt-1 leading-none">{tab.label}</span>
+        </button>
+      ))}
+    </nav>
   );
 }

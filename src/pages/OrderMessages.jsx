@@ -1,8 +1,14 @@
-import { useState, useEffect } from 'react';
+// File: src/pages/OrderMessages.jsx
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import '../styles/common.css';
-import '../styles/App.css';
-import '../styles/design-system.css';
+import MobileLayout from '../components/layout/MobileLayout';
+import ScreenContainer from '../components/layout/ScreenContainer';
+import PageHeader from '../components/molecules/PageHeader';
+import Input from '../components/atoms/Input';
+import Button from '../components/atoms/Button';
+import { Spinner } from '../components/atoms/Loader';
+import EmptyState from '../components/organisms/EmptyState';
+import { get, post } from '../utils/api';
 
 export default function OrderMessages() {
   const { orderId } = useParams();
@@ -13,186 +19,96 @@ export default function OrderMessages() {
   const [sending, setSending] = useState(false);
   const [userPhone, setUserPhone] = useState('');
 
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
-  const token = localStorage.getItem('auth_token');
-
   useEffect(() => {
-    if (!token) {
-      navigate('/login');
-      return;
-    }
+    const token = localStorage.getItem('auth_token');
+    if (!token) return navigate('/login');
+
+    // fetch current user phone
+    get('/profile/me', { token }).then(({ status, data }) => {
+      if (status === 'success') setUserPhone(data.phone);
+    });
+
+    // fetch order messages
     fetchMessages();
-    fetchUserPhone();
-  }, [orderId]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [orderId, navigate]);
 
-  const fetchUserPhone = async () => {
+  async function fetchMessages() {
+    const token = localStorage.getItem('auth_token');
     try {
-      const res = await fetch(`${backendUrl}/profile/me`, {
-        headers: { 'Authorization': token }
-      });
-      const data = await res.json();
-      if (data.status === 'success') {
-        setUserPhone(data.data.phone);
-      }
-    } catch (error) {
-      console.error('Error fetching user phone:', error);
+      const { status, messages } = await get(
+        `/order/consumer/messages/${orderId}`,
+        { token }
+      );
+      if (status === 'success') setMessages(messages);
+    } catch {
+      // ignore
+    } finally {
+      setLoading(false);
     }
-  };
+  }
 
-  const fetchMessages = async () => {
-    try {
-      const res = await fetch(`${backendUrl}/order/consumer/messages/${orderId}`, {
-        headers: { 'Authorization': token }
-      });
-      const data = await res.json();
-      if (data.status === 'success') {
-        setMessages(data.messages);
-      }
-    } catch (error) {
-      console.error('Error fetching messages:', error);
-    }
-    setLoading(false);
-  };
-
-  const sendMessage = async () => {
+  async function sendMessage() {
     if (!newMessage.trim()) return;
-    
     setSending(true);
+    const token = localStorage.getItem('auth_token');
     try {
-      const res = await fetch(`${backendUrl}/order/consumer/message/send/${orderId}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': token
-        },
-        body: JSON.stringify({ message: newMessage.trim() })
-      });
-
-      const data = await res.json();
-      if (data.status === 'success') {
+      const { status } = await post(
+        `/order/consumer/message/send/${orderId}`,
+        { message: newMessage.trim() },
+        { token }
+      );
+      if (status === 'success') {
         setNewMessage('');
-        fetchMessages(); // Refresh messages
+        fetchMessages();
       } else {
-        alert(data.message || 'Failed to send message');
+        alert('Failed to send message');
       }
-    } catch (error) {
-      console.error('Error sending message:', error);
+    } catch {
       alert('Something went wrong. Please try again.');
+    } finally {
+      setSending(false);
     }
-    setSending(false);
-  };
-
-  if (loading) {
-    return (
-      <div className="screen-content">
-        <div style={{ textAlign: 'center', marginTop: '40px' }}>
-          <div style={{ 
-            width: '40px', 
-            height: '40px', 
-            border: '3px solid var(--divider)', 
-            borderTop: '3px solid var(--primary-color)', 
-            borderRadius: '50%', 
-            animation: 'spin 1s linear infinite',
-            margin: '0 auto 20px'
-          }}></div>
-          <p>Loading messages...</p>
-        </div>
-      </div>
-    );
   }
 
   return (
-    <div className="screen-content" style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
-      {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px', background: 'white', padding: '20px 0' }}>
-        <button
-          onClick={() => navigate(-1)}
-          style={{
-            background: 'none',
-            border: 'none',
-            fontSize: '24px',
-            marginRight: '16px',
-            cursor: 'pointer'
-          }}
-        >
-          ←
-        </button>
-        <div style={{ flex: 1 }}>
-          <h2 style={{ margin: '0 0 4px 0', fontSize: '18px', fontWeight: '600' }}>
-            Order #{orderId}
-          </h2>
-          <p style={{ margin: 0, fontSize: '14px', color: 'var(--text-secondary)' }}>
-            Chat with vendor
-          </p>
-        </div>
-        <div style={{
-          width: '40px',
-          height: '40px',
-          background: 'var(--primary-gradient)',
-          borderRadius: '20px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontSize: '16px'
-        }}>
-          🏪
-        </div>
-      </div>
-
-      {/* Messages Container */}
-      <div style={{ 
-        flex: 1, 
-        overflowY: 'auto', 
-        padding: '0 0 20px 0',
-        marginBottom: '80px' // Space for input area
-      }}>
-        {messages.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '40px 20px' }}>
-            <div style={{ fontSize: '64px', marginBottom: '20px' }}>💬</div>
-            <h3 style={{ margin: '0 0 8px 0', fontSize: '18px', fontWeight: '600' }}>
-              No messages yet
-            </h3>
-            <p style={{ margin: '0 0 24px 0', color: 'var(--text-secondary)', fontSize: '14px' }}>
-              Start a conversation with the vendor about your order
-            </p>
+    <MobileLayout>
+      <PageHeader title={`Order #${orderId}`} />
+      <ScreenContainer className="flex-1 flex flex-col">
+        {/* Loading / Empty State */}
+        {loading ? (
+          <div className="flex-1 flex items-center justify-center">
+            <Spinner size={48} className="text-primary" />
           </div>
+        ) : messages.length === 0 ? (
+          <EmptyState
+            icon="💬"
+            title="No messages yet"
+            description="Start a conversation with the vendor about your order."
+            className="flex-1"
+          />
         ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            {messages.map((message) => {
-              const isMyMessage = message.sender_phone === userPhone;
+          /* Messages List */
+          <div className="flex-1 overflow-y-auto space-y-3">
+            {messages.map(msg => {
+              const isMine = msg.sender_phone === userPhone;
               return (
                 <div
-                  key={message.id}
-                  style={{
-                    display: 'flex',
-                    justifyContent: isMyMessage ? 'flex-end' : 'flex-start',
-                    marginBottom: '8px'
-                  }}
+                  key={msg.id}
+                  className={`flex ${isMine ? 'justify-end' : 'justify-start'}`}
                 >
-                  <div style={{
-                      maxWidth: '75%',
-                      padding: '12px 16px',
-                      borderRadius: isMyMessage 
-                        ? '18px 18px 4px 18px' 
-                        : '18px 18px 18px 4px',
-                      background: isMyMessage 
-                        ? 'var(--primary-gradient)'
-                        : 'var(--background-soft)',
-                      color: isMyMessage ? 'white' : 'var(--text-primary)',
-                      border: isMyMessage ? 'none' : '1px solid var(--divider)'
-                    }}>
-                    <p style={{ margin: '0 0 6px 0', fontSize: '14px', lineHeight: '1.4' }}>
-                      {message.message}
-                    </p>
-                    <p style={{ 
-                      margin: 0, 
-                      fontSize: '11px', 
-                      opacity: isMyMessage ? 0.8 : 0.6,
-                      textAlign: 'right'
-                    }}>
-                      {new Date(message.timestamp).toLocaleTimeString('en-IN', {
+                  <div
+                    className={`max-w-[75%] p-3 rounded-lg ${
+                      isMine
+                        ? 'bg-primary text-white'
+                        : 'bg-background-soft text-text-primary'
+                    }`}
+                  >
+                    <p className="text-sm">{msg.message}</p>
+                    <p className="text-xs text-secondary mt-1 text-right">
+                      {new Date(msg.timestamp).toLocaleTimeString('en-IN', {
                         hour: '2-digit',
-                        minute: '2-digit'
+                        minute: '2-digit',
                       })}
                     </p>
                   </div>
@@ -201,120 +117,27 @@ export default function OrderMessages() {
             })}
           </div>
         )}
-      </div>
 
-      {/* Message Input Area */}
-      <div style={{
-        position: 'fixed',
-        bottom: 0,
-        left: '50%',
-        transform: 'translateX(-50%)',
-        width: '100%',
-        maxWidth: '375px',
-        background: 'white',
-        borderTop: '1px solid var(--divider)',
-        padding: '16px 20px',
-        display: 'flex',
-        alignItems: 'flex-end',
-        gap: '12px',
-        zIndex: 1000
-      }}>
-        <div style={{ flex: 1 }}>
-          <textarea
-            placeholder="Type your message..."
+        {/* Input Area */}
+        <form
+          onSubmit={e => {
+            e.preventDefault();
+            sendMessage();
+          }}
+          className="flex gap-2 pt-2 border-t border-[var(--divider)]"
+        >
+          <Input
+            placeholder="Type your message…"
             value={newMessage}
-            onChange={(e) => setNewMessage(e.target.value)}
-            onKeyPress={(e) => {
-              if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                sendMessage();
-              }
-            }}
-            style={{
-              width: '100%',
-              minHeight: '40px',
-              maxHeight: '120px',
-              padding: '10px 16px',
-              border: '1px solid var(--divider)',
-              borderRadius: '20px',
-              fontSize: '14px',
-              resize: 'none',
-              fontFamily: 'inherit',
-              outline: 'none'
-            }}
+            onChange={e => setNewMessage(e.target.value)}
+            className="flex-1"
             rows={1}
           />
-        </div>
-        
-        <button
-          onClick={sendMessage}
-          disabled={sending || !newMessage.trim()}
-          style={{
-            width: '44px',
-            height: '44px',
-            background: sending || !newMessage.trim() 
-              ? 'var(--text-disabled)' 
-              : 'var(--primary-gradient)',
-            color: 'white',
-            border: 'none',
-            borderRadius: '22px',
-            cursor: sending || !newMessage.trim() ? 'not-allowed' : 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: '16px',
-            opacity: sending || !newMessage.trim() ? 0.6 : 1,
-            flexShrink: 0
-          }}
-        >
-          {sending ? '⏳' : '➤'}
-        </button>
-      </div>
-
-      {/* Quick Replies */}
-      {messages.length === 0 && (
-        <div style={{
-          position: 'fixed',
-          bottom: '80px', // Above the input area
-          left: '50%',
-          transform: 'translateX(-50%)',
-          width: 'calc(100% - 40px)',
-          maxWidth: '375px',
-          background: 'white',
-          borderRadius: '12px',
-          border: '1px solid var(--divider)',
-          padding: '16px',
-          zIndex: 999
-        }}>
-          <h4 style={{ margin: '0 0 12px 0', fontSize: '14px', fontWeight: '600' }}>
-            Quick messages:
-          </h4>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            {[
-              'Can you deliver earlier?',
-              'Please call before delivery',
-              'Is this item fresh?',
-              'Can you provide a substitute?'
-            ].map((quickMessage) => (
-              <button
-                key={quickMessage}
-                onClick={() => setNewMessage(quickMessage)}
-                style={{
-                  background: 'var(--background-soft)',
-                  border: '1px solid var(--divider)',
-                  borderRadius: '8px',
-                  padding: '8px 12px',
-                  fontSize: '13px',
-                  cursor: 'pointer',
-                  textAlign: 'left'
-                }}
-              >
-                {quickMessage}
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
-    </div>
+          <Button type="submit" disabled={sending || !newMessage.trim()}>
+            {sending ? <Spinner size={20} className="text-white" /> : 'Send'}
+          </Button>
+        </form>
+      </ScreenContainer>
+    </MobileLayout>
   );
 }

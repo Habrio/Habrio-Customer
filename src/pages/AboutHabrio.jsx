@@ -1,270 +1,130 @@
-
-import '../styles/common.css';
-import '../styles/App.css';
-import '../styles/design-system.css';
+// File: src/pages/AboutHabrio.jsx
+import React from 'react';
+import MobileLayout from '../components/layout/MobileLayout';
+import ScreenContainer from '../components/layout/ScreenContainer';
 import PageHeader from '../components/molecules/PageHeader';
+import SectionCard from '../components/molecules/SectionCard';
+import { BodyText, Heading } from '../components/atoms/Typography';
+import EmptyState from '../components/organisms/EmptyState';
 
 export default function AboutHabrio() {
-
   return (
-    <div className="screen-content">
-      {/* Header */}
-      <PageHeader title="About Habrio" />
+    <MobileLayout>
+      <PageHeader back={null} title="About Habrio" />
+      <ScreenContainer>
+        {/* App Logo & Info */}
+        <SectionCard padding="lg" className="bg-gradient-to-br from-primary to-accent text-white">
+          <div className="flex flex-col items-center space-y-2">
+            <div className="w-20 h-20 bg-white/20 rounded-2xl flex items-center justify-center text-4xl">
+              🏘️
+            </div>
+            <Heading level={1} className="text-white">
+              Habrio
+            </Heading>
+            <BodyText size="md" className="text-white/90">
+              Your society's very own super app
+            </BodyText>
+            <BodyText size="sm" className="text-white/80">
+              Version 1.0.0
+            </BodyText>
+          </div>
+        </SectionCard>
 
-      {/* App Logo & Info */}
-      <div style={{
-        background: 'var(--primary-gradient)',
-        borderRadius: '16px',
-        padding: '32px 24px',
-        marginBottom: '24px',
-        color: 'white',
-        textAlign: 'center'
-      }}>
-        <div style={{
-          width: '80px',
-          height: '80px',
-          background: 'rgba(255, 255, 255, 0.2)',
-          borderRadius: '20px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          margin: '0 auto 20px',
-          fontSize: '36px'
-        }}>
-          🏘️
-        </div>
-        <h1 style={{ margin: '0 0 8px 0', fontSize: '24px', fontWeight: '700' }}>
-          Habrio
-        </h1>
-        <p style={{ margin: '0 0 16px 0', fontSize: '16px', opacity: 0.9 }}>
-          Your society's very own super app
-        </p>
-        <p style={{ margin: 0, fontSize: '14px', opacity: 0.8 }}>
-          Version 1.0.0
-        </p>
-      </div>
+        {/* What is Habrio */}
+        <SectionCard title="What is Habrio?">
+          <BodyText className="mb-4 text-sm text-[var(--text-secondary)] leading-relaxed">
+            Habrio is a hyperlocal commerce platform that connects residents with local
+            shops and services within their society. We make it easy to discover, order,
+            and get things delivered right to your doorstep from trusted local vendors.
+          </BodyText>
+          {[
+            { emoji: '🏪', text: 'Browse local shops and services in your society' },
+            { emoji: '🛒', text: 'Order groceries, medicines, and daily essentials' },
+            { emoji: '🚚', text: 'Get fast delivery right to your door' },
+            { emoji: '💳', text: 'Pay securely using wallet or cash on delivery' },
+          ].map(({ emoji, text }, i) => (
+            <div key={i} className="flex items-center space-x-3 mb-3">
+              <span className="text-2xl">{emoji}</span>
+              <BodyText size="sm">{text}</BodyText>
+            </div>
+          ))}
+        </SectionCard>
 
-      {/* What is Habrio */}
-      <div style={{
-        background: 'var(--background-soft)',
-        border: '1px solid var(--divider)',
-        borderRadius: '12px',
-        padding: '20px',
-        marginBottom: '20px'
-      }}>
-        <h3 style={{ margin: '0 0 16px 0', fontSize: '18px', fontWeight: '600' }}>
-          What is Habrio?
-        </h3>
-        <p style={{ margin: '0 0 16px 0', fontSize: '14px', lineHeight: '1.5', color: 'var(--text-secondary)' }}>
-          Habrio is a hyperlocal commerce platform that connects residents with local shops and services within their society. 
-          We make it easy to discover, order, and get things delivered right to your doorstep from trusted local vendors.
-        </p>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <span style={{ fontSize: '20px' }}>🏪</span>
-            <p style={{ margin: 0, fontSize: '14px' }}>
-              Browse local shops and services in your society
-            </p>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <span style={{ fontSize: '20px' }}>🛒</span>
-            <p style={{ margin: 0, fontSize: '14px' }}>
-              Order groceries, medicines, and daily essentials
-            </p>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <span style={{ fontSize: '20px' }}>🚚</span>
-            <p style={{ margin: 0, fontSize: '14px' }}>
-              Get fast delivery right to your door
-            </p>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <span style={{ fontSize: '20px' }}>💳</span>
-            <p style={{ margin: 0, fontSize: '14px' }}>
-              Pay securely using wallet or cash on delivery
-            </p>
-          </div>
-        </div>
-      </div>
+        {/* Our Mission */}
+        <SectionCard title="Our Mission">
+          <BodyText className="text-sm text-[var(--text-secondary)] leading-relaxed">
+            To empower local communities by creating a thriving ecosystem where residents
+            can easily access local products and services while supporting neighborhood
+            businesses. We believe in building stronger communities through convenient,
+            reliable, and personalized local commerce.
+          </BodyText>
+        </SectionCard>
 
-      {/* Our Mission */}
-      <div style={{
-        background: 'var(--background-soft)',
-        border: '1px solid var(--divider)',
-        borderRadius: '12px',
-        padding: '20px',
-        marginBottom: '20px'
-      }}>
-        <h3 style={{ margin: '0 0 16px 0', fontSize: '18px', fontWeight: '600' }}>
-          Our Mission
-        </h3>
-        <p style={{ margin: 0, fontSize: '14px', lineHeight: '1.5', color: 'var(--text-secondary)' }}>
-          To empower local communities by creating a thriving ecosystem where residents can easily access 
-          local products and services while supporting neighborhood businesses. We believe in building 
-          stronger communities through convenient, reliable, and personalized local commerce.
-        </p>
-      </div>
+        {/* Key Features */}
+        <SectionCard title="Key Features">
+          <div className="grid grid-cols-2 gap-4">
+            {[
+              { emoji: '⚡', label: 'Fast Delivery', desc: 'Quick delivery within your society' },
+              { emoji: '🔒', label: 'Secure Payment', desc: 'Safe and encrypted transactions' },
+              { emoji: '📱', label: 'Real-time Tracking', desc: 'Track your orders live' },
+              { emoji: '🤝', label: '24/7 Support', desc: 'Always here to help' },
+            ].map(({ emoji, label, desc }, i) => (
+              <div key={i} className="text-center">
+                <div className="text-3xl mb-1">{emoji}</div>
+                <Heading level={4} className="text-sm font-semibold mb-1">
+                  {label}
+                </Heading>
+                <BodyText size="xs" className="text-[var(--text-secondary)]">
+                  {desc}
+                </BodyText>
+              </div>
+            ))}
+          </div>
+        </SectionCard>
 
-      {/* Key Features */}
-      <div style={{
-        background: 'var(--background-soft)',
-        border: '1px solid var(--divider)',
-        borderRadius: '12px',
-        padding: '20px',
-        marginBottom: '20px'
-      }}>
-        <h3 style={{ margin: '0 0 16px 0', fontSize: '18px', fontWeight: '600' }}>
-          Key Features
-        </h3>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px' }}>
-          <div style={{ textAlign: 'center' }}>
-            <div style={{ fontSize: '32px', marginBottom: '8px' }}>⚡</div>
-            <h4 style={{ margin: '0 0 4px 0', fontSize: '14px', fontWeight: '600' }}>
-              Fast Delivery
-            </h4>
-            <p style={{ margin: 0, fontSize: '12px', color: 'var(--text-secondary)' }}>
-              Quick delivery within your society
-            </p>
-          </div>
-          <div style={{ textAlign: 'center' }}>
-            <div style={{ fontSize: '32px', marginBottom: '8px' }}>🔒</div>
-            <h4 style={{ margin: '0 0 4px 0', fontSize: '14px', fontWeight: '600' }}>
-              Secure Payment
-            </h4>
-            <p style={{ margin: 0, fontSize: '12px', color: 'var(--text-secondary)' }}>
-              Safe and encrypted transactions
-            </p>
-          </div>
-          <div style={{ textAlign: 'center' }}>
-            <div style={{ fontSize: '32px', marginBottom: '8px' }}>📱</div>
-            <h4 style={{ margin: '0 0 4px 0', fontSize: '14px', fontWeight: '600' }}>
-              Real-time Tracking
-            </h4>
-            <p style={{ margin: 0, fontSize: '12px', color: 'var(--text-secondary)' }}>
-              Track your orders live
-            </p>
-          </div>
-          <div style={{ textAlign: 'center' }}>
-            <div style={{ fontSize: '32px', marginBottom: '8px' }}>🤝</div>
-            <h4 style={{ margin: '0 0 4px 0', fontSize: '14px', fontWeight: '600' }}>
-              24/7 Support
-            </h4>
-            <p style={{ margin: 0, fontSize: '12px', color: 'var(--text-secondary)' }}>
-              Always here to help
-            </p>
-          </div>
-        </div>
-      </div>
+        {/* Contact Information */}
+        <SectionCard title="Contact Us">
+          {[
+            { emoji: '📧', label: 'support@habrio.com' },
+            { emoji: '📞', label: '+91 88000 00000' },
+            { emoji: '🌐', label: 'www.habrio.com' },
+          ].map(({ emoji, label }, i) => (
+            <div key={i} className="flex items-center space-x-3 mb-3">
+              <span className="text-lg">{emoji}</span>
+              <BodyText size="sm" className="text-primary">
+                {label}
+              </BodyText>
+            </div>
+          ))}
+        </SectionCard>
 
-      {/* Contact Information */}
-      <div style={{
-        background: 'var(--background-soft)',
-        border: '1px solid var(--divider)',
-        borderRadius: '12px',
-        padding: '20px',
-        marginBottom: '20px'
-      }}>
-        <h3 style={{ margin: '0 0 16px 0', fontSize: '18px', fontWeight: '600' }}>
-          Contact Us
-        </h3>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <span style={{ fontSize: '16px' }}>📧</span>
-            <span style={{ fontSize: '14px', color: 'var(--primary-color)' }}>
-              support@habrio.com
-            </span>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <span style={{ fontSize: '16px' }}>📞</span>
-            <span style={{ fontSize: '14px', color: 'var(--primary-color)' }}>
-              +91 88000 00000
-            </span>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <span style={{ fontSize: '16px' }}>🌐</span>
-            <span style={{ fontSize: '14px', color: 'var(--primary-color)' }}>
-              www.habrio.com
-            </span>
-          </div>
-        </div>
-      </div>
+        {/* Legal */}
+        <SectionCard title="Legal">
+          {[
+            { text: 'Terms & Conditions', onClick: () => alert('Terms & Conditions') },
+            { text: 'Privacy Policy', onClick: () => alert('Privacy Policy') },
+            { text: 'Refund & Cancellation Policy', onClick: () => alert('Refund & Cancellation Policy') },
+          ].map(({ text, onClick }, i) => (
+            <button
+              key={i}
+              onClick={onClick}
+              className="text-sm text-primary font-medium text-left w-full mb-2"
+            >
+              {text}
+            </button>
+          ))}
+        </SectionCard>
 
-      {/* Legal Links */}
-      <div style={{
-        background: 'var(--background-soft)',
-        border: '1px solid var(--divider)',
-        borderRadius: '12px',
-        padding: '20px',
-        marginBottom: '20px'
-      }}>
-        <h3 style={{ margin: '0 0 16px 0', fontSize: '18px', fontWeight: '600' }}>
-          Legal
-        </h3>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          <button
-            onClick={() => alert('Terms & Conditions will be shown here')}
-            style={{
-              background: 'none',
-              border: 'none',
-              color: 'var(--primary-color)',
-              fontSize: '14px',
-              textAlign: 'left',
-              cursor: 'pointer',
-              padding: 0
-            }}
-          >
-            Terms & Conditions
-          </button>
-          <button
-            onClick={() => alert('Privacy Policy will be shown here')}
-            style={{
-              background: 'none',
-              border: 'none',
-              color: 'var(--primary-color)',
-              fontSize: '14px',
-              textAlign: 'left',
-              cursor: 'pointer',
-              padding: 0
-            }}
-          >
-            Privacy Policy
-          </button>
-          <button
-            onClick={() => alert('Refund Policy will be shown here')}
-            style={{
-              background: 'none',
-              border: 'none',
-              color: 'var(--primary-color)',
-              fontSize: '14px',
-              textAlign: 'left',
-              cursor: 'pointer',
-              padding: 0
-            }}
-          >
-            Refund & Cancellation Policy
-          </button>
-        </div>
-      </div>
-
-      {/* App Credits */}
-      <div style={{
-        background: 'var(--background-soft)',
-        border: '1px solid var(--divider)',
-        borderRadius: '12px',
-        padding: '20px',
-        marginBottom: '20px',
-        textAlign: 'center'
-      }}>
-        <p style={{ margin: '0 0 8px 0', fontSize: '14px', fontWeight: '600' }}>
-          Made with ❤️ for your neighbourhood
-        </p>
-        <p style={{ margin: 0, fontSize: '12px', color: 'var(--text-secondary)' }}>
-          © 2024 Habrio. All rights reserved.
-        </p>
-      </div>
-
-      {/* Bottom Navigation Placeholder */}
-      <div style={{ height: '80px' }}></div>
-    </div>
+        {/* App Credits */}
+        <SectionCard className="text-center">
+          <BodyText size="sm" className="font-semibold mb-1">
+            Made with ❤️ for your neighbourhood
+          </BodyText>
+          <BodyText size="xs" color="secondary">
+            © 2024 Habrio. All rights reserved.
+          </BodyText>
+        </SectionCard>
+      </ScreenContainer>
+    </MobileLayout>
   );
 }

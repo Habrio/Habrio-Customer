@@ -1,292 +1,159 @@
-import { useState, useEffect } from 'react';
+// File: src/pages/SearchShops.jsx
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../styles/common.css';
-import '../styles/App.css';
-import '../styles/design-system.css';
+import MobileLayout from '../components/layout/MobileLayout';
+import ScreenContainer from '../components/layout/ScreenContainer';
 import PageHeader from '../components/molecules/PageHeader';
+import Input from '../components/atoms/Input';
+import Button from '../components/atoms/Button';
+import { Spinner } from '../components/atoms/Loader';
+import EmptyState from '../components/organisms/EmptyState';
+import { get } from '../utils/api';
 
 export default function SearchShops() {
   const navigate = useNavigate();
-  const [searchQuery, setSearchQuery] = useState('');
+  const [query, setQuery] = useState('');
   const [shops, setShops] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [recentSearches, setRecentSearches] = useState([]);
-
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
-  const token = localStorage.getItem('auth_token');
+  const [recent, setRecent] = useState([]);
 
   useEffect(() => {
-    if (!token) {
-      navigate('/login');
-      return;
-    }
-    // Load recent searches from localStorage
-    const recent = JSON.parse(localStorage.getItem('recentSearches') || '[]');
-    setRecentSearches(recent);
-  }, []);
+    const token = localStorage.getItem('auth_token');
+    if (!token) return navigate('/login');
+    const saved = JSON.parse(localStorage.getItem('recentSearches') || '[]');
+    setRecent(saved);
+  }, [navigate]);
 
-  const searchShops = async (query) => {
-    if (!query.trim()) return;
-    
+  async function search(q) {
+    if (!q.trim()) return;
     setLoading(true);
     try {
-      const res = await fetch(`${backendUrl}/shops/search?q=${encodeURIComponent(query)}`, {
-        headers: { 'Authorization': token }
-      });
-      const data = await res.json();
-      
-      if (data.status === 'success') {
-        setShops(data.shops);
-        // Save to recent searches
-        const updatedSearches = [query, ...recentSearches.filter(s => s !== query)].slice(0, 5);
-        setRecentSearches(updatedSearches);
-        localStorage.setItem('recentSearches', JSON.stringify(updatedSearches));
+      const token = localStorage.getItem('auth_token');
+      const { status, shops } = await get(`/shops/search?q=${encodeURIComponent(q)}`, { token });
+      if (status === 'success') {
+        setShops(shops);
+        const updated = [q, ...recent.filter(r => r !== q)].slice(0, 5);
+        setRecent(updated);
+        localStorage.setItem('recentSearches', JSON.stringify(updated));
       } else {
         alert('Failed to search shops');
       }
-    } catch (error) {
-      console.error('Error searching shops:', error);
+    } catch {
       alert('Something went wrong. Please try again.');
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
-  };
+  }
 
-  const handleSearch = (e) => {
+  function onSubmit(e) {
     e.preventDefault();
-    searchShops(searchQuery);
-  };
+    search(query);
+  }
 
-  const handleRecentSearch = (query) => {
-    setSearchQuery(query);
-    searchShops(query);
-  };
+  function onRecentClick(q) {
+    setQuery(q);
+    search(q);
+  }
 
-  const clearRecentSearches = () => {
-    setRecentSearches([]);
+  function clearRecent() {
+    setRecent([]);
     localStorage.removeItem('recentSearches');
-  };
+  }
 
   return (
-    <div className="screen-content">
-      {/* Header */}
+    <MobileLayout>
       <PageHeader title="Search Shops" />
-
-      {/* Search Bar */}
-      <form onSubmit={handleSearch} style={{ marginBottom: '24px' }}>
-        <div style={{
-          display: 'flex',
-          background: 'var(--background-soft)',
-          border: '1px solid var(--divider)',
-          borderRadius: '12px',
-          padding: '12px 16px',
-          alignItems: 'center',
-          gap: '12px'
-        }}>
-          <span style={{ fontSize: '16px' }}>🔍</span>
-          <input
-            type="text"
-            placeholder="Search for shops, items..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            style={{
-              flex: 1,
-              border: 'none',
-              background: 'transparent',
-              fontSize: '16px',
-              outline: 'none'
-            }}
+      <ScreenContainer className="space-y-6">
+        {/* Search Bar */}
+        <form onSubmit={onSubmit} className="flex gap-2">
+          <Input
+            placeholder="Search for shops, items…"
+            value={query}
+            onChange={e => setQuery(e.target.value)}
+            className="flex-1"
           />
-          {searchQuery && (
-            <button
-              type="button"
-              onClick={() => setSearchQuery('')}
-              style={{
-                background: 'none',
-                border: 'none',
-                fontSize: '16px',
-                cursor: 'pointer',
-                color: 'var(--text-secondary)'
-              }}
-            >
-              ✕
-            </button>
-          )}
-        </div>
-      </form>
+          <Button type="submit" disabled={!query.trim()}>Search</Button>
+        </form>
 
-      {/* Quick Filters */}
-      <div style={{ marginBottom: '24px' }}>
-        <div style={{ 
-          display: 'flex', 
-          gap: '8px', 
-          overflowX: 'auto',
-          paddingBottom: '8px'
-        }}>
-          {['Grocery', 'Pharmacy', 'Restaurant', 'Electronics', 'Fashion', 'Services'].map((category) => (
-            <button
-              key={category}
-              onClick={() => handleRecentSearch(category)}
-              style={{
-                background: 'var(--background-soft)',
-                border: '1px solid var(--divider)',
-                borderRadius: '20px',
-                padding: '8px 16px',
-                fontSize: '14px',
-                fontWeight: '500',
-                cursor: 'pointer',
-                whiteSpace: 'nowrap',
-                minWidth: 'fit-content'
-              }}
-            >
-              {category}
-            </button>
+        {/* Quick Filters */}
+        <div className="flex gap-2 overflow-x-auto">
+          {['Grocery','Pharmacy','Restaurant','Electronics','Fashion','Services'].map(cat => (
+            <Button key={cat} onClick={() => onRecentClick(cat)} className="whitespace-nowrap">
+              {cat}
+            </Button>
           ))}
         </div>
-      </div>
 
-      {/* Recent Searches */}
-      {recentSearches.length > 0 && !searchQuery && shops.length === 0 && (
-        <div style={{ marginBottom: '24px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-            <h3 style={{ margin: 0, fontSize: '16px', fontWeight: '600' }}>Recent Searches</h3>
-            <button
-              onClick={clearRecentSearches}
-              style={{
-                background: 'none',
-                border: 'none',
-                color: 'var(--primary-color)',
-                fontSize: '14px',
-                fontWeight: '500',
-                cursor: 'pointer'
-              }}
-            >
-              Clear All
-            </button>
+        {/* Recent Searches */}
+        {recent.length > 0 && !query.trim() && shops.length === 0 && (
+          <div className="space-y-2">
+            <div className="flex justify-between items-center">
+              <h4 className="font-semibold">Recent Searches</h4>
+              <button onClick={clearRecent} className="text-sm text-primary">Clear</button>
+            </div>
+            <div className="space-y-1">
+              {recent.map((r, i) => (
+                <button
+                  key={i}
+                  onClick={() => onRecentClick(r)}
+                  className="w-full text-left p-2 bg-background-soft rounded"
+                >
+                  🕒 {r}
+                </button>
+              ))}
+            </div>
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            {recentSearches.map((search, index) => (
-              <button
-                key={index}
-                onClick={() => handleRecentSearch(search)}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  textAlign: 'left',
-                  padding: '12px 0',
-                  fontSize: '16px',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '12px',
-                  borderBottom: index < recentSearches.length - 1 ? '1px solid var(--divider)' : 'none'
-                }}
-              >
-                <span style={{ fontSize: '16px' }}>🕒</span>
-                {search}
-              </button>
-            ))}
+        )}
+
+        {/* Loading */}
+        {loading && (
+          <div className="flex justify-center py-10">
+            <Spinner size={48} className="text-primary" />
           </div>
-        </div>
-      )}
+        )}
 
-      {/* Loading */}
-      {loading && (
-        <div style={{ textAlign: 'center', padding: '40px 20px' }}>
-          <div style={{ 
-            width: '40px', 
-            height: '40px', 
-            border: '3px solid var(--divider)', 
-            borderTop: '3px solid var(--primary-color)', 
-            borderRadius: '50%', 
-            animation: 'spin 1s linear infinite',
-            margin: '0 auto 20px'
-          }}></div>
-          <p>Searching...</p>
-        </div>
-      )}
-
-      {/* Search Results */}
-      {shops.length > 0 && (
-        <div>
-          <h3 style={{ margin: '0 0 16px 0', fontSize: '16px', fontWeight: '600' }}>
-            Search Results ({shops.length})
-          </h3>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            {shops.map((shop) => (
-              <div
-                key={shop.id}
-                onClick={() => navigate(`/shop/${shop.id}`)}
-                style={{
-                  background: 'var(--background-soft)',
-                  border: '1px solid var(--divider)',
-                  borderRadius: '12px',
-                  padding: '16px',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '12px'
-                }}
-              >
-                <div style={{ 
-                  width: '48px', 
-                  height: '48px', 
-                  background: 'var(--primary-gradient)', 
-                  borderRadius: '24px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: '20px'
-                }}>
-                  🏪
-                </div>
-                <div style={{ flex: 1 }}>
-                  <h4 style={{ margin: '0 0 4px 0', fontSize: '16px', fontWeight: '600' }}>
-                    {shop.shop_name}
-                  </h4>
-                  <p style={{ margin: '0 0 4px 0', fontSize: '14px', color: 'var(--text-secondary)' }}>
-                    {shop.shop_type} • {shop.description}
-                  </p>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <span style={{ 
-                      fontSize: '12px', 
-                      color: shop.is_open ? 'var(--success-color)' : 'var(--error-color)',
-                      fontWeight: '500'
-                    }}>
-                      {shop.is_open ? '• Open' : '• Closed'}
-                    </span>
-                    {shop.delivers && (
-                      <span style={{ 
-                        fontSize: '12px', 
-                        color: 'var(--primary-color)',
-                        fontWeight: '500'
-                      }}>
-                        • Delivers
-                      </span>
-                    )}
+        {/* Results */}
+        {!loading && shops.length > 0 && (
+          <div className="space-y-4">
+            <h4 className="font-semibold">Results ({shops.length})</h4>
+            <div className="space-y-2">
+              {shops.map(shop => (
+                <div
+                  key={shop.id}
+                  onClick={() => navigate(`/shop/${shop.id}`)}
+                  className="flex items-center gap-3 p-4 bg-background-soft rounded cursor-pointer"
+                >
+                  <div className="w-12 h-12 bg-gradient-to-r from-primary to-primary-dark rounded-full flex items-center justify-center text-white text-lg">
+                    🏪
                   </div>
+                  <div className="flex-1">
+                    <p className="font-medium">{shop.shop_name}</p>
+                    <p className="text-sm text-secondary">
+                      {shop.shop_type} • {shop.description}
+                    </p>
+                    <p className="text-xs">
+                      <span className={shop.is_open ? 'text-success' : 'text-error'}>
+                        {shop.is_open ? 'Open' : 'Closed'}
+                      </span>
+                      {shop.delivers && <span className="ml-2 text-primary">Delivers</span>}
+                    </p>
+                  </div>
+                  <div className="text-secondary text-lg">→</div>
                 </div>
-                <div style={{ fontSize: '16px', color: 'var(--text-secondary)' }}>→</div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* No Results */}
-      {!loading && searchQuery && shops.length === 0 && (
-        <div style={{ textAlign: 'center', padding: '40px 20px' }}>
-          <div style={{ fontSize: '48px', marginBottom: '16px' }}>🔍</div>
-          <h3 style={{ margin: '0 0 8px 0', fontSize: '18px', fontWeight: '600' }}>
-            No shops found
-          </h3>
-          <p style={{ margin: 0, color: 'var(--text-secondary)', fontSize: '14px' }}>
-            Try searching with different keywords
-          </p>
-        </div>
-      )}
-
-      {/* Bottom Navigation Placeholder */}
-      <div style={{ height: '80px' }}></div>
-    </div>
+        {/* Empty State */}
+        {!loading && query.trim() && shops.length === 0 && (
+          <EmptyState
+            icon="🔍"
+            title="No shops found"
+            description="Try searching with different keywords."
+          />
+        )}
+      </ScreenContainer>
+    </MobileLayout>
   );
 }

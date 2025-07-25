@@ -1,21 +1,25 @@
-import { useState } from 'react';
+// File: src/pages/Otp.jsx
+import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import '../styles/common.css';
-import '../styles/App.css';
-import '../styles/design-system.css';
+import MobileLayout from '../components/layout/MobileLayout';
+import ScreenContainer from '../components/layout/ScreenContainer';
+import Button from '../components/atoms/Button';
+import Input from '../components/atoms/Input';
 
 export default function Otp() {
   const [otp, setOtp] = useState('');
+  const [verifying, setVerifying] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
   const phone = location.state?.phone || '9876543210';
 
-  const verifyOtp = async () => {
+  async function verifyOtp() {
     if (!/^\d{6}$/.test(otp)) {
       alert('Enter a valid 6-digit OTP');
       return;
     }
+    setVerifying(true);
     try {
       const res = await fetch(`${backendUrl}/verify-otp`, {
         method: 'POST',
@@ -36,40 +40,64 @@ export default function Otp() {
     } catch {
       alert('Something went wrong while verifying OTP');
     }
-  };
+    setVerifying(false);
+  }
+
+  // Optionally implement resend
+  function resendOtp(e) {
+    e.preventDefault();
+    alert('Resend OTP functionality to be implemented.');
+  }
 
   return (
-    <div className="mobile-screen fade-in">
-      <div className="status-bar">
-        <span className="time">9:41</span>
-        <span className="battery">🔋</span>
-      </div>
-      <div className="screen-content">
-        <div className="text-center pt-10 mb-6">
-          <div className="bg-gradient-to-r from-primary to-primary-dark w-18 h-18 rounded-xl flex items-center justify-center mx-auto mb-5 shadow-lg">
+    <MobileLayout>
+      <ScreenContainer className="flex flex-col justify-center min-h-screen">
+        <div className="flex flex-col items-center mb-8 mt-8">
+          <div className="bg-gradient-to-r from-primary to-primary-dark w-16 h-16 rounded-2xl flex items-center justify-center shadow-lg mb-4">
             <span className="text-white text-2xl">🔐</span>
           </div>
-          <h2 className="title">Enter OTP</h2>
-          <p className="subtitle">Sent to +91 {phone}</p>
+          <h2 className="text-xl font-bold mb-1">Enter OTP</h2>
+          <div className="text-secondary text-sm mb-4">Sent to +91 {phone}</div>
         </div>
-        <div className="form-group mb-md">
-          <input
+
+        <form
+          className="flex flex-col gap-5"
+          onSubmit={e => { e.preventDefault(); verifyOtp(); }}
+        >
+          <Input
+            autoFocus
             type="tel"
-            className="w-full text-center text-xl tracking-widest p-3 border border-gray-300 rounded-lg"
+            maxLength={6}
+            pattern="\d{6}"
             placeholder="Enter 6-digit code"
-            maxLength="6"
+            className="text-center tracking-widest text-xl"
             value={otp}
-            onChange={e => setOtp(e.target.value)}
+            onChange={e => setOtp(e.target.value.replace(/\D/g, ''))}
           />
-        </div>
-        <button className="btn btn-primary btn-full btn-large" onClick={verifyOtp}>
-          Verify OTP
-        </button>
-        <p className="text-xs text-text-secondary text-center mt-5">
+
+          <Button
+            type="submit"
+            size="lg"
+            className="w-full"
+            disabled={verifying || otp.length !== 6}
+            loading={verifying}
+          >
+            Verify OTP
+          </Button>
+        </form>
+
+        <div className="mt-8 text-center text-xs text-secondary">
           Didn’t receive the code?{' '}
-          <a href="#" className="link">Resend</a>
-        </p>
-      </div>
-    </div>
+          <button
+            type="button"
+            className="text-primary font-medium underline"
+            onClick={resendOtp}
+            tabIndex={-1}
+          >
+            Resend
+          </button>
+        </div>
+      </ScreenContainer>
+    </MobileLayout>
   );
 }

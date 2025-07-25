@@ -1,29 +1,36 @@
-import { useState } from 'react';
+// File: src/pages/ConsumerOnboarding.jsx
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../styles/common.css';
-import '../styles/App.css';
-import '../styles/design-system.css';
+import MobileLayout from '../components/layout/MobileLayout';
+import ScreenContainer from '../components/layout/ScreenContainer';
+import PageHeader from '../components/molecules/PageHeader';
+import SectionCard from '../components/molecules/SectionCard';
+import Input from '../components/atoms/Input';
+import Button from '../components/atoms/Button';
+import { BodyText, Heading } from '../components/atoms/Typography';
 
 export default function ConsumerOnboarding() {
   const navigate = useNavigate();
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
   const [flatNumber, setFlatNumber] = useState('');
+  const [submitting, setSubmitting] = useState(false);
 
-  const submit = async () => {
+  async function handleSubmit() {
     const token = localStorage.getItem('auth_token');
-    if (!token) return alert('Missing login token. Please login again.');
-    if (!flatNumber.trim()) {
-      alert('Please enter your flat or house number');
-      return;
+    if (!token) {
+      return alert('Missing login token. Please login again.');
     }
+    if (!flatNumber.trim()) {
+      return alert('Please enter your flat or house number');
+    }
+    setSubmitting(true);
     try {
-      const res = await fetch(`${backendUrl}/onboarding/consumer`, {
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/onboarding/consumer`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': token
+          Authorization: token,
         },
-        body: JSON.stringify({ flat_number: flatNumber.trim() })
+        body: JSON.stringify({ flat_number: flatNumber.trim() }),
       });
       const result = await res.json();
       if (result.status === 'success') {
@@ -33,30 +40,42 @@ export default function ConsumerOnboarding() {
       }
     } catch {
       alert('Something went wrong. Please try again.');
+    } finally {
+      setSubmitting(false);
     }
-  };
+  }
 
   return (
-    <div className="mobile-screen fade-in">
-      <div className="status-bar">
-        <span className="time">9:41</span>
-        <span className="battery">🔋</span>
-      </div>
-      <div className="screen-content">
-        <h2 className="title text-center mb-lg">Your Home Address</h2>
-        <div className="form-group">
-          <label className="form-label">Flat / House Number</label>
-          <input
-            className="form-input"
-            placeholder="e.g., A-302"
-            value={flatNumber}
-            onChange={e => setFlatNumber(e.target.value.trimStart())}
-          />
-        </div>
-        <button className="btn btn-primary btn-full btn-large" onClick={submit}>
-          Complete
-        </button>
-      </div>
-    </div>
+    <MobileLayout>
+      <PageHeader back={null} title="Your Home Address" />
+      <ScreenContainer>
+        <SectionCard>
+          <div className="space-y-4">
+            <div>
+              <Heading level={2} className="text-center">
+                Enter Your Flat / House Number
+              </Heading>
+            </div>
+            <div>
+              <BodyText size="sm" className="mb-1">
+                Flat / House Number
+              </BodyText>
+              <Input
+                placeholder="e.g., A-302"
+                value={flatNumber}
+                onChange={e => setFlatNumber(e.target.value.trimStart())}
+              />
+            </div>
+            <Button
+              className="w-full mt-4"
+              onClick={handleSubmit}
+              disabled={submitting}
+            >
+              {submitting ? 'Submitting...' : 'Complete'}
+            </Button>
+          </div>
+        </SectionCard>
+      </ScreenContainer>
+    </MobileLayout>
   );
 }
