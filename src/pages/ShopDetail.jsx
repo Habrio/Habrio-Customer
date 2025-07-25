@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import '../styles/common.css';
 import '../styles/App.css';
+import PageHeader from '../components/molecules/PageHeader';
 
 export default function ShopDetail() {
   const { shopId } = useParams();
@@ -103,23 +104,8 @@ export default function ShopDetail() {
   return (
     <div className="screen-content">
       {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
-        <button
-          onClick={() => navigate(-1)}
-          style={{
-            background: 'none',
-            border: 'none',
-            fontSize: '24px',
-            marginRight: '16px',
-            cursor: 'pointer'
-          }}
-        >
-          ←
-        </button>
-        <h2 style={{ margin: 0, fontSize: '20px', fontWeight: '600', flex: 1 }}>
-          {shop?.shop_name}
-        </h2>
-        {cartCount > 0 && (
+      <PageHeader title={shop?.shop_name || 'Shop'} />
+      {cartCount > 0 && (
           <button
             onClick={() => navigate('/cart')}
             style={{
@@ -153,7 +139,6 @@ export default function ShopDetail() {
             </span>
           </button>
         )}
-      </div>
 
       {/* Shop Info */}
       <div style={{
