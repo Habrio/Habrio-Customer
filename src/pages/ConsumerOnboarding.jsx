@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/common.css';
 import '../styles/App.css';
+import Button from '../components/atoms/Button';
+import Input from '../components/atoms/Input';
 
 export default function ConsumerOnboarding() {
   const navigate = useNavigate();
@@ -45,16 +47,13 @@ export default function ConsumerOnboarding() {
         <h2 className="title text-center mb-lg">Your Home Address</h2>
         <div className="form-group">
           <label className="form-label">Flat / House Number</label>
-          <input
-            className="form-input"
+          <Input
             placeholder="e.g., A-302"
             value={flatNumber}
             onChange={e => setFlatNumber(e.target.value.trimStart())}
           />
         </div>
-        <button className="btn btn-primary btn-full btn-large" onClick={submit}>
-          Complete
-        </button>
+        <Button onClick={submit}>Complete</Button>
       </div>
     </div>
   );

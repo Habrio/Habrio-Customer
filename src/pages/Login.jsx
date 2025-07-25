@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/common.css';
 import '../styles/App.css';
+import Button from '../components/atoms/Button';
 
 export default function Login() {
   const [phone, setPhone] = useState('');
@@ -69,9 +70,7 @@ export default function Login() {
             />
           </div>
         </div>
-        <button className="btn btn-primary btn-full btn-large" onClick={sendOtp}>
-          Send OTP
-        </button>
+        <Button onClick={sendOtp}>Send OTP</Button>
         <p
           style={{
             fontSize: 12,

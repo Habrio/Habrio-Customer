@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import '../styles/common.css';
 import '../styles/App.css';
+import Button from '../components/atoms/Button';
+import Input from '../components/atoms/Input';
 
 export default function Otp() {
   const [otp, setOtp] = useState('');
@@ -44,55 +46,25 @@ export default function Otp() {
         <span className="battery">🔋</span>
       </div>
       <div className="screen-content">
-        <div className="text-center mb-lg" style={{ paddingTop: 40 }}>
-          <div
-            style={{
-              background: 'var(--primary-gradient)',
-              width: 72,
-              height: 72,
-              borderRadius: 18,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              margin: '0 auto 20px',
-              boxShadow: '0 6px 16px rgba(255, 125, 30, 0.3)',
-            }}
-          >
-            <span style={{ fontSize: 30, color: 'white' }}>🔐</span>
+        <div className="text-center pt-10 mb-6">
+          <div className="bg-gradient-to-r from-primary to-primary-dark w-18 h-18 rounded-xl flex items-center justify-center mx-auto mb-5 shadow-lg">
+            <span className="text-white text-2xl">🔐</span>
           </div>
           <h2 className="title">Enter OTP</h2>
           <p className="subtitle">Sent to +91 {phone}</p>
         </div>
-        <div className="form-group mb-md">
-          <input
+        <div className="mb-md">
+          <Input
             type="tel"
-            className="otp-input"
             placeholder="Enter 6-digit code"
             maxLength="6"
             value={otp}
             onChange={e => setOtp(e.target.value)}
-            style={{
-              width: '100%',
-              textAlign: 'center',
-              fontSize: 20,
-              letterSpacing: '4px',
-              padding: 12,
-              border: '1px solid #ccc',
-              borderRadius: 8,
-            }}
+            className="text-center text-xl tracking-widest"
           />
         </div>
-        <button className="btn btn-primary btn-full btn-large" onClick={verifyOtp}>
-          Verify OTP
-        </button>
-        <p
-          style={{
-            fontSize: 12,
-            color: 'var(--text-secondary)',
-            textAlign: 'center',
-            marginTop: 20,
-          }}
-        >
+        <Button onClick={verifyOtp}>Verify OTP</Button>
+        <p className="text-xs text-text-secondary text-center mt-5">
           Didn’t receive the code?{' '}
           <a href="#" className="link">Resend</a>
         </p>

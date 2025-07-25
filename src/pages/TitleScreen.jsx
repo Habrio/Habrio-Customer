@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import '../styles/common.css';
 import '../styles/App.css';
+import Button from '../components/atoms/Button';
 
 export default function TitleScreen() {
   const navigate = useNavigate();
@@ -34,13 +35,9 @@ export default function TitleScreen() {
         <p className="subtitle mb-lg" style={{ fontSize: 14 }}>
           Your society’s very own super app
         </p>
-        <button
-          className="btn btn-primary btn-full btn-large"
-          style={{ marginBottom: 24 }}
-          onClick={() => navigate('/login')}
-        >
+        <Button className="mb-6" onClick={() => navigate('/login')}>
           Get Started
-        </button>
+        </Button>
         <p
           className="text-center"
           style={{

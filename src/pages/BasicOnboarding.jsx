@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/common.css';
 import '../styles/App.css';
+import Button from '../components/atoms/Button';
+import Input from '../components/atoms/Input';
 
 export default function BasicOnboarding() {
   const navigate = useNavigate();
@@ -58,9 +60,8 @@ export default function BasicOnboarding() {
         <h2 className="title text-center mb-lg">Tell us about yourself</h2>
         <div className="form-group">
           <label className="form-label">Full Name</label>
-          <input
+          <Input
             name="name"
-            className="form-input"
             placeholder="Ashish Dabas"
             value={data.name}
             onChange={handleChange}
@@ -68,9 +69,8 @@ export default function BasicOnboarding() {
         </div>
         <div className="form-group">
           <label className="form-label">City</label>
-          <input
+          <Input
             name="city"
-            className="form-input"
             placeholder="Noida"
             value={data.city}
             onChange={handleChange}
@@ -78,17 +78,14 @@ export default function BasicOnboarding() {
         </div>
         <div className="form-group">
           <label className="form-label">Society</label>
-          <input
+          <Input
             name="society"
-            className="form-input"
             placeholder="Hyde Park"
             value={data.society}
             onChange={handleChange}
           />
         </div>
-        <button className="btn btn-primary btn-full btn-large" onClick={submit}>
-          Complete
-        </button>
+        <Button onClick={submit}>Complete</Button>
       </div>
     </div>
   );
