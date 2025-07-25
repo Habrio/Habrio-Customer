@@ -73,7 +73,7 @@ export default function Profile() {
 
   if (loading) {
     return (
-      <MobileLayout>
+      <MobileLayout showNav activeTab="profile">
         <PageHeader title="My Profile" />
         <ScreenContainer className="flex justify-center py-20">
           <Spinner size={48} className="text-primary" />
@@ -84,7 +84,7 @@ export default function Profile() {
 
   if (!profile) {
     return (
-      <MobileLayout>
+      <MobileLayout showNav activeTab="profile">
         <PageHeader title="My Profile" />
         <ScreenContainer className="py-20">
           <EmptyState
@@ -99,7 +99,7 @@ export default function Profile() {
   }
 
   return (
-    <MobileLayout>
+    <MobileLayout showNav activeTab="profile">
       <PageHeader title="My Profile" />
       <ScreenContainer className="space-y-6">
         {!editing && (

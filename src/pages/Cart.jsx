@@ -48,7 +48,7 @@ export default function Cart() {
 
   if (loading) {
     return (
-      <MobileLayout>
+      <MobileLayout showNav activeTab="cart">
         <PageHeader title="My Cart" />
         <ScreenContainer>
           <div className="flex flex-col items-center py-12">
@@ -62,7 +62,7 @@ export default function Cart() {
 
   if (items.length === 0) {
     return (
-      <MobileLayout>
+      <MobileLayout showNav activeTab="cart">
         <PageHeader title="My Cart" />
         <ScreenContainer>
           <EmptyState
@@ -78,7 +78,7 @@ export default function Cart() {
   }
 
   return (
-    <MobileLayout>
+    <MobileLayout showNav activeTab="cart">
       <PageHeader title={`My Cart (${items.length})`} />
       <ScreenContainer>
         <div className="flex justify-end mb-4 px-4">

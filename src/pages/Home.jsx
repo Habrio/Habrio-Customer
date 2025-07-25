@@ -81,7 +81,7 @@ export default function Home() {
 
   if (loading) {
     return (
-      <MobileLayout>
+      <MobileLayout showNav activeTab="home">
         <ScreenContainer>
           <div className="flex items-center justify-center h-screen">
             <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-primary"></div>
@@ -92,7 +92,7 @@ export default function Home() {
   }
 
   return (
-    <MobileLayout>
+    <MobileLayout showNav activeTab="home">
       <ScreenContainer className="px-4 py-6 space-y-6">
         {/* Hero Section */}
         <HeroSection
