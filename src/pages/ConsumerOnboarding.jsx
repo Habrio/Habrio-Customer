@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../styles/common.css';
-import '../styles/App.css';
+import MobileLayout from '../components/layout/MobileLayout';
+import StatusBar from '../components/atoms/StatusBar';
+import Button from '../components/atoms/Button';
+import Input from '../components/atoms/Input';
 
 export default function ConsumerOnboarding() {
   const navigate = useNavigate();
@@ -36,26 +38,20 @@ export default function ConsumerOnboarding() {
   };
 
   return (
-    <div className="mobile-screen fade-in">
-      <div className="status-bar">
-        <span className="time">9:41</span>
-        <span className="battery">🔋</span>
-      </div>
-      <div className="screen-content">
-        <h2 className="title text-center mb-lg">Your Home Address</h2>
-        <div className="form-group">
-          <label className="form-label">Flat / House Number</label>
-          <input
-            className="form-input"
+    <MobileLayout>
+      <StatusBar />
+      <div className="px-6 py-10">
+        <h2 className="text-center text-xl font-semibold mb-8">Your Home Address</h2>
+        <div className="mb-6">
+          <label className="block mb-1 text-sm font-medium text-gray-700">Flat / House Number</label>
+          <Input
             placeholder="e.g., A-302"
             value={flatNumber}
             onChange={e => setFlatNumber(e.target.value.trimStart())}
           />
         </div>
-        <button className="btn btn-primary btn-full btn-large" onClick={submit}>
-          Complete
-        </button>
+        <Button onClick={submit}>Complete</Button>
       </div>
-    </div>
+    </MobileLayout>
   );
 }

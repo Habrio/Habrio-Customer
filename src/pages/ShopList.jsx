@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import '../styles/common.css';
-import '../styles/App.css';
 
 function ShopList() {
   const location = useLocation();

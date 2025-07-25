@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../styles/common.css';
-import '../styles/App.css';
+import MobileLayout from '../components/layout/MobileLayout';
+import StatusBar from '../components/atoms/StatusBar';
+import Button from '../components/atoms/Button';
 
 export default function Login() {
   const [phone, setPhone] = useState('');
@@ -31,61 +32,34 @@ export default function Login() {
   };
 
   return (
-    <div className="mobile-screen fade-in">
-      <div className="status-bar">
-        <span className="time">9:41</span>
-        <span className="battery">🔋</span>
-      </div>
-      <div className="screen-content">
-        <div className="text-center mb-lg" style={{ paddingTop: 48 }}>
-          <div
-            style={{
-              background: 'var(--primary-gradient)',
-              width: 80,
-              height: 80,
-              borderRadius: 20,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              margin: '0 auto 24px',
-              boxShadow: '0 8px 18px rgba(255, 145, 0, 0.35)',
-            }}
-          >
-            <span style={{ fontSize: 36, color: 'white' }}>📲</span>
+    <MobileLayout>
+      <StatusBar />
+      <div className="px-6 pt-12">
+        <div className="text-center mb-8">
+          <div className="w-20 h-20 rounded-2xl bg-gradient-to-r from-primary to-primary-dark flex items-center justify-center mx-auto mb-6 shadow-lg">
+            <span className="text-3xl text-white">📲</span>
           </div>
-          <h2 className="title" style={{ fontSize: 22 }}>Log in to Habrio</h2>
-          <p className="subtitle">Enter your mobile number to continue</p>
+          <h2 className="text-xl font-semibold mb-1">Log in to Habrio</h2>
+          <p className="text-sm text-gray-500">Enter your mobile number to continue</p>
         </div>
-        <div className="form-group mb-md">
-          <div className="phone-input-group">
-            <div className="country-code">+91</div>
-            <input
-              type="tel"
-              className="phone-input"
-              placeholder="9876543210"
-              maxLength="10"
-              value={phone}
-              onChange={e => setPhone(e.target.value)}
-            />
-          </div>
+        <div className="flex items-center bg-gray-50 border border-gray-300 rounded-lg px-3 mb-6 h-11">
+          <span className="text-gray-500 mr-2">+91</span>
+          <input
+            type="tel"
+            placeholder="9876543210"
+            maxLength="10"
+            value={phone}
+            onChange={e => setPhone(e.target.value)}
+            className="flex-1 bg-transparent outline-none text-sm"
+          />
         </div>
-        <button className="btn btn-primary btn-full btn-large" onClick={sendOtp}>
-          Send OTP
-        </button>
-        <p
-          style={{
-            fontSize: 12,
-            color: 'var(--text-secondary)',
-            textAlign: 'center',
-            lineHeight: 1.5,
-            marginTop: 24,
-          }}
-        >
+        <Button onClick={sendOtp}>Send OTP</Button>
+        <p className="text-xs text-gray-500 text-center mt-6">
           By continuing, you agree to our{' '}
-          <a href="#" className="link">Terms & Conditions</a> and{' '}
-          <a href="#" className="link">Privacy Policy</a>
+          <a href="#" className="text-primary font-medium">Terms & Conditions</a> and{' '}
+          <a href="#" className="text-primary font-medium">Privacy Policy</a>
         </p>
       </div>
-    </div>
+    </MobileLayout>
   );
 }

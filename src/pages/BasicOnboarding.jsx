@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../styles/common.css';
-import '../styles/App.css';
+import MobileLayout from '../components/layout/MobileLayout';
+import StatusBar from '../components/atoms/StatusBar';
+import Button from '../components/atoms/Button';
+import Input from '../components/atoms/Input';
 
 export default function BasicOnboarding() {
   const navigate = useNavigate();
@@ -49,47 +51,39 @@ export default function BasicOnboarding() {
   };
 
   return (
-    <div className="mobile-screen fade-in">
-      <div className="status-bar">
-        <span className="time">9:41</span>
-        <span className="battery">🔋</span>
-      </div>
-      <div className="screen-content">
-        <h2 className="title text-center mb-lg">Tell us about yourself</h2>
-        <div className="form-group">
-          <label className="form-label">Full Name</label>
-          <input
+    <MobileLayout>
+      <StatusBar />
+      <div className="px-6 py-10">
+        <h2 className="text-center text-xl font-semibold mb-8">Tell us about yourself</h2>
+        <div className="mb-4">
+          <label className="block mb-1 text-sm font-medium text-gray-700">Full Name</label>
+          <Input
             name="name"
-            className="form-input"
             placeholder="Ashish Dabas"
             value={data.name}
             onChange={handleChange}
           />
         </div>
-        <div className="form-group">
-          <label className="form-label">City</label>
-          <input
+        <div className="mb-4">
+          <label className="block mb-1 text-sm font-medium text-gray-700">City</label>
+          <Input
             name="city"
-            className="form-input"
             placeholder="Noida"
             value={data.city}
             onChange={handleChange}
           />
         </div>
-        <div className="form-group">
-          <label className="form-label">Society</label>
-          <input
+        <div className="mb-6">
+          <label className="block mb-1 text-sm font-medium text-gray-700">Society</label>
+          <Input
             name="society"
-            className="form-input"
             placeholder="Hyde Park"
             value={data.society}
             onChange={handleChange}
           />
         </div>
-        <button className="btn btn-primary btn-full btn-large" onClick={submit}>
-          Complete
-        </button>
+        <Button onClick={submit}>Complete</Button>
       </div>
-    </div>
+    </MobileLayout>
   );
 }
