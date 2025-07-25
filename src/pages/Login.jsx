@@ -38,6 +38,7 @@ export default function Login() {
 
   return (
     <MobileLayout>
+      {/* make this fill the frame and center its contents */}
       <ScreenContainer className="flex flex-col justify-center items-center h-full">
         {/* Logo + Heading */}
         <div className="flex flex-col items-center mb-8">

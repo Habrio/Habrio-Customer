@@ -1,9 +1,17 @@
 // File: src/components/layout/ScreenContainer.jsx
 import React from 'react';
+import clsx from 'clsx';
 
-export default function ScreenContainer({ children, className = '' }) {
+export default function ScreenContainer({
+  children,
+  className = '',
+  ...rest
+}) {
   return (
-    <div className={`px-4 py-2 ${className}`}>
+    <div
+      className={clsx('px-4 py-2', className)}
+      {...rest}
+    >
       {children}
     </div>
   );
