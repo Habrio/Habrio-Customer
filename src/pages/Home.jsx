@@ -1,4 +1,4 @@
-// File: src/pages/Home.jsx
+// src/pages/Home.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import MobileLayout from '../components/layout/MobileLayout';
@@ -19,7 +19,7 @@ import {
   HiDeviceMobile,
   HiCog,
   HiSparkles,
-  HiUser
+  HiUser,
 } from 'react-icons/hi';
 
 export default function Home() {
@@ -67,7 +67,7 @@ export default function Home() {
     try {
       const { status, shops } = await get('/shops?status=open');
       if (status === 'success') {
-        setFeaturedShops(shops.filter(s => s.featured).slice(0, 3));
+        setFeaturedShops(shops.filter((s) => s.featured).slice(0, 3));
         setNearbyShops(shops.slice(0, 6));
       }
     } catch {}
@@ -79,18 +79,30 @@ export default function Home() {
     }
   }
 
+  if (loading) {
+    return (
+      <MobileLayout>
+        <ScreenContainer>
+          <div className="flex items-center justify-center h-screen">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-primary"></div>
+          </div>
+        </ScreenContainer>
+      </MobileLayout>
+    );
+  }
+
   return (
     <MobileLayout>
-      <ScreenContainer>
-        {/* Hero with greeting, location, avatar, and search */}
+      <ScreenContainer className="px-4 py-6 space-y-6">
+        {/* Hero Section */}
         <HeroSection
           greeting={`Hello, ${user?.name || 'User'}! 👋`}
           subtext={`${user?.society}, ${user?.city}`}
-          avatar={<HiUser />}
+          avatar={<HiUser className="text-2xl text-primary" />}
           action={
             <SearchBar
               value={search}
-              onChange={v => setSearch(v)}
+              onChange={(v) => setSearch(v)}
               onSearch={handleSearchSubmit}
               loading={searching}
               placeholder="Search shops or items…"
@@ -98,88 +110,92 @@ export default function Home() {
           }
         />
 
-        {/* Wallet Card */}
-        <div className="px-4 -mt-8 mb-6">
-          <WalletCard
-            amount={`₹${walletBalance.toFixed(2)}`}
-            label="Wallet Balance"
-            icon={<HiShoppingCart className="text-white" />}
-            color="gradient"
-            cta="Add Money"
-            onCta={() => navigate('/wallet/add')}
-          />
-        </div>
+        {/* Wallet Balance */}
+        <WalletCard
+          amount={`₹${walletBalance.toFixed(2)}`}
+          label="Wallet Balance"
+          icon={<HiShoppingCart className="text-white text-xl" />}
+          color="gradient"
+          cta="Add Money"
+          onCta={() => navigate('/wallet/add')}
+        />
 
         {/* Categories */}
-        <ShopListSection
-          title="Categories"
-          layout="horizontal"
-          empty={<EmptyState title="No Categories" />}
-        >
-          {shopCategories.map(cat => (
-            <CategoryCard
-              key={cat.type}
-              icon={cat.icon}
-              label={cat.name}
-              active={false}
-              onClick={() => navigate(`/shops?type=${cat.type}`)}
-            />
-          ))}
-        </ShopListSection>
+        <section>
+          <h2 className="text-lg font-semibold mb-3">Categories</h2>
+          <div className="grid grid-cols-3 gap-4">
+            {shopCategories.map((cat) => (
+              <CategoryCard
+                key={cat.type}
+                icon={cat.icon}
+                label={cat.name}
+                active={false}
+                onClick={() => navigate(`/shops?type=${cat.type}`)}
+              />
+            ))}
+          </div>
+        </section>
 
         {/* Featured Shops */}
-        <ShopListSection
-          title="Featured Shops"
-          layout="horizontal"
-          empty={<EmptyState title="No Featured Shops" />}
-          action={
+        <section>
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-lg font-semibold">Featured Shops</h2>
             <button
               className="text-primary text-sm font-medium"
               onClick={() => navigate('/shops')}
             >
               See All
             </button>
-          }
-        >
-          {featuredShops.map(shop => (
-            <FeaturedShopCard
-              key={shop.id}
-              image={shop.logo_url}
-              name={shop.shop_name}
-              category={shop.shop_type}
-              status={shop.is_open ? 'open' : 'closed'}
-              badge={shop.verified ? 'Verified' : undefined}
-              onClick={() => navigate(`/shop/${shop.id}`)}
-            />
-          ))}
-        </ShopListSection>
+          </div>
+          {featuredShops.length ? (
+            <div className="flex overflow-x-auto gap-4">
+              {featuredShops.map((shop) => (
+                <FeaturedShopCard
+                  key={shop.id}
+                  image={shop.logo_url}
+                  name={shop.shop_name}
+                  category={shop.shop_type}
+                  status={shop.is_open ? 'open' : 'closed'}
+                  badge={shop.verified ? 'Verified' : undefined}
+                  onClick={() => navigate(`/shop/${shop.id}`)}
+                />
+              ))}
+            </div>
+          ) : (
+            <EmptyState title="No Featured Shops" />
+          )}
+        </section>
 
         {/* Nearby Shops */}
-        <ShopListSection
-          title="Nearby Shops"
-          empty={<EmptyState title="No Nearby Shops" />}
-          action={
+        <section>
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-lg font-semibold">Nearby Shops</h2>
             <button
               className="text-primary text-sm font-medium"
               onClick={() => navigate('/shops')}
             >
               View All
             </button>
-          }
-        >
-          {nearbyShops.map(shop => (
-            <NearbyShopCard
-              key={shop.id}
-              image={shop.logo_url}
-              name={shop.shop_name}
-              category={shop.shop_type}
-              address={shop.society}
-              status={shop.is_open ? 'open' : 'closed'}
-              delivers={shop.delivers}
-              onClick={() => navigate(`/shop/${shop.id}`)}
-            />
-          ))}
-        </ShopListSection>
+          </div>
+          {nearbyShops.length ? (
+            <div className="space-y-4">
+              {nearbyShops.map((shop) => (
+                <NearbyShopCard
+                  key={shop.id}
+                  image={shop.logo_url}
+                  name={shop.shop_name}
+                  category={shop.shop_type}
+                  address={shop.society}
+                  status={shop.is_open ? 'open' : 'closed'}
+                  delivers={shop.delivers}
+                  onClick={() => navigate(`/shop/${shop.id}`)}
+                />
+              ))}
+            </div>
+          ) : (
+            <EmptyState title="No Nearby Shops" />
+          )}
+        </section>
       </ScreenContainer>
     </MobileLayout>
   );
