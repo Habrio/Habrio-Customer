@@ -1,8 +1,9 @@
-/** @type {import('tailwindcss').Config} */
+const plugin = require('tailwindcss/plugin');
+
 module.exports = {
   content: [
+    "./index.html",
     "./src/**/*.{js,jsx,ts,tsx}",
-    "./public/index.html",
   ],
   darkMode: false, // 'media' or 'class' if dark mode support is added later
   theme: {
@@ -65,5 +66,28 @@ module.exports = {
       }
     }
   },
-  plugins: []
+  plugins: [
+    // Inject CSS variables into :root based on theme values
+    plugin(function({ addBase, theme }) {
+      addBase({
+        ':root': {
+          '--color-primary':      theme('colors.primary'),
+          '--color-primary-dark': theme('colors.primary-dark'),
+          '--color-accent':       theme('colors.accent'),
+          '--color-accent-dark':  theme('colors.accent-dark'),
+          '--color-background':   theme('colors.background'),
+          '--color-background-soft': theme('colors.background-soft'),
+          '--color-text-primary':   theme('colors.text-primary'),
+          '--color-text-secondary': theme('colors.text-secondary'),
+          '--color-divider':        theme('colors.divider'),
+          '--color-error':          theme('colors.error'),
+          '--color-success':        theme('colors.success'),
+          '--color-warning':        theme('colors.warning'),
+          '--color-info':           theme('colors.info'),
+          '--shadow-card':          theme('boxShadow.card'),
+          '--shadow-elevated':      theme('boxShadow.elevated'),
+        }
+      });
+    })
+  ]
 };

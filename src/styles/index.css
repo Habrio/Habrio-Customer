@@ -1,26 +1,3 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-:root {
-  --color-primary: theme('colors.orange.600');
-  --color-primary-dark: theme('colors.orange.700');
-  --color-accent: theme('colors.green.600');
-  --color-accent-light: theme('colors.green.100');
-
-  --color-background: theme('colors.gray.50');
-  --color-background-soft: theme('colors.white');
-  --color-divider: theme('colors.gray.200');
-  --color-text-primary: theme('colors.gray.900');
-  --color-text-secondary: theme('colors.gray.600');
-
-  /* Shadows */
-  --shadow-card: 0 1px 3px theme('colors.gray.200');
-  --shadow-elevated: 0 4px 6px theme('colors.gray.300');
-}
-
-/* Global resets or utilities */
-body {
-  background-color: var(--color-background);
-  color: var(--color-text-primary);
-}
