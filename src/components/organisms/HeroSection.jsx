@@ -1,4 +1,4 @@
-// src/components/organisms/HeroSection.jsx
+// File: src/components/organisms/HeroSection.jsx
 import React from "react";
 import clsx from "clsx";
 import Avatar from "../atoms/Avatar";
@@ -7,14 +7,15 @@ import { Heading, BodyText } from "../atoms/Typography";
 /**
  * HeroSection organism
  * Props:
- * - greeting: string (e.g. "Hi, Ritika 👋")
- * - subtext: string (e.g. "Discover shops & services in your society")
- * - avatar: image url (user photo, optional)
- * - location: string (e.g. "Lotus Boulevard, Noida", optional)
- * - action: ReactNode (button/search, optional)
- * - className: string
- * - bg: "gradient" | "image" | "primary" (background style)
- * - children: extra content below
+ * - greeting: string (e.g. "Hi, User 👋")
+ * - subtext: string (optional subtitle)
+ * - avatar: string (image URL for user avatar)
+ * - location: string (e.g. "Lotus Boulevard, Noida")
+ * - action: ReactNode (optional action button or search)
+ * - bg: 'gradient' | 'primary' | 'image'
+ * - className: additional Tailwind utility classes
+ * - children: ReactNode (extra content)
+ * - ...rest: other props
  */
 export default function HeroSection({
   greeting,
@@ -36,7 +37,7 @@ export default function HeroSection({
   return (
     <section
       className={clsx(
-        "w-full px-4 py-6 md:px-10 rounded-b-2xl relative text-white",
+        "w-full px-4 py-6 rounded-b-2xl text-white",
         bgClass,
         className
       )}
@@ -44,13 +45,18 @@ export default function HeroSection({
     >
       <div className="flex items-center gap-4 mb-2">
         {avatar && (
-          <Avatar src={avatar} size="md" className="ring-2 ring-white" />
+          <Avatar
+            src={avatar}
+            size="md"
+            className="ring-2 ring-white"
+            alt="User avatar"
+          />
         )}
         <div className="flex-1 min-w-0">
           {greeting && (
             <Heading
               level={2}
-              className="text-white font-bold text-xl md:text-2xl truncate"
+              className="text-xl md:text-2xl font-semibold truncate"
             >
               {greeting}
             </Heading>
@@ -61,24 +67,29 @@ export default function HeroSection({
               as="div"
               className="flex items-center gap-1 text-white/90"
             >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 21s7-7.072 7-11.417A7 7 0 1 0 5 9.583C5 13.928 12 21 12 21z" stroke="currentColor" strokeWidth="1.5"/><circle cx="12" cy="10" r="2" stroke="currentColor" strokeWidth="1.5"/></svg>
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                className="flex-shrink-0"
+              >
+                <path d="M12 21s7-7.072 7-11.417A7 7 0 1 0 5 9.583C5 13.928 12 21 12 21z" />
+                <circle cx="12" cy="10" r="2" />
+              </svg>
               <span className="truncate">{location}</span>
             </BodyText>
           )}
         </div>
       </div>
       {subtext && (
-        <BodyText
-          size="md"
-          as="div"
-          className="text-white/90 mb-3"
-        >
+        <BodyText size="md" className="text-white/90 mb-3">
           {subtext}
         </BodyText>
       )}
-      {action && (
-        <div className="mt-2">{action}</div>
-      )}
+      {action && <div className="mt-2">{action}</div>}
       {children}
     </section>
   );

@@ -1,4 +1,4 @@
-// src/components/organisms/BottomNav.jsx
+// File: src/components/organisms/BottomNav.jsx
 import React from "react";
 import clsx from "clsx";
 import Icon from "../atoms/Icon";
@@ -17,9 +17,10 @@ const TABS = [
  * BottomNav organism
  * Props:
  * - active: string (active tab key)
- * - badgeData: object { [badgeKey]: number }
- * - onNavigate: function(tab.route)
- * - className: extra Tailwind classes
+ * - badgeData: object mapping badgeKey to number
+ * - onNavigate: function(tabRoute, tabKey)
+ * - className: extra Tailwind utility classes
+ * - ...rest: other props
  */
 export default function BottomNav({
   active = "home",
@@ -32,9 +33,7 @@ export default function BottomNav({
     <nav
       className={clsx(
         "fixed bottom-0 left-0 right-0 z-30 bg-background border-t border-divider shadow-card",
-        "flex justify-between items-center h-16 px-2 md:hidden",
-        "transition-all",
-        "safe-bottom",
+        "flex justify-between items-center h-16 px-2 md:hidden transition-all safe-bottom",
         className
       )}
       aria-label="Main Navigation"
@@ -56,13 +55,10 @@ export default function BottomNav({
         >
           <span className="relative">
             <Icon name={tab.icon} size={24} />
-            {/* Badge support (e.g., cart count) */}
             {tab.badgeKey && badgeData[tab.badgeKey] > 0 && (
-              <span className="absolute -top-2 -right-2">
-                <Badge intent="error" size="sm" pill>
-                  {badgeData[tab.badgeKey]}
-                </Badge>
-              </span>
+              <Badge intent="error" size="sm" pill className="absolute -top-2 -right-2">
+                {badgeData[tab.badgeKey]}
+              </Badge>
             )}
           </span>
           <span className="text-xs mt-1 leading-none">{tab.label}</span>

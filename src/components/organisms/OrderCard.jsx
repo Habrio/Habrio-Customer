@@ -1,32 +1,34 @@
-// src/components/organisms/OrderCard.jsx
+// File: src/components/organisms/OrderCard.jsx
 
 import React from "react";
+import clsx from "clsx";
 
 /**
- * OrderCard
+ * OrderCard organism
  * Props:
- *   order: {
- *     order_id,
- *     shop_name,
- *     shop_type,
- *     status,
- *     total_amount,
- *     created_at,
- *     item_count,
- *     items: [],
+ * - order: {
+ *     order_id: string | number,
+ *     shop_name: string,
+ *     shop_type: string,
+ *     status: string,
+ *     total_amount: number | string,
+ *     created_at: string (ISO date),
+ *     item_count: number,
+ *     items?: Array,
  *   }
- *   onClick: () => void  (optional)
+ * - onClick: function (optional click handler)
  */
-const statusConfig = {
-  pending:    { label: "Pending",    icon: "⏳", color: "text-yellow-500" },
-  accepted:   { label: "Accepted",   icon: "✅", color: "text-blue-500" },
-  confirmed:  { label: "Confirmed",  icon: "📦", color: "text-blue-600" },
-  delivered:  { label: "Delivered",  icon: "🎉", color: "text-green-600" },
-  cancelled:  { label: "Cancelled",  icon: "❌", color: "text-red-500" },
-  default:    { label: "Unknown",    icon: "📋", color: "text-gray-400" }
+
+const STATUS_CONFIG = {
+  pending:    { label: "Pending",    icon: "⏳", color: "text-warning" },
+  accepted:   { label: "Accepted",   icon: "✅", color: "text-info" },
+  confirmed:  { label: "Confirmed",  icon: "📦", color: "text-info" },
+  delivered:  { label: "Delivered",  icon: "🎉", color: "text-success" },
+  cancelled:  { label: "Cancelled",  icon: "❌", color: "text-error" },
+  default:    { label: "Unknown",    icon: "📋", color: "text-text-secondary" },
 };
 
-export default function OrderCard({ order, onClick }) {
+export default function OrderCard({ order = {}, onClick }) {
   const {
     order_id,
     shop_name,
@@ -35,45 +37,46 @@ export default function OrderCard({ order, onClick }) {
     total_amount,
     created_at,
     item_count,
-    items = [],
-  } = order || {};
+    items,
+  } = order;
 
-  const statusInfo = statusConfig[status] || statusConfig.default;
+  const statusKey = STATUS_CONFIG[status] ? status : 'default';
+  const { label, icon, color } = STATUS_CONFIG[statusKey];
 
   return (
     <div
-      className="bg-background-soft border border-divider rounded-xl p-4 flex gap-4 shadow-sm cursor-pointer transition hover:shadow-md"
+      className={clsx(
+        "bg-background-soft border border-divider rounded-lg p-4 flex gap-4 shadow-card transition hover:shadow-elevated cursor-pointer",
+      )}
       onClick={onClick}
-      role="button"
-      tabIndex={0}
-      aria-label={`Order ${order_id} from ${shop_name}`}
+      role={onClick ? 'button' : undefined}
+      tabIndex={onClick ? 0 : undefined}
     >
+      {/* Status icon and label */}
       <div className="flex flex-col items-center justify-center">
-        <div className={`text-2xl ${statusInfo.color}`}>{statusInfo.icon}</div>
-        <span className="text-xs mt-1 font-semibold capitalize">{statusInfo.label}</span>
+        <span className={clsx("text-2xl", color)}>{icon}</span>
+        <span className="text-xs font-semibold capitalize mt-1">{label}</span>
       </div>
+
+      {/* Order details */}
       <div className="flex-1 min-w-0">
         <div className="flex justify-between items-center">
-          <h3 className="font-semibold text-base truncate">{shop_name || "Shop"}</h3>
+          <h3 className="font-semibold text-base truncate text-text-primary">{shop_name || 'Shop'}</h3>
           <span className="text-xs text-text-secondary ml-2">#{order_id}</span>
         </div>
         <div className="flex justify-between items-center mt-1">
           <span className="text-xs text-text-secondary capitalize">{shop_type}</span>
           <span className="text-xs text-text-secondary">
-            {item_count || (items?.length ?? 0)} item{(item_count ?? items?.length) > 1 ? "s" : ""}
+            {item_count || (items?.length ?? 0)} item{(item_count ?? items?.length) > 1 ? 's' : ''}
           </span>
         </div>
         <div className="flex justify-between items-end mt-2">
           <span className="text-lg font-bold text-primary">₹{parseFloat(total_amount).toFixed(2)}</span>
-          <span className="text-xs text-text-tertiary">
-            {created_at
-              ? new Date(created_at).toLocaleDateString("en-IN", {
-                  day: "2-digit",
-                  month: "short",
-                  year: "2-digit",
-                })
-              : ""}
-          </span>
+          {created_at && (
+            <span className="text-xs text-text-secondary">
+              {new Date(created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
+            </span>
+          )}
         </div>
       </div>
     </div>

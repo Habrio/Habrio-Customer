@@ -1,46 +1,36 @@
-// src/components/organisms/TabSelector.jsx
+// File: src/components/organisms/TabSelector.jsx
 
 import React from "react";
+import clsx from "clsx";
 
 /**
- * TabSelector
+ * TabSelector organism
  * Props:
- *   tabs: string[] | { label, value }[]     // Array of tab labels or objects
- *   value: string | number                  // Currently selected value
- *   onChange: (value) => void               // Callback when tab changes
- *   className: string (optional)
+ * - tabs: Array<string | { label: string, value: any }> (tab definitions)
+ * - value: current selected value
+ * - onChange: function(newValue)
+ * - className: additional Tailwind utility classes
  */
-export default function TabSelector({
-  tabs = [],
-  value,
-  onChange,
-  className = "",
-}) {
-  // Support both string and object array
-  const getTabProps = (tab) =>
-    typeof tab === "object"
-      ? { label: tab.label, value: tab.value }
-      : { label: tab, value: tab };
+export default function TabSelector({ tabs = [], value, onChange, className = "" }) {
+  // Normalize tabs to objects with label and value
+  const items = tabs.map((t) =>
+    typeof t === "object" ? { label: t.label, value: t.value } : { label: t, value: t }
+  );
 
   return (
-    <div
-      className={`flex gap-2 overflow-x-auto pb-1 ${className}`}
-      role="tablist"
-    >
-      {tabs.map((tab, idx) => {
-        const { label, value: tabValue } = getTabProps(tab);
+    <div className={clsx("flex gap-2 overflow-x-auto pb-1", className)} role="tablist">
+      {items.map(({ label, value: tabValue }) => {
         const selected = value === tabValue;
         return (
           <button
-            key={tabValue ?? idx}
+            key={tabValue}
             type="button"
-            className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition
-              ${
-                selected
-                  ? "bg-primary text-white shadow"
-                  : "bg-background-soft text-text-primary border border-divider"
-              }
-              focus:outline-none focus:ring-2 focus:ring-primary/60`}
+            className={clsx(
+              "px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition focus:outline-none",
+              selected
+                ? "bg-primary text-white shadow-card"
+                : "bg-background-soft text-text-primary border border-divider"
+            )}
             aria-selected={selected}
             aria-current={selected ? "page" : undefined}
             onClick={() => onChange?.(tabValue)}

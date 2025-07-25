@@ -6,22 +6,16 @@ import Button from '../atoms/Button';
 
 /**
  * BillSummarySection organism
- *
  * Props:
- * - title: string                // Optional section title
- * - items: Array<{              // Line-item array
- *     label: string,
- *     amount: number,
- *     isDiscount?: boolean,      // true for discount/savings rows
- *     isFree?: boolean           // true to display 'FREE' (e.g., delivery)
- *   }>
- * - totalLabel: string           // Label for total row (default "Total")
- * - totalAmount: number          // Total amount
- * - currencySymbol: string       // e.g. "₹"
- * - note: string                 // Optional footnote (e.g. "Taxes included")
- * - actionLabel: string          // Optional CTA text (e.g. "Pay Now")
- * - onAction: () => void         // CTA click handler
- * - className: string
+ * - title: string (optional section title)
+ * - items: Array<{ label: string; amount: number; isDiscount?: boolean; isFree?: boolean }>
+ * - totalLabel: string (label for total, default 'Total')
+ * - totalAmount: number
+ * - currencySymbol: string (e.g. '₹')
+ * - note: string (optional footnote)
+ * - actionLabel: string (optional CTA text)
+ * - onAction: function (CTA click handler)
+ * - className: additional Tailwind utility classes
  */
 export default function BillSummarySection({
   title,
@@ -33,17 +27,18 @@ export default function BillSummarySection({
   actionLabel,
   onAction,
   className = '',
+  ...rest
 }) {
   return (
     <section
       className={clsx(
-        'bg-[var(--background-soft)] border border-[var(--divider)] rounded-lg p-4',
+        'bg-background-soft border border-divider rounded-lg p-4',
         className
       )}
-      aria-label={title || 'Bill Summary'}
+      {...rest}
     >
       {title && (
-        <h3 className="text-lg font-semibold mb-4">
+        <h3 className="text-xl font-semibold mb-4 text-text-primary">
           {title}
         </h3>
       )}
@@ -51,20 +46,22 @@ export default function BillSummarySection({
       <div className="space-y-2">
         {items.map(({ label, amount, isDiscount, isFree }, idx) => {
           let display;
-          let valueClass = 'text-sm';
+          let valueClass = 'text-base';
           if (isFree) {
             display = 'FREE';
-            valueClass += ' text-[var(--success-color)] font-medium';
+            valueClass += ' text-success font-medium';
           } else if (isDiscount) {
             display = `- ${currencySymbol}${Math.abs(amount)}`;
-            valueClass += ' text-[var(--success-color)]';
+            valueClass += ' text-success';
           } else {
             display = `${currencySymbol}${amount}`;
           }
           return (
             <div key={idx} className="flex justify-between">
-              <BodyText size="sm">{label}</BodyText>
-              <BodyText size="sm" className={valueClass}>
+              <BodyText size="md" className="text-text-primary">
+                {label}
+              </BodyText>
+              <BodyText size="md" className={valueClass}>
                 {display}
               </BodyText>
             </div>
@@ -72,11 +69,11 @@ export default function BillSummarySection({
         })}
       </div>
 
-      <div className="border-t border-[var(--divider)] pt-3 mt-3 flex justify-between">
-        <BodyText size="md" className="font-semibold">
+      <div className="border-t border-divider pt-3 mt-3 flex justify-between">
+        <BodyText size="lg" className="font-semibold text-text-primary">
           {totalLabel}
         </BodyText>
-        <BodyText size="md" className="font-semibold text-[var(--primary-color)]">
+        <BodyText size="lg" className="font-semibold text-primary">
           {currencySymbol}{totalAmount}
         </BodyText>
       </div>
@@ -89,7 +86,7 @@ export default function BillSummarySection({
 
       {actionLabel && onAction && (
         <div className="mt-4">
-          <Button className="w-full" onClick={onAction}>
+          <Button fullWidth onClick={onAction}>
             {actionLabel}
           </Button>
         </div>

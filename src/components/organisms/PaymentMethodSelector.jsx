@@ -1,57 +1,45 @@
+// File: src/components/organisms/PaymentMethodSelector.jsx
 import React from 'react';
-import { BodyText, Heading } from '../atoms/Typography';
+import clsx from 'clsx';
+import { Heading, BodyText } from '../atoms/Typography';
 import Button from '../atoms/Button';
 
-export default function CartItemCard({ item, onRemove, onUpdateQuantity }) {
+/**
+ * PaymentMethodSelector organism
+ * Props:
+ * - methods: Array<{ key: string, label: string, selected: boolean }>
+ * - onSelect: function(methodKey)
+ * - className: additional Tailwind utility classes
+ * - ...rest: other props
+ */
+export default function PaymentMethodSelector({ methods = [], onSelect, className = '', ...rest }) {
   return (
-    <div className="flex items-center bg-white shadow-sm rounded-lg p-4 gap-4">
-      {/* Item Image */}
-      <div className="w-20 h-20 bg-gray-200 rounded-md overflow-hidden">
-        {item.image_url ? (
-          <img src={item.image_url} alt={item.title} className="object-cover w-full h-full" />
-        ) : (
-          <div className="flex items-center justify-center text-2xl">📦</div>
-        )}
-      </div>
-
-      {/* Item Details */}
-      <div className="flex-1">
-        <Heading size="sm" className="text-gray-800">{item.title}</Heading>
-        <BodyText className="text-gray-500">
-          {item.brand && `${item.brand} • `}
-          {item.pack_size} {item.unit}
-        </BodyText>
-        <div className="flex items-center gap-2 mt-1">
-          <Heading size="sm" className="text-primary">₹{item.price}</Heading>
-          {item.mrp && item.mrp > item.price && (
-            <>
-              <span className="text-gray-400 line-through text-sm">₹{item.mrp}</span>
-              <span className="text-green-500 text-xs font-medium">
-                {Math.round(((item.mrp - item.price) / item.mrp) * 100)}% OFF
-              </span>
-            </>
+    <div className={clsx('space-y-3', className)} {...rest}>
+      {methods.map((method) => (
+        <button
+          key={method.key}
+          type="button"
+          onClick={() => onSelect?.(method.key)}
+          className={clsx(
+            'w-full flex items-center justify-between p-4 rounded-md border transition',
+            method.selected
+              ? 'border-primary bg-primary/10'
+              : 'border-divider bg-background-soft hover:border-primary',
           )}
-        </div>
-
-        {/* Quantity Controls */}
-        <div className="flex items-center gap-2 mt-3">
-          <Button size="sm" variant="outline" onClick={() => onUpdateQuantity(item.id, item.quantity - 1)} disabled={item.quantity <= 1}>
-            -
-          </Button>
-          <span className="px-2 font-medium">{item.quantity}</span>
-          <Button size="sm" variant="outline" onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}>
-            +
-          </Button>
-        </div>
-      </div>
-
-      {/* Remove Button */}
-      <button
-        className="text-red-500 text-sm"
-        onClick={() => onRemove(item.id)}
-      >
-        Remove
-      </button>
+        >
+          <div className="flex items-center gap-3">
+            {/* You can replace with an icon based on method.key */}
+            <BodyText size="md" className="text-text-primary">
+              {method.label}
+            </BodyText>
+          </div>
+          <div>
+            {method.selected && (
+              <span className="text-primary font-semibold">Selected</span>
+            )}
+          </div>
+        </button>
+      ))}
     </div>
   );
 }

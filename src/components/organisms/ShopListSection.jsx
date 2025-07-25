@@ -1,4 +1,4 @@
-// src/components/organisms/ShopListSection.jsx
+// File: src/components/organisms/ShopListSection.jsx
 import React from "react";
 import clsx from "clsx";
 import { Heading, BodyText } from "../atoms/Typography";
@@ -6,14 +6,14 @@ import { Heading, BodyText } from "../atoms/Typography";
 /**
  * ShopListSection organism
  * Props:
- * - title: string or node (section title)
- * - subtitle: string or node (optional)
- * - action: node (e.g., filter button, "See All" link)
- * - horizontal: boolean (carousel style, for featured)
- * - children: shop cards
- * - empty: ReactNode or string to show when list is empty
- * - className: extra classes
- * - ...rest
+ * - title: string or ReactNode (optional section title)
+ * - subtitle: string or ReactNode (optional subtitle)
+ * - action: ReactNode (optional action button/link)
+ * - horizontal: boolean (carousel style display)
+ * - children: ReactNode or array of nodes
+ * - empty: ReactNode or string (content when list is empty)
+ * - className: additional Tailwind utility classes
+ * - ...rest: other props
  */
 export default function ShopListSection({
   title,
@@ -44,29 +44,28 @@ export default function ShopListSection({
               </BodyText>
             )}
           </div>
-          {action && (
-            <div className="shrink-0">{action}</div>
-          )}
+          {action && <div className="shrink-0">{action}</div>}
         </div>
       )}
+
       {isEmpty ? (
         typeof empty === "string" ? (
-          <BodyText color="secondary" className="text-center py-8">{empty}</BodyText>
+          <BodyText color="secondary" className="text-center py-8">
+            {empty}
+          </BodyText>
         ) : (
           empty
         )
       ) : horizontal ? (
         <div className="flex gap-4 overflow-x-auto pb-1 -mx-2 px-2 snap-x snap-mandatory">
-          {React.Children.map(children, (child, idx) =>
+          {React.Children.map(children, (child) =>
             React.cloneElement(child, {
               className: clsx("snap-center shrink-0", child.props.className),
             })
           )}
         </div>
       ) : (
-        <div className="flex flex-col gap-3">
-          {children}
-        </div>
+        <div className="flex flex-col gap-3">{children}</div>
       )}
     </section>
   );

@@ -1,45 +1,107 @@
+// File: src/components/organisms/CartItemCard.jsx
 import React from 'react';
-import { BodyText, Heading } from '../atoms/Typography';
+import clsx from 'clsx';
 import Button from '../atoms/Button';
+import { Heading, BodyText } from '../atoms/Typography';
 
-export default function CartItemCard({ item, onRemove, onUpdateQuantity }) {
+/**
+ * CartItemCard organism
+ * Props:
+ * - item: {
+ *     id: string | number,
+ *     image_url?: string,
+ *     title: string,
+ *     brand?: string,
+ *     pack_size?: string,
+ *     unit?: string,
+ *     price: number,
+ *     mrp?: number,
+ *     quantity: number
+ *   }
+ * - onRemove: function(itemId)
+ * - onUpdateQuantity: function(itemId, newQuantity)
+ * - className: additional Tailwind utility classes
+ * - ...rest: other props
+ */
+export default function CartItemCard({ item, onRemove, onUpdateQuantity, className = '', ...rest }) {
+  const {
+    id,
+    image_url,
+    title,
+    brand,
+    pack_size,
+    unit,
+    price,
+    mrp,
+    quantity
+  } = item;
+
+  // Calculate discount percentage if applicable
+  const discountPercent = mrp && mrp > price
+    ? Math.round(((mrp - price) / mrp) * 100)
+    : 0;
+
   return (
-    <div className="flex items-center bg-white shadow-sm rounded-lg p-4 gap-4">
+    <div
+      className={clsx(
+        'flex items-center bg-background-soft shadow-card rounded-lg p-4 gap-4',
+        className
+      )}
+      {...rest}
+    >
       {/* Item Image */}
-      <div className="w-20 h-20 bg-gray-200 rounded-md overflow-hidden">
-        {item.image_url ? (
-          <img src={item.image_url} alt={item.title} className="object-cover w-full h-full" />
+      <div className="w-20 h-20 bg-divider/40 rounded-md overflow-hidden flex items-center justify-center">
+        {image_url ? (
+          <img
+            src={image_url}
+            alt={title}
+            className="object-cover w-full h-full"
+          />
         ) : (
-          <div className="flex items-center justify-center text-2xl">📦</div>
+          <span className="text-2xl text-text-secondary">📦</span>
         )}
       </div>
 
       {/* Item Details */}
-      <div className="flex-1">
-        <Heading size="sm" className="text-gray-800">{item.title}</Heading>
-        <BodyText className="text-gray-500">
-          {item.brand && `${item.brand} • `}
-          {item.pack_size} {item.unit}
+      <div className="flex-1 min-w-0">
+        <Heading level={4} className="text-text-primary truncate">
+          {title}
+        </Heading>
+        <BodyText size="sm" color="secondary" className="truncate">
+          {brand && `${brand} • `}{pack_size} {unit}
         </BodyText>
         <div className="flex items-center gap-2 mt-1">
-          <Heading size="sm" className="text-primary">₹{item.price}</Heading>
-          {item.mrp && item.mrp > item.price && (
+          <BodyText size="md" className="font-semibold text-primary">
+            {currencySymbol}{price}
+          </BodyText>
+          {discountPercent > 0 && (
             <>
-              <span className="text-gray-400 line-through text-sm">₹{item.mrp}</span>
-              <span className="text-green-500 text-xs font-medium">
-                {Math.round(((item.mrp - item.price) / item.mrp) * 100)}% OFF
-              </span>
+              <BodyText size="sm" className="line-through text-text-secondary">
+                {currencySymbol}{mrp}
+              </BodyText>
+              <Badge intent="success" size="sm" pill>
+                {discountPercent}% OFF
+              </Badge>
             </>
           )}
         </div>
 
         {/* Quantity Controls */}
         <div className="flex items-center gap-2 mt-3">
-          <Button size="sm" variant="outline" onClick={() => onUpdateQuantity(item.id, item.quantity - 1)} disabled={item.quantity <= 1}>
+          <Button
+            size="sm"
+            variant="ghost"
+            onClick={() => onUpdateQuantity(id, quantity - 1)}
+            disabled={quantity <= 1}
+          >
             -
           </Button>
-          <span className="px-2 font-medium">{item.quantity}</span>
-          <Button size="sm" variant="outline" onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}>
+          <BodyText className="px-2 font-medium">{quantity}</BodyText>
+          <Button
+            size="sm"
+            variant="ghost"
+            onClick={() => onUpdateQuantity(id, quantity + 1)}
+          >
             +
           </Button>
         </div>
@@ -47,8 +109,8 @@ export default function CartItemCard({ item, onRemove, onUpdateQuantity }) {
 
       {/* Remove Button */}
       <button
-        className="text-red-500 text-sm"
-        onClick={() => onRemove(item.id)}
+        onClick={() => onRemove(id)}
+        className="text-error text-sm ml-2 focus:outline-none"
       >
         Remove
       </button>
