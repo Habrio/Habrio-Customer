@@ -7,6 +7,7 @@ import PageHeader from '../components/molecules/PageHeader';
 import SectionCard from '../components/molecules/SectionCard';
 import Input from '../components/atoms/Input';
 import Button from '../components/atoms/Button';
+import Icon from '../components/atoms/Icon';
 import { BodyText, Heading } from '../components/atoms/Typography';
 import EmptyState from '../components/organisms/EmptyState';
 
@@ -67,6 +68,7 @@ export default function BasicOnboarding() {
                   placeholder="Ashish Dabas"
                   value={data.name}
                   onChange={handleChange}
+                  leftIcon={<Icon name="user" />}
                 />
               </div>
               <div>
@@ -76,6 +78,7 @@ export default function BasicOnboarding() {
                   placeholder="Noida"
                   value={data.city}
                   onChange={handleChange}
+                  leftIcon={<Icon name="location" />}
                 />
               </div>
               <div>
@@ -85,6 +88,7 @@ export default function BasicOnboarding() {
                   placeholder="Hyde Park"
                   value={data.society}
                   onChange={handleChange}
+                  leftIcon={<Icon name="building" />}
                 />
               </div>
             </div>

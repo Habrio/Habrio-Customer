@@ -7,6 +7,7 @@ import PageHeader from '../components/molecules/PageHeader';
 import SectionCard from '../components/molecules/SectionCard';
 import Input from '../components/atoms/Input';
 import Button from '../components/atoms/Button';
+import Icon from '../components/atoms/Icon';
 import { BodyText, Heading } from '../components/atoms/Typography';
 
 export default function ConsumerOnboarding() {
@@ -64,6 +65,7 @@ export default function ConsumerOnboarding() {
                 placeholder="e.g., A-302"
                 value={flatNumber}
                 onChange={e => setFlatNumber(e.target.value.trimStart())}
+                leftIcon={<Icon name="building" />}
               />
             </div>
             <Button
