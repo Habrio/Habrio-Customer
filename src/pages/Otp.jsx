@@ -5,6 +5,7 @@ import MobileLayout from '../components/layout/MobileLayout';
 import ScreenContainer from '../components/layout/ScreenContainer';
 import Button from '../components/atoms/Button';
 import Input from '../components/atoms/Input';
+import Icon from '../components/atoms/Icon';
 
 export default function Otp() {
   const [otp, setOtp] = useState('');
@@ -54,7 +55,7 @@ export default function Otp() {
       <ScreenContainer className="flex flex-col justify-center min-h-screen">
         <div className="flex flex-col items-center mb-8 mt-8">
           <div className="bg-gradient-to-r from-primary to-primary-dark w-16 h-16 rounded-2xl flex items-center justify-center shadow-lg mb-4">
-            <span className="text-white text-2xl">🔐</span>
+            <Icon name="lock" size={28} className="text-white" />
           </div>
           <h2 className="text-xl font-bold mb-1">Enter OTP</h2>
           <div className="text-secondary text-sm mb-4">Sent to +91 {phone}</div>

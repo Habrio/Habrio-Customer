@@ -69,7 +69,7 @@ export default function WalletHistory() {
 
   if (loading) {
     return (
-      <MobileLayout>
+      <MobileLayout showNav activeTab="profile">
         <PageHeader title="Transaction History" />
         <ScreenContainer className="flex justify-center py-20">
           <Spinner size={48} className="text-primary" />
@@ -79,7 +79,7 @@ export default function WalletHistory() {
   }
 
   return (
-    <MobileLayout>
+    <MobileLayout showNav activeTab="profile">
       <PageHeader title="Transaction History" />
       <ScreenContainer className="space-y-6">
         {/* Filter Tabs */}

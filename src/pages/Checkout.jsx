@@ -75,7 +75,7 @@ export default function Checkout() {
 
   if (loading) {
     return (
-      <MobileLayout>
+      <MobileLayout showNav activeTab="cart">
         <PageHeader title="Checkout" />
         <ScreenContainer className="flex-center">
           <Heading level={3}>Loading checkout…</Heading>
@@ -85,7 +85,7 @@ export default function Checkout() {
   }
 
   return (
-    <MobileLayout>
+    <MobileLayout showNav activeTab="cart">
       <PageHeader title="Checkout" />
       <ScreenContainer className="space-y-6">
         {/* Delivery Address */}

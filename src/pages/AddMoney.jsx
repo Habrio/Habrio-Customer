@@ -49,7 +49,7 @@ export default function AddMoney() {
   }
 
   return (
-    <MobileLayout>
+    <MobileLayout showNav activeTab="profile">
       <PageHeader title="Add Money" />
       <ScreenContainer>
         {/* Intro Card */}

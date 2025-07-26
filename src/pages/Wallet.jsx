@@ -64,7 +64,7 @@ export default function Wallet() {
 
   if (loading) {
     return (
-      <MobileLayout>
+      <MobileLayout showNav activeTab="profile">
         <PageHeader title="My Wallet" />
         <ScreenContainer className="flex justify-center py-20">
           <Spinner size={48} className="text-primary" />
@@ -74,7 +74,7 @@ export default function Wallet() {
   }
 
   return (
-    <MobileLayout>
+    <MobileLayout showNav activeTab="profile">
       <PageHeader title="My Wallet" />
       <ScreenContainer className="space-y-6">
 

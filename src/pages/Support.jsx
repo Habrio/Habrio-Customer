@@ -60,7 +60,7 @@ export default function Support() {
   ];
 
   return (
-    <MobileLayout>
+    <MobileLayout showNav activeTab="profile">
       <ScreenContainer>
         {/* Header */}
         <PageHeader title="Help & Support" />

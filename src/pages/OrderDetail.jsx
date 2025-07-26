@@ -69,7 +69,7 @@ export default function OrderDetail() {
 
   if (loading) {
     return (
-      <MobileLayout>
+      <MobileLayout showNav activeTab="orders">
         <PageHeader title="Order Details" />
         <ScreenContainer className="flex justify-center py-20">
           <Spinner size={48} className="text-primary" />
@@ -80,7 +80,7 @@ export default function OrderDetail() {
 
   if (!order) {
     return (
-      <MobileLayout>
+      <MobileLayout showNav activeTab="orders">
         <PageHeader title="Order Details" />
         <ScreenContainer>
           <EmptyState
@@ -100,7 +100,7 @@ export default function OrderDetail() {
   const items = order.items || [];
 
   return (
-    <MobileLayout>
+    <MobileLayout showNav activeTab="orders">
       <PageHeader title={`Order #${order.order_id}`} />
       <ScreenContainer className="space-y-6">
 

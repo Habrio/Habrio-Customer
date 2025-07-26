@@ -5,6 +5,8 @@ import MobileLayout from '../components/layout/MobileLayout';
 import ScreenContainer from '../components/layout/ScreenContainer';
 import Button from '../components/atoms/Button';
 import Input from '../components/atoms/Input';
+import Icon from '../components/atoms/Icon';
+import phoneImg from '../assets/login-illustration.svg';
 
 export default function Login() {
   const [phone, setPhone] = useState('');
@@ -40,15 +42,10 @@ export default function Login() {
     <MobileLayout>
       {/* make this fill the frame and center its contents */}
       <ScreenContainer className="flex flex-col justify-center items-center h-full">
-        {/* Logo + Heading */}
+        {/* Illustration + Heading */}
         <div className="flex flex-col items-center mb-8">
-          <div className="
-              bg-gradient-to-r from-primary to-primary-dark
-              w-20 h-20 rounded-2xl
-              flex items-center justify-center
-              shadow-lg mb-5
-            ">
-            <span className="text-onPrimary text-3xl">📲</span>
+          <div className="w-24 h-24 mb-5">
+            <img src={phoneImg} alt="Login" className="w-full h-full" />
           </div>
           <h2 className="text-2xl font-bold mb-1 text-text-primary">
             Log in to Habrio
@@ -81,6 +78,7 @@ export default function Login() {
               className="flex-1 text-lg"
               value={phone}
               onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))}
+              leftIcon={<Icon name="phone" />}
             />
           </div>
 

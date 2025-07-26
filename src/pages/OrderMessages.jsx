@@ -72,7 +72,7 @@ export default function OrderMessages() {
   }
 
   return (
-    <MobileLayout>
+    <MobileLayout showNav activeTab="orders">
       <PageHeader title={`Order #${orderId}`} />
       <ScreenContainer className="flex-1 flex flex-col">
         {/* Loading / Empty State */}
