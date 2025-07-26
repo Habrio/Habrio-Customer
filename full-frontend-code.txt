@@ -1,11 +1,15 @@
 
 ===== FILE: src/App.jsx =====
 
-// src/App.jsx
+import React from 'react';
 import { HashRouter } from 'react-router-dom';
 import AppRoutes from './router';
 
-function App() {
+/**
+ * App component
+ * Sets up the HashRouter for client-side routing
+ */
+export default function App() {
   return (
     <HashRouter>
       <AppRoutes />
@@ -13,26 +17,24 @@ function App() {
   );
 }
 
-export default App;
-
-
 ===== FILE: src/components/atoms/Avatar.jsx =====
 
-// src/components/atoms/Avatar.jsx
+// File: src/components/atoms/Avatar.jsx
 import React from "react";
 import clsx from "clsx";
 
 /**
  * Avatar atom
  * Props:
- * - src: image url
- * - alt: alt text (for accessibility)
+ * - src: image URL
+ * - alt: alt text for accessibility
  * - size: 'sm' | 'md' | 'lg' | 'xl' | number (px)
- * - fallback: string (e.g. "AB" or placeholder SVG)
- * - status: 'online' | 'offline' | null (optional status dot)
- * - className: extra Tailwind classes
+ * - fallback: string (initials) or ReactNode
+ * - status: 'online' | 'offline' | null
+ * - className: additional Tailwind utility classes
  */
-const sizeMap = {
+
+const SIZE_CLASSES = {
   sm: "w-8 h-8 text-sm",
   md: "w-11 h-11 text-base",
   lg: "w-16 h-16 text-xl",
@@ -48,29 +50,48 @@ export default function Avatar({
   className = "",
   ...rest
 }) {
-  const sizeClass = typeof size === "number"
-    ? `w-[${size}px] h-[${size}px]`
-    : sizeMap[size] || sizeMap.md;
+  const sizeClass =
+    typeof size === 'number'
+      ? `w-[${size}px] h-[${size}px]`
+      : SIZE_CLASSES[size] || SIZE_CLASSES.md;
 
   return (
-    <span className={clsx("relative inline-block", sizeClass, className)} {...rest}>
+    <span
+      className={clsx(
+        'relative inline-block',
+        sizeClass,
+        className
+      )}
+      {...rest}
+    >
       {src ? (
         <img
           src={src}
           alt={alt}
-          className="w-full h-full object-cover rounded-full border border-divider bg-background-soft"
           loading="lazy"
+          className="w-full h-full object-cover rounded-full border border-divider bg-background-soft"
         />
       ) : fallback ? (
-        <span className="w-full h-full flex items-center justify-center rounded-full bg-background-soft text-text-secondary font-medium uppercase border border-divider">
-          {typeof fallback === "string" ? fallback.slice(0, 2) : fallback}
+        <span
+          className="flex items-center justify-center w-full h-full rounded-full bg-background-soft text-text-secondary font-medium border border-divider uppercase"
+        >
+          {typeof fallback === 'string' ? fallback.slice(0, 2) : fallback}
         </span>
       ) : (
-        // Default placeholder icon (can be replaced with your own SVG)
-        <span className="w-full h-full flex items-center justify-center rounded-full bg-background-soft border border-divider text-text-secondary">
-          <svg width="60%" height="60%" viewBox="0 0 24 24" fill="none">
-            <circle cx="12" cy="8" r="4" stroke="currentColor" strokeWidth="1.5"/>
-            <path d="M4 20c0-2.5 3-4.5 8-4.5s8 2 8 4.5" stroke="currentColor" strokeWidth="1.5"/>
+        <span
+          className="flex items-center justify-center w-full h-full rounded-full bg-background-soft text-text-secondary border border-divider"
+        >
+          <svg
+            width="60%"
+            height="60%"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            className="text-text-secondary"
+          >
+            <circle cx="12" cy="8" r="4" />
+            <path d="M4 20c0-2.5 3-4.5 8-4.5s8 2 8 4.5" />
           </svg>
         </span>
       )}
@@ -78,10 +99,10 @@ export default function Avatar({
       {status && (
         <span
           className={clsx(
-            "absolute right-0 bottom-0 block w-2.5 h-2.5 rounded-full ring-2 ring-white",
-            status === "online" ? "bg-accent" : "bg-gray-400"
+            'absolute -bottom-0.5 -right-0.5 block w-2.5 h-2.5 rounded-full ring-2 ring-background',
+            status === 'online' ? 'bg-accent' : 'bg-divider'
           )}
-          aria-label={status === "online" ? "Online" : "Offline"}
+          aria-label={status === 'online' ? 'Online' : 'Offline'}
         />
       )}
     </span>
@@ -91,30 +112,31 @@ export default function Avatar({
 
 ===== FILE: src/components/atoms/Badge.jsx =====
 
-// src/components/atoms/Badge.jsx
+// File: src/components/atoms/Badge.jsx
 import React from "react";
 import clsx from "clsx";
 
 /**
  * Badge atom
  * Props:
- * - children: text or node (label)
- * - intent: 'success' | 'warning' | 'error' | 'info' | 'neutral' | custom (controls color)
+ * - children: label text or node
+ * - intent: 'success' | 'warning' | 'error' | 'info' | 'neutral'
  * - size: 'sm' | 'md'
- * - pill: boolean (full-rounded)
- * - icon: ReactNode (optional)
- * - className: extra Tailwind classes
- * - ...rest: extra props (aria-label, etc)
+ * - pill: boolean (full rounded)
+ * - icon: ReactNode (optional leading icon)
+ * - className: additional Tailwind utility classes
+ * - ...rest: other props (e.g. aria-label)
  */
-const intentMap = {
+
+const INTENT_CLASSES = {
   success: "bg-accent/20 text-accent",
   warning: "bg-warning/20 text-warning",
   error:   "bg-error/20 text-error",
-  info:    "bg-primary/10 text-primary",
-  neutral: "bg-background-soft text-text-secondary",
+  info:    "bg-info/20 text-info",
+  neutral: "bg-background-soft text-text-secondary"
 };
 
-const sizeMap = {
+const SIZE_CLASSES = {
   sm: "px-2 py-0.5 text-xs",
   md: "px-3 py-1 text-sm",
 };
@@ -128,19 +150,23 @@ export default function Badge({
   className = "",
   ...rest
 }) {
+  const intentClass = INTENT_CLASSES[intent] || INTENT_CLASSES.neutral;
+  const sizeClass = SIZE_CLASSES[size] || SIZE_CLASSES.sm;
+  const radiusClass = pill ? "rounded-full" : "rounded-md";
+
   return (
     <span
       className={clsx(
         "inline-flex items-center font-medium",
-        intentMap[intent] || intentMap.neutral,
-        sizeMap[size],
-        pill ? "rounded-full" : "rounded-md",
+        intentClass,
+        sizeClass,
+        radiusClass,
         className
       )}
-      aria-label={rest["aria-label"] || typeof children === "string" ? children : ""}
+      aria-label={rest["aria-label"] || (typeof children === "string" ? children : undefined)}
       {...rest}
     >
-      {icon && <span className="mr-1">{icon}</span>}
+      {icon && <span className="mr-1 flex-shrink-0">{icon}</span>}
       {children}
     </span>
   );
@@ -149,12 +175,14 @@ export default function Badge({
 
 ===== FILE: src/components/atoms/Button.jsx =====
 
-// src/components/atoms/Button.jsx
+// File: src/components/atoms/Button.jsx
 import React from "react";
 import clsx from "clsx";
 
-// Loader spinner atom (minimal, atomic)
-function Spinner({ className }) {
+/**
+ * Spinner icon for loading state
+ */
+function Spinner({ className = "" }) {
   return (
     <svg
       className={clsx("animate-spin h-5 w-5 text-white", className)}
@@ -165,8 +193,11 @@ function Spinner({ className }) {
     >
       <circle
         className="opacity-25"
-        cx="12" cy="12" r="10"
-        stroke="currentColor" strokeWidth="4"
+        cx="12"
+        cy="12"
+        r="10"
+        stroke="currentColor"
+        strokeWidth="4"
       />
       <path
         className="opacity-75"
@@ -178,17 +209,18 @@ function Spinner({ className }) {
 }
 
 /**
- * PRO Button atom
+ * Button atom
  * Props:
- * - children: text
+ * - children: text or node
  * - type: 'button' | 'submit'
  * - variant: 'primary' | 'secondary' | 'ghost'
- * - size: 'md' | 'lg' | 'sm'
+ * - size: 'sm' | 'md' | 'lg'
  * - fullWidth: boolean
  * - disabled: boolean
  * - loading: boolean
- * - leftIcon/rightIcon: <Icon />
- * - className: string (extra classes)
+ * - leftIcon: ReactNode
+ * - rightIcon: ReactNode
+ * - className: additional Tailwind utility classes
  * - ...rest: native button props
  */
 export default function Button({
@@ -204,36 +236,44 @@ export default function Button({
   className = "",
   ...rest
 }) {
-  // Style maps
-  const base = "inline-flex items-center justify-center font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-primary shadow-card";
-  const sizes = {
+  const baseClasses =
+    "inline-flex items-center justify-center font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-primary shadow-card";
+
+  const sizeMap = {
     sm: "h-9 px-3 text-sm rounded-md",
     md: "h-11 px-4 text-base rounded-lg",
     lg: "h-14 px-6 text-lg rounded-xl",
   };
-  const variants = {
-    primary: "bg-primary text-white hover:bg-primary-dark active:bg-primary-dark disabled:bg-text-disabled disabled:text-white",
-    secondary: "bg-white text-primary border border-primary hover:bg-primary/10 active:bg-primary/20 disabled:text-text-disabled disabled:border-gray-200",
-    ghost: "bg-transparent text-primary hover:bg-primary/10 active:bg-primary/20 disabled:text-text-disabled",
+
+  const variantMap = {
+    primary:
+      "bg-primary text-white hover:bg-primary-dark active:bg-primary-dark disabled:bg-text-secondary disabled:text-white",
+    secondary:
+      "bg-white text-primary border border-primary hover:bg-primary/10 active:bg-primary/20 disabled:text-text-secondary disabled:border-divider",
+    ghost:
+      "bg-transparent text-primary hover:bg-primary/10 active:bg-primary/20 disabled:text-text-secondary",
   };
+
+  const classes = clsx(
+    baseClasses,
+    sizeMap[size],
+    variantMap[variant],
+    fullWidth && "w-full",
+    (disabled || loading) && "opacity-60 cursor-not-allowed",
+    className
+  );
 
   return (
     <button
       type={type}
-      className={clsx(
-        base,
-        sizes[size],
-        variants[variant],
-        { "w-full": fullWidth, "opacity-60 cursor-not-allowed": disabled || loading },
-        className
-      )}
+      className={classes}
       disabled={disabled || loading}
       {...rest}
     >
       {loading && <Spinner className="mr-2" />}
-      {leftIcon && !loading && <span className="mr-2">{leftIcon}</span>}
+      {!loading && leftIcon && <span className="mr-2 flex-shrink-0">{leftIcon}</span>}
       {children}
-      {rightIcon && !loading && <span className="ml-2">{rightIcon}</span>}
+      {!loading && rightIcon && <span className="ml-2 flex-shrink-0">{rightIcon}</span>}
     </button>
   );
 }
@@ -241,22 +281,18 @@ export default function Button({
 
 ===== FILE: src/components/atoms/Icon.jsx =====
 
-// src/components/atoms/Icon.jsx
+// File: src/components/atoms/Icon.jsx
 import React from "react";
 import clsx from "clsx";
 
 /**
  * Icon atom for SVG-based icons.
  * Props:
- * - name: (optional) string — load icon by name from assets/icons (if using dynamic import)
- * - size: number|string (default: 20)
- * - className: extra Tailwind classes
- * - children: SVG element (for inline SVG)
- * - ...rest: extra props (aria-label, etc)
- *
- * Usage:
- * <Icon><YourSVGIcon /></Icon>
- * <Icon name="home" />
+ * - name: string (key for built-in icons)
+ * - size: number|string (width/height in px)
+ * - className: additional Tailwind utility classes
+ * - children: inline SVG element (optional)
+ * - ...rest: other props (aria-label, etc)
  */
 export default function Icon({
   name,
@@ -265,50 +301,57 @@ export default function Icon({
   children,
   ...rest
 }) {
-  // Static import map for known icons (expand as needed)
+  // Combine passed className and default inline-block
+  const svgClass = clsx("inline-block", className);
+  const commonProps = {
+    width: size,
+    height: size,
+    className: svgClass,
+    fill: "none",
+    ...rest
+  };
+
+  // Predefined icons
   const iconMap = {
     home: (
-      <svg viewBox="0 0 20 20" fill="none" width={size} height={size}>
-        <path d="M3 9.5L10 4l7 5.5V16a1 1 0 01-1 1h-3a1 1 0 01-1-1V13a1 1 0 00-1-1H9a1 1 0 00-1 1v3a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z" stroke="currentColor" strokeWidth={1.5} />
+      <svg viewBox="0 0 20 20" {...commonProps}>
+        <path
+          d="M3 9.5L10 4l7 5.5V16a1 1 0 01-1 1h-3a1 1 0 01-1-1V13a1 1 0 00-1-1H9a1 1 0 00-1 1v3a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"
+          stroke="currentColor"
+          strokeWidth={1.5}
+        />
       </svg>
     ),
     search: (
-      <svg fill="none" viewBox="0 0 20 20" width={size} height={size}>
-        <circle cx={9} cy={9} r={7} stroke="currentColor" strokeWidth={1.5}/>
-        <path d="M15 15l4 4" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round"/>
+      <svg viewBox="0 0 20 20" {...commonProps}>
+        <circle
+          cx={9}
+          cy={9}
+          r={7}
+          stroke="currentColor"
+          strokeWidth={1.5}
+        />
+        <path
+          d="M15 15l4 4"
+          stroke="currentColor"
+          strokeWidth={1.5}
+          strokeLinecap="round"
+        />
       </svg>
     ),
-    // Add more icons as needed...
+    // Add additional icons as needed
   };
 
-  // Prefer passed children (inline SVG), fallback to iconMap by name
-  const content = children
-    ? React.cloneElement(children, {
-        width: size,
-        height: size,
-        className: clsx("inline-block", children.props.className),
-        ...rest,
-      })
+  // Determine SVG content: inline children or mapped icon
+  const svgContent = children
+    ? React.cloneElement(children, commonProps)
     : name && iconMap[name]
-    ? React.cloneElement(iconMap[name], {
-        width: size,
-        height: size,
-        className: clsx("inline-block", className),
-        ...rest,
-      })
+    ? iconMap[name]
     : null;
 
   return (
-    <span
-      className={clsx(
-        "icon",
-        className
-      )}
-      role="img"
-      aria-label={rest["aria-label"] || name}
-      {...rest}
-    >
-      {content}
+    <span role="img" aria-label={rest["aria-label"] || name}>
+      {svgContent}
     </span>
   );
 }
@@ -316,26 +359,29 @@ export default function Icon({
 
 ===== FILE: src/components/atoms/Input.jsx =====
 
-// src/components/atoms/Input.jsx
+// File: src/components/atoms/Input.jsx
 import React, { useState } from "react";
 import clsx from "clsx";
+import Icon from "../atoms/Icon";
 
 /**
- * PRO Input atom
+ * Input atom
  * Props:
- * - type: string (text, number, password, etc.)
+ * - type: string (e.g. 'text', 'password')
  * - placeholder: string
- * - value, onChange: controlled input
+ * - value: string
+ * - onChange: function
  * - disabled: boolean
  * - error: string (error message)
  * - success: string (success message)
- * - leftIcon, rightIcon: <Icon />
- * - className: string
- * - ...rest: native input props
+ * - leftIcon: ReactNode
+ * - rightIcon: ReactNode
+ * - className: additional Tailwind utility classes
+ * - ...rest: other input props
  */
 export default function Input({
   type = "text",
-  placeholder,
+  placeholder = "",
   value,
   onChange,
   disabled = false,
@@ -347,23 +393,25 @@ export default function Input({
   ...rest
 }) {
   const [showPassword, setShowPassword] = useState(false);
-
-  // If type=password, allow toggle
   const actualType = type === "password" && showPassword ? "text" : type;
 
   return (
     <div>
       <div
         className={clsx(
-          "flex items-center border rounded-lg px-3 bg-white transition h-11",
+          "flex items-center px-3 h-11 rounded-md bg-background-soft transition",
           error
-            ? "border-error focus-within:border-error"
-            : "border-divider focus-within:border-primary",
-          disabled && "bg-background-soft text-text-disabled opacity-60 cursor-not-allowed",
+            ? "border border-error focus-within:border-error"
+            : "border border-divider focus-within:border-primary",
+          disabled && "bg-background-soft text-text-secondary opacity-60 cursor-not-allowed",
           className
         )}
       >
-        {leftIcon && <span className="mr-2 text-xl text-text-secondary">{leftIcon}</span>}
+        {leftIcon && (
+          <span className="mr-2 text-xl text-text-secondary flex-shrink-0">
+            {leftIcon}
+          </span>
+        )}
 
         <input
           type={actualType}
@@ -372,49 +420,34 @@ export default function Input({
           onChange={onChange}
           disabled={disabled}
           className={clsx(
-            "flex-1 bg-transparent border-none outline-none text-base placeholder-text-secondary",
-            "focus:ring-0 disabled:cursor-not-allowed",
+            "flex-1 bg-transparent border-none outline-none text-base placeholder-text-secondary focus:ring-0 disabled:cursor-not-allowed",
             leftIcon && "pl-0",
             rightIcon && type !== "password" && "pr-0"
           )}
           {...rest}
         />
 
-        {/* Password reveal for type=password */}
         {type === "password" && (
           <button
             type="button"
             tabIndex={-1}
             onClick={() => setShowPassword((s) => !s)}
-            className="ml-2 text-text-secondary focus:outline-none"
             disabled={disabled}
+            className="ml-2 text-text-secondary focus:outline-none"
           >
-            {showPassword ? (
-              // You can replace these with your own SVG icons
-              <svg width="20" height="20" fill="none" viewBox="0 0 20 20">
-                <path d="M10 13.333a3.333 3.333 0 100-6.666 3.333 3.333 0 000 6.666z" stroke="currentColor"/>
-                <path d="M1.667 10S4.167 4.167 10 4.167c5.833 0 8.333 5.833 8.333 5.833s-2.5 5.833-8.333 5.833c-5.833 0-8.333-5.833-8.333-5.833z" stroke="currentColor"/>
-              </svg>
-            ) : (
-              <svg width="20" height="20" fill="none" viewBox="0 0 20 20">
-                <path d="M1.667 1.667l16.666 16.666" stroke="currentColor"/>
-                <path d="M10 13.333a3.333 3.333 0 01-3.072-2.128M7.186 7.186A3.333 3.333 0 0112.814 12.814M17.04 13.873C16.07 15.17 13.578 17.5 10 17.5c-5.833 0-8.333-5.833-8.333-5.833A15.772 15.772 0 014.17 6.165" stroke="currentColor"/>
-              </svg>
-            )}
+            <Icon name={showPassword ? "eye-off" : "eye"} size={20} />
           </button>
         )}
 
-        {/* Optional right icon (for search, clear, etc) */}
         {rightIcon && type !== "password" && (
-          <span className="ml-2 text-xl text-text-secondary">{rightIcon}</span>
+          <span className="ml-2 text-xl text-text-secondary flex-shrink-0">
+            {rightIcon}
+          </span>
         )}
       </div>
-      {error && (
-        <div className="text-error text-xs mt-1">{error}</div>
-      )}
-      {!error && success && (
-        <div className="text-success text-xs mt-1">{success}</div>
-      )}
+
+      {error && <div className="text-error text-xs mt-1">{error}</div>}
+      {!error && success && <div className="text-success text-xs mt-1">{success}</div>}
     </div>
   );
 }
@@ -422,7 +455,7 @@ export default function Input({
 
 ===== FILE: src/components/atoms/Loader.jsx =====
 
-// src/components/atoms/Loader.jsx
+// File: src/components/atoms/Loader.jsx
 import React from "react";
 import clsx from "clsx";
 
@@ -430,10 +463,16 @@ import clsx from "clsx";
  * Spinner loader atom
  * Props:
  * - size: number (px, default 24)
- * - color: Tailwind class ("text-primary", "text-white", etc.)
- * - className: extra classes
+ * - color: Tailwind text color class (e.g. "text-primary", "text-white")
+ * - className: additional Tailwind utility classes
+ * - ...rest: other props (aria-label, etc.)
  */
-export function Spinner({ size = 24, color = "text-primary", className = "", ...rest }) {
+export function Spinner({
+  size = 24,
+  color = "text-primary",
+  className = "",
+  ...rest
+}) {
   return (
     <svg
       width={size}
@@ -462,13 +501,15 @@ export function Spinner({ size = 24, color = "text-primary", className = "", ...
 }
 
 /**
- * Skeleton loader atom (for cards, lists, etc.)
+ * Skeleton loader atom
  * Props:
- * - width, height: size in px (default w-full h-4)
+ * - width: number|string (e.g. 200 or "100%"), optional
+ * - height: number|string (e.g. 20 or "1rem"), optional
  * - rounded: boolean (default true)
- * - className: extra classes
- * Usage:
- * <Skeleton width={200} height={40} />
+ * - className: additional Tailwind utility classes
+ * - ...rest: other props (aria-label, etc.)
+ *
+ * Usage: <Skeleton width={200} height={40} />
  */
 export function Skeleton({
   width,
@@ -485,8 +526,8 @@ export function Skeleton({
         className
       )}
       style={{
-        width: width ? (typeof width === "number" ? `${width}px` : width) : undefined,
-        height: height ? (typeof height === "number" ? `${height}px` : height) : undefined,
+        width: width ? (typeof width === 'number' ? `${width}px` : width) : undefined,
+        height: height ? (typeof height === 'number' ? `${height}px` : height) : undefined
       }}
       aria-label="Loading"
       {...rest}
@@ -497,28 +538,31 @@ export function Skeleton({
 
 ===== FILE: src/components/atoms/Typography.jsx =====
 
-// src/components/atoms/Typography.jsx
+// File: src/components/atoms/Typography.jsx
 import React from "react";
 import clsx from "clsx";
 
 /**
  * Heading atom
  * Props:
- * - level: 1 | 2 | 3 | 4 (renders h1-h4)
+ * - level: 1 | 2 | 3 | 4
  * - children: node
- * - className: string
- * - ...rest: extra props
+ * - className: additional Tailwind utility classes
+ * - ...rest: other props
  */
 export function Heading({ level = 1, children, className = "", ...rest }) {
   const Tag = `h${level}`;
-  const styles = {
-    1: "text-2xl font-bold text-text-primary md:text-3xl",
-    2: "text-xl font-semibold text-text-primary md:text-2xl",
-    3: "text-lg font-semibold text-text-primary md:text-xl",
-    4: "text-base font-medium text-text-primary md:text-lg",
+  const sizes = {
+    1: "text-3xl font-semibold text-text-primary",
+    2: "text-2xl font-semibold text-text-primary",
+    3: "text-xl font-medium text-text-primary",
+    4: "text-lg font-medium text-text-primary",
   };
   return (
-    <Tag className={clsx(styles[level] || styles[1], className)} {...rest}>
+    <Tag
+      className={clsx(sizes[level] || sizes[1], className)}
+      {...rest}
+    >
       {children}
     </Tag>
   );
@@ -527,25 +571,24 @@ export function Heading({ level = 1, children, className = "", ...rest }) {
 /**
  * BodyText atom
  * Props:
- * - size: "sm" | "md" | "lg"
- * - color: "primary" | "secondary" | "error" | "success" | "muted"
- * - as: elementType (e.g., 'p', 'span', 'div')
- * - className: string
- * - ...rest
+ * - size: 'sm' | 'md' | 'lg'
+ * - color: 'primary' | 'secondary' | 'error' | 'success' | 'muted'
+ * - as: string (element type, e.g. 'p', 'span')
+ * - className: additional Tailwind utility classes
+ * - ...rest: other props
  */
 export function BodyText({
   size = "md",
   color = "primary",
-  as = "p",
+  as: Component = "p",
   className = "",
   children,
   ...rest
 }) {
-  const Tag = as;
   const sizeMap = {
-    sm: "text-xs md:text-sm",
+    sm: "text-sm",
     md: "text-base",
-    lg: "text-lg md:text-xl",
+    lg: "text-lg",
   };
   const colorMap = {
     primary: "text-text-primary",
@@ -555,19 +598,27 @@ export function BodyText({
     muted: "text-text-secondary opacity-80",
   };
   return (
-    <Tag className={clsx(sizeMap[size], colorMap[color], className)} {...rest}>
+    <Component
+      className={clsx(sizeMap[size], colorMap[color], className)}
+      {...rest}
+    >
       {children}
-    </Tag>
+    </Component>
   );
 }
 
 /**
  * Caption atom
- * For extra small helper or status text
+ * Props:
+ * - className: additional Tailwind utility classes
+ * - ...rest: other props
  */
 export function Caption({ children, className = "", ...rest }) {
   return (
-    <span className={clsx("text-xs text-text-secondary", className)} {...rest}>
+    <span
+      className={clsx("text-xs text-text-secondary", className)}
+      {...rest}
+    >
       {children}
     </span>
   );
@@ -578,17 +629,25 @@ export function Caption({ children, className = "", ...rest }) {
 
 // File: src/components/layout/MobileLayout.jsx
 import React from 'react';
+import clsx from 'clsx';
 
-export default function MobileLayout({ children }) {
+/**
+ * MobileLayout wrapper
+ * Centers content on mobile devices, ensures proper padding for bottom nav
+ * Props:
+ * - children: page content
+ * - className: additional Tailwind utility classes
+ */
+export default function MobileLayout({ children, className = '' }) {
   return (
-    <div className="
-        min-h-screen           /* full viewport height */
-        bg-background          /* your default background color */
-        flex                   /* flex container */
-        justify-center         /* center horizontally */
-        items-center           /* center vertically */
-      ">
-      <div className="w-full max-w-md h-full">
+    <div
+      className={clsx(
+        'min-h-screen bg-background flex justify-center items-start',
+        'pt-4 pb-20', // top padding and bottom padding for fixed bottom nav
+        className
+      )}
+    >
+      <div className="w-full max-w-md px-4">
         {children}
       </div>
     </div>
@@ -602,14 +661,21 @@ export default function MobileLayout({ children }) {
 import React from 'react';
 import clsx from 'clsx';
 
-export default function ScreenContainer({
-  children,
-  className = '',
-  ...rest
-}) {
+/**
+ * ScreenContainer wrapper
+ * Provides consistent horizontal padding and vertical spacing
+ * Props:
+ * - children: inner content
+ * - className: additional Tailwind utility classes
+ * - ...rest: other props (e.g., id, aria-label)
+ */
+export default function ScreenContainer({ children, className = '', ...rest }) {
   return (
     <div
-      className={clsx('px-4 py-2', className)}
+      className={clsx(
+        'px-4 py-4', // consistent padding from design system (16px = p-4)
+        className
+      )}
       {...rest}
     >
       {children}
@@ -617,53 +683,52 @@ export default function ScreenContainer({
   );
 }
 
-
 ===== FILE: src/components/molecules/Card.jsx =====
 
-// src/components/molecules/Card.jsx
-import React from "react";
-import clsx from "clsx";
+// File: src/components/molecules/Card.jsx
+import React from 'react';
+import clsx from 'clsx';
 
 /**
  * Card molecule
  * Props:
  * - children: content
- * - variant: "default" | "outlined" | "soft" | "error" | "success"
- * - padding: "sm" | "md" | "lg" | false (no padding)
- * - clickable: boolean (adds hover, pointer)
- * - className: extra Tailwind classes
- * - ...rest
+ * - variant: 'default' | 'outlined' | 'soft' | 'error' | 'success'
+ * - padding: 'sm' | 'md' | 'lg' | false
+ * - clickable: boolean
+ * - className: additional Tailwind utility classes
+ * - ...rest: other props
  */
-const variantMap = {
-  default: "bg-background-soft shadow-card",
-  outlined: "bg-white border border-divider",
-  soft: "bg-primary/5",
-  error: "bg-error/10 border border-error",
-  success: "bg-accent/10 border border-accent",
+const VARIANT_CLASSES = {
+  default: 'bg-background-soft shadow-card',
+  outlined: 'bg-background border border-divider',
+  soft: 'bg-primary/5',
+  error: 'bg-error/10 border border-error',
+  success: 'bg-accent/10 border border-accent',
 };
 
-const paddingMap = {
-  sm: "p-3",
-  md: "p-5",
-  lg: "p-7",
-  false: "",
+const PADDING_CLASSES = {
+  sm: 'p-3',
+  md: 'p-5',
+  lg: 'p-7',
+  false: '',
 };
 
 export default function Card({
   children,
-  variant = "default",
-  padding = "md",
+  variant = 'default',
+  padding = 'md',
   clickable = false,
-  className = "",
+  className = '',
   ...rest
 }) {
   return (
     <div
       className={clsx(
-        "rounded-lg transition group",
-        variantMap[variant] || variantMap.default,
-        paddingMap[padding],
-        clickable && "hover:shadow-elevated cursor-pointer active:scale-[0.98]",
+        'rounded-lg transition group',
+        VARIANT_CLASSES[variant],
+        PADDING_CLASSES[padding],
+        clickable && 'hover:shadow-elevated cursor-pointer active:scale-[0.98]',
         className
       )}
       tabIndex={clickable ? 0 : undefined}
@@ -677,7 +742,7 @@ export default function Card({
 
 ===== FILE: src/components/molecules/CategoryCard.jsx =====
 
-// src/components/molecules/CategoryCard.jsx
+// File: src/components/molecules/CategoryCard.jsx
 import React from "react";
 import clsx from "clsx";
 import Card from "./Card";
@@ -685,12 +750,12 @@ import Card from "./Card";
 /**
  * CategoryCard molecule
  * Props:
- * - icon: ReactNode (SVG icon/image)
+ * - icon: ReactNode (SVG icon or image)
  * - label: string
- * - active: boolean (selected/highlighted)
+ * - active: boolean
  * - disabled: boolean
- * - onClick: function (optional, makes it clickable)
- * - className: string
+ * - onClick: function (optional)
+ * - className: additional Tailwind utility classes
  */
 export default function CategoryCard({
   icon,
@@ -708,8 +773,8 @@ export default function CategoryCard({
       clickable={!!onClick && !disabled}
       className={clsx(
         "flex flex-col items-center w-20 h-24 transition relative",
-        active ? "ring-2 ring-primary ring-inset" : "",
-        disabled ? "opacity-50 pointer-events-none" : "hover:-translate-y-1",
+        active ? "ring-2 ring-primary ring-inset" : "hover:-translate-y-1",
+        disabled && "opacity-50 pointer-events-none",
         className
       )}
       onClick={onClick}
@@ -720,7 +785,7 @@ export default function CategoryCard({
       <span
         className={clsx(
           "flex items-center justify-center w-12 h-12 rounded-full bg-primary/10 mb-2",
-          active ? "bg-primary/20" : ""
+          active && "bg-primary/20"
         )}
       >
         {icon}
@@ -728,8 +793,6 @@ export default function CategoryCard({
       <span className="text-xs font-medium text-center text-text-primary truncate">
         {label}
       </span>
-      {/* Optionally add badge or "new" label at top right */}
-      {/* <Badge intent="info" className="absolute top-2 right-2">NEW</Badge> */}
     </Card>
   );
 }
@@ -737,7 +800,7 @@ export default function CategoryCard({
 
 ===== FILE: src/components/molecules/FeaturedShopCard.jsx =====
 
-// src/components/molecules/FeaturedShopCard.jsx
+// File: src/components/molecules/FeaturedShopCard.jsx
 import React from "react";
 import clsx from "clsx";
 import Card from "./Card";
@@ -747,13 +810,13 @@ import Badge from "../atoms/Badge";
 /**
  * FeaturedShopCard molecule
  * Props:
- * - image: url (shop logo or photo)
+ * - image: string (shop logo or photo URL)
  * - name: string (shop name)
- * - category: string (e.g. "Groceries")
- * - status: "open" | "closed"
- * - onClick: function (for navigation)
- * - badge: string (e.g. "Featured", optional)
- * - className: extra classes
+ * - category: string
+ * - status: 'open' | 'closed'
+ * - badge: string (optional badge text)
+ * - onClick: function (optional click handler)
+ * - className: additional Tailwind utility classes
  */
 export default function FeaturedShopCard({
   image,
@@ -771,14 +834,13 @@ export default function FeaturedShopCard({
       padding="sm"
       clickable={!!onClick}
       className={clsx(
-        "flex flex-col items-center w-40 min-w-[160px] max-w-[180px] transition relative group",
+        "flex flex-col items-center w-40 min-w-[160px] max-w-[180px] transition group",
         "hover:shadow-elevated hover:-translate-y-1 active:scale-[0.98]",
         className
       )}
       onClick={onClick}
       {...rest}
     >
-      {/* Shop avatar or photo */}
       <Avatar
         src={image}
         alt={name}
@@ -786,23 +848,23 @@ export default function FeaturedShopCard({
         className="mb-2"
       />
 
-      {/* Badge for “Featured” */}
       {badge && (
-        <Badge intent="info" pill className="absolute top-2 left-2 z-10">
+        <Badge
+          intent="info"
+          pill
+          className="absolute top-2 left-2 z-10"
+        >
           {badge}
         </Badge>
       )}
 
-      {/* Shop name */}
-      <div className="text-sm font-semibold text-text-primary text-center truncate w-full">
+      <div className="text-base font-medium text-text-primary text-center truncate w-full">
         {name}
       </div>
-      {/* Category */}
-      <div className="text-xs text-text-secondary mt-1 mb-2 text-center truncate w-full">
+      <div className="text-sm text-text-secondary mt-1 mb-2 text-center truncate w-full">
         {category}
       </div>
 
-      {/* Shop status */}
       <Badge
         intent={status === "open" ? "success" : "error"}
         size="sm"
@@ -818,7 +880,7 @@ export default function FeaturedShopCard({
 
 ===== FILE: src/components/molecules/NearbyShopCard.jsx =====
 
-// src/components/molecules/NearbyShopCard.jsx
+// File: src/components/molecules/NearbyShopCard.jsx
 import React from "react";
 import clsx from "clsx";
 import Card from "./Card";
@@ -828,15 +890,15 @@ import Badge from "../atoms/Badge";
 /**
  * NearbyShopCard molecule
  * Props:
- * - image: url (shop logo or photo)
+ * - image: string (shop logo or photo URL)
  * - name: string (shop name)
  * - category: string (e.g. "Pharmacy")
  * - address: string (optional)
- * - status: "open" | "closed"
+ * - status: 'open' | 'closed'
  * - delivers: boolean (shows “Delivers” badge)
- * - distance: string/number (e.g. "400m", optional)
- * - onClick: function (for navigation)
- * - className: extra classes
+ * - distance: string | number
+ * - onClick: function (optional click handler)
+ * - className: additional Tailwind utility classes
  */
 export default function NearbyShopCard({
   image,
@@ -856,47 +918,45 @@ export default function NearbyShopCard({
       padding="md"
       clickable={!!onClick}
       className={clsx(
-        "flex items-center gap-4 transition group min-h-[76px]",
+        "flex items-center gap-4 min-h-[76px] transition group",
         "hover:shadow-elevated hover:-translate-y-0.5 active:scale-[0.99]",
         className
       )}
       onClick={onClick}
       {...rest}
     >
-      {/* Shop avatar or photo */}
+      {/* Shop avatar */}
       <Avatar src={image} alt={name} size="md" />
 
       <div className="flex-1 min-w-0">
-        {/* Shop name and “Delivers” badge */}
+        {/* Name and delivers badge */}
         <div className="flex items-center gap-1">
-          <span className="text-base font-semibold text-text-primary truncate">
-            {name}
-          </span>
+          <span className="text-base font-medium text-text-primary truncate">{name}</span>
           {delivers && (
             <Badge intent="success" size="sm" pill className="ml-2">
               Delivers
             </Badge>
           )}
         </div>
-        {/* Category + Address */}
-        <div className="flex flex-wrap items-center gap-2 mt-0.5 text-xs text-text-secondary">
+
+        {/* Category & Address */}
+        <div className="flex flex-wrap items-center gap-2 mt-0.5 text-sm text-text-secondary">
           <span className="truncate">{category}</span>
           {address && (
             <>
-              <span className="mx-1">•</span>
+              <span className="mx-1">&bull;</span>
               <span className="truncate">{address}</span>
             </>
           )}
         </div>
-        {/* Optional distance */}
+
+        {/* Distance */}
         {distance && (
-          <div className="text-xs text-text-secondary mt-0.5">
-            {distance}
-          </div>
+          <div className="text-sm text-text-secondary mt-0.5">{distance}</div>
         )}
       </div>
 
-      {/* Status badge (Open/Closed) */}
+      {/* Status badge */}
       <Badge
         intent={status === "open" ? "success" : "error"}
         size="sm"
@@ -912,7 +972,7 @@ export default function NearbyShopCard({
 
 ===== FILE: src/components/molecules/PageHeader.jsx =====
 
-// src/components/molecules/PageHeader.jsx
+// File: src/components/molecules/PageHeader.jsx
 import React from "react";
 import clsx from "clsx";
 import Icon from "../atoms/Icon";
@@ -921,13 +981,13 @@ import { Heading, BodyText } from "../atoms/Typography";
 /**
  * PageHeader molecule
  * Props:
- * - title: string or node
- * - subtitle: string or node (optional)
- * - back: function (if provided, shows back arrow)
- * - action: node (right-side button/icon/avatar)
- * - sticky: boolean (makes header sticky at top)
- * - className: string
- * - ...rest
+ * - title: string or ReactNode
+ * - subtitle: string or ReactNode (optional)
+ * - back: function (optional, shows back arrow)
+ * - action: ReactNode (optional, right-side element)
+ * - sticky: boolean (default true, makes header sticky)
+ * - className: additional Tailwind utility classes
+ * - ...rest: other props
  */
 export default function PageHeader({
   title,
@@ -941,31 +1001,28 @@ export default function PageHeader({
   return (
     <header
       className={clsx(
-        "w-full z-20 bg-background",
+        "w-full z-20 bg-background border-b border-divider",
         sticky && "sticky top-0",
-        "flex items-center min-h-[56px] px-4 md:px-8 py-2 border-b border-divider",
+        "flex items-center min-h-14 px-4 py-2",
         className
       )}
       {...rest}
     >
-      {/* Back button */}
       {back && (
         <button
           type="button"
-          aria-label="Back"
           onClick={back}
-          className="mr-3 flex items-center justify-center rounded-full w-9 h-9 hover:bg-background-soft focus:outline-none"
+          aria-label="Back"
+          className="mr-3 flex items-center justify-center w-9 h-9 rounded-md hover:bg-background-soft focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
         >
-          <Icon name="chevron-left" size={22} className="text-text-primary" />
+          <Icon name="chevron-left" size={22} />
         </button>
       )}
 
-      {/* Title and subtitle */}
-      <div className={clsx(
-        "flex-1 min-w-0",
-        (subtitle || action) && "flex flex-col"
-      )}>
-        <Heading level={2} className="truncate">{title}</Heading>
+      <div className={clsx("flex-1 min-w-0", (subtitle || action) && "flex flex-col")}>
+        <Heading level={2} className="truncate">
+          {title}
+        </Heading>
         {subtitle && (
           <BodyText size="sm" color="secondary" className="truncate mt-0.5">
             {subtitle}
@@ -973,10 +1030,7 @@ export default function PageHeader({
         )}
       </div>
 
-      {/* Action (icon, button, avatar, etc.) */}
-      {action && (
-        <div className="ml-3 flex-shrink-0">{action}</div>
-      )}
+      {action && <div className="ml-3 flex-shrink-0">{action}</div>}
     </header>
   );
 }
@@ -984,7 +1038,7 @@ export default function PageHeader({
 
 ===== FILE: src/components/molecules/SearchBar.jsx =====
 
-// src/components/molecules/SearchBar.jsx
+// File: src/components/molecules/SearchBar.jsx
 import React, { useState, useRef } from "react";
 import clsx from "clsx";
 import Input from "../atoms/Input";
@@ -994,13 +1048,14 @@ import { Spinner } from "../atoms/Loader";
 /**
  * SearchBar molecule
  * Props:
- * - value: string (for controlled input)
- * - onChange: function (value) — fires on typing
- * - onSearch: function (value) — fires on Enter/search
+ * - value: string (controlled value)
+ * - onChange: function(value)
+ * - onSearch: function(value) (called on Enter)
  * - placeholder: string
- * - loading: boolean (shows spinner)
+ * - loading: boolean
  * - disabled: boolean
- * - className: string
+ * - className: additional Tailwind utility classes
+ * - ...rest: other props
  */
 export default function SearchBar({
   value,
@@ -1013,14 +1068,14 @@ export default function SearchBar({
   ...rest
 }) {
   const [internalValue, setInternalValue] = useState("");
-  const inputRef = useRef();
+  const inputRef = useRef(null);
 
-  // Controlled vs uncontrolled
   const inputValue = value !== undefined ? value : internalValue;
 
   function handleInputChange(e) {
-    setInternalValue(e.target.value);
-    onChange?.(e.target.value);
+    const v = e.target.value;
+    setInternalValue(v);
+    onChange?.(v);
   }
 
   function handleKeyDown(e) {
@@ -1049,26 +1104,27 @@ export default function SearchBar({
         className="pr-10"
         {...rest}
       />
-      {/* Clear/Spinner Button */}
+
       <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center">
         {loading ? (
           <Spinner size={20} color="text-primary" />
-        ) : inputValue && !disabled ? (
-          <button
-            type="button"
-            aria-label="Clear search"
-            onClick={handleClear}
-            className="text-xl text-text-secondary focus:outline-none"
-            tabIndex={0}
-          >
-            <Icon>
-              <svg viewBox="0 0 20 20" width={20} height={20} fill="none">
-                <circle cx={10} cy={10} r={9} stroke="currentColor" strokeWidth={1.5} />
-                <path d="M7 7l6 6M13 7l-6 6" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round"/>
-              </svg>
-            </Icon>
-          </button>
-        ) : null}
+        ) : (
+          inputValue && !disabled && (
+            <button
+              type="button"
+              aria-label="Clear search"
+              onClick={handleClear}
+              className="text-xl text-text-secondary focus:outline-none"
+            >
+              <Icon>
+                <svg viewBox="0 0 20 20" width={20} height={20} fill="none">
+                  <circle cx={10} cy={10} r={9} stroke="currentColor" strokeWidth={1.5} />
+                  <path d="M7 7l6 6M13 7l-6 6" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" />
+                </svg>
+              </Icon>
+            </button>
+          )
+        )}
       </div>
     </div>
   );
@@ -1077,7 +1133,7 @@ export default function SearchBar({
 
 ===== FILE: src/components/molecules/SectionCard.jsx =====
 
-// src/components/molecules/SectionCard.jsx
+// File: src/components/molecules/SectionCard.jsx
 import React from "react";
 import clsx from "clsx";
 import Card from "./Card";
@@ -1086,14 +1142,14 @@ import { Heading, BodyText } from "../atoms/Typography";
 /**
  * SectionCard molecule
  * Props:
- * - title: string or node (section title)
- * - subtitle: string or node (optional subtext)
- * - action: node (optional action button/icon)
- * - children: section content
- * - variant: Card variant (default, outlined, soft, error, etc.)
- * - padding: Card padding ("sm", "md", "lg", or false)
- * - className: extra classes
- * - ...rest
+ * - title: string or ReactNode (optional section title)
+ * - subtitle: string or ReactNode (optional subtitle)
+ * - action: ReactNode (optional action button/icon)
+ * - children: ReactNode (section content)
+ * - variant: 'default' | 'outlined' | 'soft' | 'error' | 'success'
+ * - padding: 'sm' | 'md' | 'lg' | false
+ * - className: additional Tailwind utility classes
+ * - ...rest: other props
  */
 export default function SectionCard({
   title,
@@ -1126,9 +1182,7 @@ export default function SectionCard({
               </BodyText>
             )}
           </div>
-          {action && (
-            <div className="shrink-0">{action}</div>
-          )}
+          {action && <div className="shrink-0">{action}</div>}
         </div>
       )}
       <div>{children}</div>
@@ -1139,7 +1193,7 @@ export default function SectionCard({
 
 ===== FILE: src/components/molecules/WalletCard.jsx =====
 
-// src/components/molecules/WalletCard.jsx
+// File: src/components/molecules/WalletCard.jsx
 import React from "react";
 import clsx from "clsx";
 import Card from "./Card";
@@ -1148,14 +1202,15 @@ import Icon from "../atoms/Icon";
 /**
  * WalletCard molecule
  * Props:
- * - amount: string/number (main balance/value)
- * - label: string (e.g. "Wallet Balance")
- * - icon: ReactNode (optional, left side or top)
- * - color: 'primary' | 'accent' | 'gradient' | custom (bg color)
- * - info: string (optional extra info, e.g. "Expiring soon")
- * - cta: string (call to action, e.g. "Add Money")
- * - onCta: function (on click CTA)
- * - className: extra classes
+ * - amount: string | number
+ * - label: string
+ * - icon: ReactNode (optional wallet icon)
+ * - color: 'primary' | 'accent' | 'gradient' | 'default'
+ * - info: string (optional extra info)
+ * - cta: string (call-to-action text)
+ * - onCta: function (CTA click handler)
+ * - className: additional Tailwind utility classes
+ * - ...rest: other props
  */
 export default function WalletCard({
   amount,
@@ -1168,13 +1223,13 @@ export default function WalletCard({
   className = "",
   ...rest
 }) {
-  // Color map
   const colorMap = {
     primary: "bg-primary text-white",
     accent: "bg-accent text-white",
     gradient: "bg-gradient-to-tr from-primary to-accent text-white",
     default: "bg-background-soft text-text-primary",
   };
+
   return (
     <Card
       variant="default"
@@ -1186,26 +1241,23 @@ export default function WalletCard({
       )}
       {...rest}
     >
-      {/* Optional icon (wallet/cashback) */}
       {icon && (
         <span className="w-10 h-10 flex items-center justify-center bg-white/20 rounded-full mr-2">
           {icon}
         </span>
       )}
+
       <div className="flex-1 min-w-0">
-        {/* Label and amount */}
-        <div className="text-xs opacity-90">{label}</div>
+        <div className="text-sm font-medium opacity-90">{label}</div>
         <div className="text-2xl font-bold leading-tight">{amount}</div>
-        {info && (
-          <div className="text-xs opacity-80 mt-1">{info}</div>
-        )}
+        {info && <div className="text-sm opacity-80 mt-1">{info}</div>}
       </div>
-      {/* CTA Button */}
-      {cta && (
+
+      {cta && onCta && (
         <button
           type="button"
           onClick={onCta}
-          className="ml-2 px-3 py-1 text-xs font-semibold rounded-full bg-white/80 text-primary shadow hover:bg-white transition"
+          className="ml-2 px-3 py-1 text-xs font-semibold rounded-full bg-white/80 text-primary shadow-card hover:bg-white transition"
         >
           {cta}
         </button>
@@ -1225,22 +1277,16 @@ import Button from '../atoms/Button';
 
 /**
  * BillSummarySection organism
- *
  * Props:
- * - title: string                // Optional section title
- * - items: Array<{              // Line-item array
- *     label: string,
- *     amount: number,
- *     isDiscount?: boolean,      // true for discount/savings rows
- *     isFree?: boolean           // true to display 'FREE' (e.g., delivery)
- *   }>
- * - totalLabel: string           // Label for total row (default "Total")
- * - totalAmount: number          // Total amount
- * - currencySymbol: string       // e.g. "₹"
- * - note: string                 // Optional footnote (e.g. "Taxes included")
- * - actionLabel: string          // Optional CTA text (e.g. "Pay Now")
- * - onAction: () => void         // CTA click handler
- * - className: string
+ * - title: string (optional section title)
+ * - items: Array<{ label: string; amount: number; isDiscount?: boolean; isFree?: boolean }>
+ * - totalLabel: string (label for total, default 'Total')
+ * - totalAmount: number
+ * - currencySymbol: string (e.g. '₹')
+ * - note: string (optional footnote)
+ * - actionLabel: string (optional CTA text)
+ * - onAction: function (CTA click handler)
+ * - className: additional Tailwind utility classes
  */
 export default function BillSummarySection({
   title,
@@ -1252,17 +1298,18 @@ export default function BillSummarySection({
   actionLabel,
   onAction,
   className = '',
+  ...rest
 }) {
   return (
     <section
       className={clsx(
-        'bg-[var(--background-soft)] border border-[var(--divider)] rounded-lg p-4',
+        'bg-background-soft border border-divider rounded-lg p-4',
         className
       )}
-      aria-label={title || 'Bill Summary'}
+      {...rest}
     >
       {title && (
-        <h3 className="text-lg font-semibold mb-4">
+        <h3 className="text-xl font-semibold mb-4 text-text-primary">
           {title}
         </h3>
       )}
@@ -1270,20 +1317,22 @@ export default function BillSummarySection({
       <div className="space-y-2">
         {items.map(({ label, amount, isDiscount, isFree }, idx) => {
           let display;
-          let valueClass = 'text-sm';
+          let valueClass = 'text-base';
           if (isFree) {
             display = 'FREE';
-            valueClass += ' text-[var(--success-color)] font-medium';
+            valueClass += ' text-success font-medium';
           } else if (isDiscount) {
             display = `- ${currencySymbol}${Math.abs(amount)}`;
-            valueClass += ' text-[var(--success-color)]';
+            valueClass += ' text-success';
           } else {
             display = `${currencySymbol}${amount}`;
           }
           return (
             <div key={idx} className="flex justify-between">
-              <BodyText size="sm">{label}</BodyText>
-              <BodyText size="sm" className={valueClass}>
+              <BodyText size="md" className="text-text-primary">
+                {label}
+              </BodyText>
+              <BodyText size="md" className={valueClass}>
                 {display}
               </BodyText>
             </div>
@@ -1291,11 +1340,11 @@ export default function BillSummarySection({
         })}
       </div>
 
-      <div className="border-t border-[var(--divider)] pt-3 mt-3 flex justify-between">
-        <BodyText size="md" className="font-semibold">
+      <div className="border-t border-divider pt-3 mt-3 flex justify-between">
+        <BodyText size="lg" className="font-semibold text-text-primary">
           {totalLabel}
         </BodyText>
-        <BodyText size="md" className="font-semibold text-[var(--primary-color)]">
+        <BodyText size="lg" className="font-semibold text-primary">
           {currencySymbol}{totalAmount}
         </BodyText>
       </div>
@@ -1308,7 +1357,7 @@ export default function BillSummarySection({
 
       {actionLabel && onAction && (
         <div className="mt-4">
-          <Button className="w-full" onClick={onAction}>
+          <Button fullWidth onClick={onAction}>
             {actionLabel}
           </Button>
         </div>
@@ -1320,7 +1369,7 @@ export default function BillSummarySection({
 
 ===== FILE: src/components/organisms/BottomNav.jsx =====
 
-// src/components/organisms/BottomNav.jsx
+// File: src/components/organisms/BottomNav.jsx
 import React from "react";
 import clsx from "clsx";
 import Icon from "../atoms/Icon";
@@ -1339,9 +1388,10 @@ const TABS = [
  * BottomNav organism
  * Props:
  * - active: string (active tab key)
- * - badgeData: object { [badgeKey]: number }
- * - onNavigate: function(tab.route)
- * - className: extra Tailwind classes
+ * - badgeData: object mapping badgeKey to number
+ * - onNavigate: function(tabRoute, tabKey)
+ * - className: extra Tailwind utility classes
+ * - ...rest: other props
  */
 export default function BottomNav({
   active = "home",
@@ -1354,9 +1404,7 @@ export default function BottomNav({
     <nav
       className={clsx(
         "fixed bottom-0 left-0 right-0 z-30 bg-background border-t border-divider shadow-card",
-        "flex justify-between items-center h-16 px-2 md:hidden",
-        "transition-all",
-        "safe-bottom",
+        "flex justify-between items-center h-16 px-2 md:hidden transition-all safe-bottom",
         className
       )}
       aria-label="Main Navigation"
@@ -1378,13 +1426,10 @@ export default function BottomNav({
         >
           <span className="relative">
             <Icon name={tab.icon} size={24} />
-            {/* Badge support (e.g., cart count) */}
             {tab.badgeKey && badgeData[tab.badgeKey] > 0 && (
-              <span className="absolute -top-2 -right-2">
-                <Badge intent="error" size="sm" pill>
-                  {badgeData[tab.badgeKey]}
-                </Badge>
-              </span>
+              <Badge intent="error" size="sm" pill className="absolute -top-2 -right-2">
+                {badgeData[tab.badgeKey]}
+              </Badge>
             )}
           </span>
           <span className="text-xs mt-1 leading-none">{tab.label}</span>
@@ -1397,48 +1442,110 @@ export default function BottomNav({
 
 ===== FILE: src/components/organisms/CartItemCard.jsx =====
 
+// File: src/components/organisms/CartItemCard.jsx
 import React from 'react';
-import { BodyText, Heading } from '../atoms/Typography';
+import clsx from 'clsx';
 import Button from '../atoms/Button';
+import { Heading, BodyText } from '../atoms/Typography';
 
-export default function CartItemCard({ item, onRemove, onUpdateQuantity }) {
+/**
+ * CartItemCard organism
+ * Props:
+ * - item: {
+ *     id: string | number,
+ *     image_url?: string,
+ *     title: string,
+ *     brand?: string,
+ *     pack_size?: string,
+ *     unit?: string,
+ *     price: number,
+ *     mrp?: number,
+ *     quantity: number
+ *   }
+ * - onRemove: function(itemId)
+ * - onUpdateQuantity: function(itemId, newQuantity)
+ * - className: additional Tailwind utility classes
+ * - ...rest: other props
+ */
+export default function CartItemCard({ item, onRemove, onUpdateQuantity, className = '', ...rest }) {
+  const {
+    id,
+    image_url,
+    title,
+    brand,
+    pack_size,
+    unit,
+    price,
+    mrp,
+    quantity
+  } = item;
+
+  // Calculate discount percentage if applicable
+  const discountPercent = mrp && mrp > price
+    ? Math.round(((mrp - price) / mrp) * 100)
+    : 0;
+
   return (
-    <div className="flex items-center bg-white shadow-sm rounded-lg p-4 gap-4">
+    <div
+      className={clsx(
+        'flex items-center bg-background-soft shadow-card rounded-lg p-4 gap-4',
+        className
+      )}
+      {...rest}
+    >
       {/* Item Image */}
-      <div className="w-20 h-20 bg-gray-200 rounded-md overflow-hidden">
-        {item.image_url ? (
-          <img src={item.image_url} alt={item.title} className="object-cover w-full h-full" />
+      <div className="w-20 h-20 bg-divider/40 rounded-md overflow-hidden flex items-center justify-center">
+        {image_url ? (
+          <img
+            src={image_url}
+            alt={title}
+            className="object-cover w-full h-full"
+          />
         ) : (
-          <div className="flex items-center justify-center text-2xl">📦</div>
+          <span className="text-2xl text-text-secondary">📦</span>
         )}
       </div>
 
       {/* Item Details */}
-      <div className="flex-1">
-        <Heading size="sm" className="text-gray-800">{item.title}</Heading>
-        <BodyText className="text-gray-500">
-          {item.brand && `${item.brand} • `}
-          {item.pack_size} {item.unit}
+      <div className="flex-1 min-w-0">
+        <Heading level={4} className="text-text-primary truncate">
+          {title}
+        </Heading>
+        <BodyText size="sm" color="secondary" className="truncate">
+          {brand && `${brand} • `}{pack_size} {unit}
         </BodyText>
         <div className="flex items-center gap-2 mt-1">
-          <Heading size="sm" className="text-primary">₹{item.price}</Heading>
-          {item.mrp && item.mrp > item.price && (
+          <BodyText size="md" className="font-semibold text-primary">
+            {currencySymbol}{price}
+          </BodyText>
+          {discountPercent > 0 && (
             <>
-              <span className="text-gray-400 line-through text-sm">₹{item.mrp}</span>
-              <span className="text-green-500 text-xs font-medium">
-                {Math.round(((item.mrp - item.price) / item.mrp) * 100)}% OFF
-              </span>
+              <BodyText size="sm" className="line-through text-text-secondary">
+                {currencySymbol}{mrp}
+              </BodyText>
+              <Badge intent="success" size="sm" pill>
+                {discountPercent}% OFF
+              </Badge>
             </>
           )}
         </div>
 
         {/* Quantity Controls */}
         <div className="flex items-center gap-2 mt-3">
-          <Button size="sm" variant="outline" onClick={() => onUpdateQuantity(item.id, item.quantity - 1)} disabled={item.quantity <= 1}>
+          <Button
+            size="sm"
+            variant="ghost"
+            onClick={() => onUpdateQuantity(id, quantity - 1)}
+            disabled={quantity <= 1}
+          >
             -
           </Button>
-          <span className="px-2 font-medium">{item.quantity}</span>
-          <Button size="sm" variant="outline" onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}>
+          <BodyText className="px-2 font-medium">{quantity}</BodyText>
+          <Button
+            size="sm"
+            variant="ghost"
+            onClick={() => onUpdateQuantity(id, quantity + 1)}
+          >
             +
           </Button>
         </div>
@@ -1446,8 +1553,8 @@ export default function CartItemCard({ item, onRemove, onUpdateQuantity }) {
 
       {/* Remove Button */}
       <button
-        className="text-red-500 text-sm"
-        onClick={() => onRemove(item.id)}
+        onClick={() => onRemove(id)}
+        className="text-error text-sm ml-2 focus:outline-none"
       >
         Remove
       </button>
@@ -1467,16 +1574,13 @@ import Button from '../atoms/Button';
 
 /**
  * EmptyState organism
- *
- * Renders a friendly “nothing here” view for empty lists, errors, or no-data screens.
- *
  * Props:
- * - icon: ReactNode         // Optional icon or SVG to display
- * - title: string           // Primary headline (e.g. “No Shops Found”)
- * - description: string     // Secondary text explaining the empty state
- * - actionLabel: string     // Optional call-to-action button text
- * - onAction: function      // Handler when CTA button is clicked
- * - className: string       // Additional container classes
+ * - icon: ReactNode (optional)
+ * - title: string
+ * - description: string (optional)
+ * - actionLabel: string (optional button text)
+ * - onAction: function (optional button click handler)
+ * - className: additional Tailwind utility classes
  */
 export default function EmptyState({
   icon,
@@ -1485,20 +1589,22 @@ export default function EmptyState({
   actionLabel,
   onAction,
   className = '',
+  ...rest
 }) {
   return (
     <div
       className={clsx(
-        'flex flex-col items-center justify-center text-center px-6 py-12',
+        'flex flex-col items-center justify-center text-center px-6 py-12 bg-background',
         className
       )}
+      {...rest}
     >
       {icon && (
         <div className="mb-4 text-primary text-6xl">
           <Icon className="w-12 h-12">{icon}</Icon>
         </div>
       )}
-      <Heading level={3} className="mb-2">
+      <Heading level={3} className="mb-2 text-text-primary">
         {title}
       </Heading>
       {description && (
@@ -1518,7 +1624,7 @@ export default function EmptyState({
 
 ===== FILE: src/components/organisms/HeroSection.jsx =====
 
-// src/components/organisms/HeroSection.jsx
+// File: src/components/organisms/HeroSection.jsx
 import React from "react";
 import clsx from "clsx";
 import Avatar from "../atoms/Avatar";
@@ -1527,14 +1633,15 @@ import { Heading, BodyText } from "../atoms/Typography";
 /**
  * HeroSection organism
  * Props:
- * - greeting: string (e.g. "Hi, Ritika 👋")
- * - subtext: string (e.g. "Discover shops & services in your society")
- * - avatar: image url (user photo, optional)
- * - location: string (e.g. "Lotus Boulevard, Noida", optional)
- * - action: ReactNode (button/search, optional)
- * - className: string
- * - bg: "gradient" | "image" | "primary" (background style)
- * - children: extra content below
+ * - greeting: string (e.g. "Hi, User 👋")
+ * - subtext: string (optional subtitle)
+ * - avatar: string (image URL for user avatar)
+ * - location: string (e.g. "Lotus Boulevard, Noida")
+ * - action: ReactNode (optional action button or search)
+ * - bg: 'gradient' | 'primary' | 'image'
+ * - className: additional Tailwind utility classes
+ * - children: ReactNode (extra content)
+ * - ...rest: other props
  */
 export default function HeroSection({
   greeting,
@@ -1556,7 +1663,7 @@ export default function HeroSection({
   return (
     <section
       className={clsx(
-        "w-full px-4 py-6 md:px-10 rounded-b-2xl relative text-white",
+        "w-full px-4 py-6 rounded-b-2xl text-white",
         bgClass,
         className
       )}
@@ -1564,13 +1671,18 @@ export default function HeroSection({
     >
       <div className="flex items-center gap-4 mb-2">
         {avatar && (
-          <Avatar src={avatar} size="md" className="ring-2 ring-white" />
+          <Avatar
+            src={avatar}
+            size="md"
+            className="ring-2 ring-white"
+            alt="User avatar"
+          />
         )}
         <div className="flex-1 min-w-0">
           {greeting && (
             <Heading
               level={2}
-              className="text-white font-bold text-xl md:text-2xl truncate"
+              className="text-xl md:text-2xl font-semibold truncate"
             >
               {greeting}
             </Heading>
@@ -1581,24 +1693,29 @@ export default function HeroSection({
               as="div"
               className="flex items-center gap-1 text-white/90"
             >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 21s7-7.072 7-11.417A7 7 0 1 0 5 9.583C5 13.928 12 21 12 21z" stroke="currentColor" strokeWidth="1.5"/><circle cx="12" cy="10" r="2" stroke="currentColor" strokeWidth="1.5"/></svg>
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                className="flex-shrink-0"
+              >
+                <path d="M12 21s7-7.072 7-11.417A7 7 0 1 0 5 9.583C5 13.928 12 21 12 21z" />
+                <circle cx="12" cy="10" r="2" />
+              </svg>
               <span className="truncate">{location}</span>
             </BodyText>
           )}
         </div>
       </div>
       {subtext && (
-        <BodyText
-          size="md"
-          as="div"
-          className="text-white/90 mb-3"
-        >
+        <BodyText size="md" className="text-white/90 mb-3">
           {subtext}
         </BodyText>
       )}
-      {action && (
-        <div className="mt-2">{action}</div>
-      )}
+      {action && <div className="mt-2">{action}</div>}
       {children}
     </section>
   );
@@ -1607,35 +1724,37 @@ export default function HeroSection({
 
 ===== FILE: src/components/organisms/OrderCard.jsx =====
 
-// src/components/organisms/OrderCard.jsx
+// File: src/components/organisms/OrderCard.jsx
 
 import React from "react";
+import clsx from "clsx";
 
 /**
- * OrderCard
+ * OrderCard organism
  * Props:
- *   order: {
- *     order_id,
- *     shop_name,
- *     shop_type,
- *     status,
- *     total_amount,
- *     created_at,
- *     item_count,
- *     items: [],
+ * - order: {
+ *     order_id: string | number,
+ *     shop_name: string,
+ *     shop_type: string,
+ *     status: string,
+ *     total_amount: number | string,
+ *     created_at: string (ISO date),
+ *     item_count: number,
+ *     items?: Array,
  *   }
- *   onClick: () => void  (optional)
+ * - onClick: function (optional click handler)
  */
-const statusConfig = {
-  pending:    { label: "Pending",    icon: "⏳", color: "text-yellow-500" },
-  accepted:   { label: "Accepted",   icon: "✅", color: "text-blue-500" },
-  confirmed:  { label: "Confirmed",  icon: "📦", color: "text-blue-600" },
-  delivered:  { label: "Delivered",  icon: "🎉", color: "text-green-600" },
-  cancelled:  { label: "Cancelled",  icon: "❌", color: "text-red-500" },
-  default:    { label: "Unknown",    icon: "📋", color: "text-gray-400" }
+
+const STATUS_CONFIG = {
+  pending:    { label: "Pending",    icon: "⏳", color: "text-warning" },
+  accepted:   { label: "Accepted",   icon: "✅", color: "text-info" },
+  confirmed:  { label: "Confirmed",  icon: "📦", color: "text-info" },
+  delivered:  { label: "Delivered",  icon: "🎉", color: "text-success" },
+  cancelled:  { label: "Cancelled",  icon: "❌", color: "text-error" },
+  default:    { label: "Unknown",    icon: "📋", color: "text-text-secondary" },
 };
 
-export default function OrderCard({ order, onClick }) {
+export default function OrderCard({ order = {}, onClick }) {
   const {
     order_id,
     shop_name,
@@ -1644,45 +1763,46 @@ export default function OrderCard({ order, onClick }) {
     total_amount,
     created_at,
     item_count,
-    items = [],
-  } = order || {};
+    items,
+  } = order;
 
-  const statusInfo = statusConfig[status] || statusConfig.default;
+  const statusKey = STATUS_CONFIG[status] ? status : 'default';
+  const { label, icon, color } = STATUS_CONFIG[statusKey];
 
   return (
     <div
-      className="bg-background-soft border border-divider rounded-xl p-4 flex gap-4 shadow-sm cursor-pointer transition hover:shadow-md"
+      className={clsx(
+        "bg-background-soft border border-divider rounded-lg p-4 flex gap-4 shadow-card transition hover:shadow-elevated cursor-pointer",
+      )}
       onClick={onClick}
-      role="button"
-      tabIndex={0}
-      aria-label={`Order ${order_id} from ${shop_name}`}
+      role={onClick ? 'button' : undefined}
+      tabIndex={onClick ? 0 : undefined}
     >
+      {/* Status icon and label */}
       <div className="flex flex-col items-center justify-center">
-        <div className={`text-2xl ${statusInfo.color}`}>{statusInfo.icon}</div>
-        <span className="text-xs mt-1 font-semibold capitalize">{statusInfo.label}</span>
+        <span className={clsx("text-2xl", color)}>{icon}</span>
+        <span className="text-xs font-semibold capitalize mt-1">{label}</span>
       </div>
+
+      {/* Order details */}
       <div className="flex-1 min-w-0">
         <div className="flex justify-between items-center">
-          <h3 className="font-semibold text-base truncate">{shop_name || "Shop"}</h3>
+          <h3 className="font-semibold text-base truncate text-text-primary">{shop_name || 'Shop'}</h3>
           <span className="text-xs text-text-secondary ml-2">#{order_id}</span>
         </div>
         <div className="flex justify-between items-center mt-1">
           <span className="text-xs text-text-secondary capitalize">{shop_type}</span>
           <span className="text-xs text-text-secondary">
-            {item_count || (items?.length ?? 0)} item{(item_count ?? items?.length) > 1 ? "s" : ""}
+            {item_count || (items?.length ?? 0)} item{(item_count ?? items?.length) > 1 ? 's' : ''}
           </span>
         </div>
         <div className="flex justify-between items-end mt-2">
           <span className="text-lg font-bold text-primary">₹{parseFloat(total_amount).toFixed(2)}</span>
-          <span className="text-xs text-text-tertiary">
-            {created_at
-              ? new Date(created_at).toLocaleDateString("en-IN", {
-                  day: "2-digit",
-                  month: "short",
-                  year: "2-digit",
-                })
-              : ""}
-          </span>
+          {created_at && (
+            <span className="text-xs text-text-secondary">
+              {new Date(created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
+            </span>
+          )}
         </div>
       </div>
     </div>
@@ -1692,24 +1812,42 @@ export default function OrderCard({ order, onClick }) {
 
 ===== FILE: src/components/organisms/OrderSummarySection.jsx =====
 
+// File: src/components/organisms/OrderSummarySection.jsx
 import React from 'react';
+import clsx from 'clsx';
 import { Heading, BodyText } from '../atoms/Typography';
 
-export default function OrderSummarySection({ items, totalAmount, deliveryCharges, finalAmount }) {
+/**
+ * OrderSummarySection organism
+ * Props:
+ * - items: Array<{ id: string|number, name: string, quantity: number, subtotal: number }> 
+ * - totalAmount: number
+ * - deliveryCharges: number
+ * - finalAmount: number
+ * - className: string (optional additional classes)
+ * - ...rest: other props
+ */
+export default function OrderSummarySection({ items = [], totalAmount = 0, deliveryCharges = 0, finalAmount = 0, className = '', ...rest }) {
   return (
-    <div className="bg-white rounded-xl shadow p-4 space-y-4">
-      <Heading size="md">Order Summary</Heading>
+    <div
+      className={clsx(
+        'bg-background rounded-lg shadow-card p-4 space-y-4',
+        className
+      )}
+      {...rest}
+    >
+      <Heading level={3} className="text-text-primary">Order Summary</Heading>
 
       <div className="space-y-2">
         {items.map((item) => (
           <div key={item.id} className="flex justify-between items-center">
-            <BodyText className="font-medium">{item.name} × {item.quantity}</BodyText>
-            <BodyText className="font-medium">₹{item.subtotal}</BodyText>
+            <BodyText size="md" className="text-text-primary">{item.name} × {item.quantity}</BodyText>
+            <BodyText size="md" className="text-text-primary">₹{item.subtotal}</BodyText>
           </div>
         ))}
       </div>
 
-      <div className="border-t pt-3 space-y-1">
+      <div className="border-t border-divider pt-3 space-y-1">
         <div className="flex justify-between">
           <BodyText>Subtotal</BodyText>
           <BodyText>₹{totalAmount}</BodyText>
@@ -1720,9 +1858,9 @@ export default function OrderSummarySection({ items, totalAmount, deliveryCharge
         </div>
       </div>
 
-      <div className="border-t pt-3 flex justify-between items-center">
-        <Heading size="sm">Total</Heading>
-        <Heading size="sm" className="text-primary">₹{finalAmount}</Heading>
+      <div className="border-t border-divider pt-3 flex justify-between items-center">
+        <Heading level={4} className="text-text-primary">Total</Heading>
+        <Heading level={4} className="text-primary">₹{finalAmount}</Heading>
       </div>
     </div>
   );
@@ -1731,60 +1869,48 @@ export default function OrderSummarySection({ items, totalAmount, deliveryCharge
 
 ===== FILE: src/components/organisms/PaymentMethodSelector.jsx =====
 
+// File: src/components/organisms/PaymentMethodSelector.jsx
 import React from 'react';
-import { BodyText, Heading } from '../atoms/Typography';
+import clsx from 'clsx';
+import { Heading, BodyText } from '../atoms/Typography';
 import Button from '../atoms/Button';
 
-export default function CartItemCard({ item, onRemove, onUpdateQuantity }) {
+/**
+ * PaymentMethodSelector organism
+ * Props:
+ * - methods: Array<{ key: string, label: string, selected: boolean }>
+ * - onSelect: function(methodKey)
+ * - className: additional Tailwind utility classes
+ * - ...rest: other props
+ */
+export default function PaymentMethodSelector({ methods = [], onSelect, className = '', ...rest }) {
   return (
-    <div className="flex items-center bg-white shadow-sm rounded-lg p-4 gap-4">
-      {/* Item Image */}
-      <div className="w-20 h-20 bg-gray-200 rounded-md overflow-hidden">
-        {item.image_url ? (
-          <img src={item.image_url} alt={item.title} className="object-cover w-full h-full" />
-        ) : (
-          <div className="flex items-center justify-center text-2xl">📦</div>
-        )}
-      </div>
-
-      {/* Item Details */}
-      <div className="flex-1">
-        <Heading size="sm" className="text-gray-800">{item.title}</Heading>
-        <BodyText className="text-gray-500">
-          {item.brand && `${item.brand} • `}
-          {item.pack_size} {item.unit}
-        </BodyText>
-        <div className="flex items-center gap-2 mt-1">
-          <Heading size="sm" className="text-primary">₹{item.price}</Heading>
-          {item.mrp && item.mrp > item.price && (
-            <>
-              <span className="text-gray-400 line-through text-sm">₹{item.mrp}</span>
-              <span className="text-green-500 text-xs font-medium">
-                {Math.round(((item.mrp - item.price) / item.mrp) * 100)}% OFF
-              </span>
-            </>
+    <div className={clsx('space-y-3', className)} {...rest}>
+      {methods.map((method) => (
+        <button
+          key={method.key}
+          type="button"
+          onClick={() => onSelect?.(method.key)}
+          className={clsx(
+            'w-full flex items-center justify-between p-4 rounded-md border transition',
+            method.selected
+              ? 'border-primary bg-primary/10'
+              : 'border-divider bg-background-soft hover:border-primary',
           )}
-        </div>
-
-        {/* Quantity Controls */}
-        <div className="flex items-center gap-2 mt-3">
-          <Button size="sm" variant="outline" onClick={() => onUpdateQuantity(item.id, item.quantity - 1)} disabled={item.quantity <= 1}>
-            -
-          </Button>
-          <span className="px-2 font-medium">{item.quantity}</span>
-          <Button size="sm" variant="outline" onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}>
-            +
-          </Button>
-        </div>
-      </div>
-
-      {/* Remove Button */}
-      <button
-        className="text-red-500 text-sm"
-        onClick={() => onRemove(item.id)}
-      >
-        Remove
-      </button>
+        >
+          <div className="flex items-center gap-3">
+            {/* You can replace with an icon based on method.key */}
+            <BodyText size="md" className="text-text-primary">
+              {method.label}
+            </BodyText>
+          </div>
+          <div>
+            {method.selected && (
+              <span className="text-primary font-semibold">Selected</span>
+            )}
+          </div>
+        </button>
+      ))}
     </div>
   );
 }
@@ -1792,7 +1918,7 @@ export default function CartItemCard({ item, onRemove, onUpdateQuantity }) {
 
 ===== FILE: src/components/organisms/ShopListSection.jsx =====
 
-// src/components/organisms/ShopListSection.jsx
+// File: src/components/organisms/ShopListSection.jsx
 import React from "react";
 import clsx from "clsx";
 import { Heading, BodyText } from "../atoms/Typography";
@@ -1800,14 +1926,14 @@ import { Heading, BodyText } from "../atoms/Typography";
 /**
  * ShopListSection organism
  * Props:
- * - title: string or node (section title)
- * - subtitle: string or node (optional)
- * - action: node (e.g., filter button, "See All" link)
- * - horizontal: boolean (carousel style, for featured)
- * - children: shop cards
- * - empty: ReactNode or string to show when list is empty
- * - className: extra classes
- * - ...rest
+ * - title: string or ReactNode (optional section title)
+ * - subtitle: string or ReactNode (optional subtitle)
+ * - action: ReactNode (optional action button/link)
+ * - horizontal: boolean (carousel style display)
+ * - children: ReactNode or array of nodes
+ * - empty: ReactNode or string (content when list is empty)
+ * - className: additional Tailwind utility classes
+ * - ...rest: other props
  */
 export default function ShopListSection({
   title,
@@ -1838,29 +1964,28 @@ export default function ShopListSection({
               </BodyText>
             )}
           </div>
-          {action && (
-            <div className="shrink-0">{action}</div>
-          )}
+          {action && <div className="shrink-0">{action}</div>}
         </div>
       )}
+
       {isEmpty ? (
         typeof empty === "string" ? (
-          <BodyText color="secondary" className="text-center py-8">{empty}</BodyText>
+          <BodyText color="secondary" className="text-center py-8">
+            {empty}
+          </BodyText>
         ) : (
           empty
         )
       ) : horizontal ? (
         <div className="flex gap-4 overflow-x-auto pb-1 -mx-2 px-2 snap-x snap-mandatory">
-          {React.Children.map(children, (child, idx) =>
+          {React.Children.map(children, (child) =>
             React.cloneElement(child, {
               className: clsx("snap-center shrink-0", child.props.className),
             })
           )}
         </div>
       ) : (
-        <div className="flex flex-col gap-3">
-          {children}
-        </div>
+        <div className="flex flex-col gap-3">{children}</div>
       )}
     </section>
   );
@@ -1869,49 +1994,39 @@ export default function ShopListSection({
 
 ===== FILE: src/components/organisms/TabSelector.jsx =====
 
-// src/components/organisms/TabSelector.jsx
+// File: src/components/organisms/TabSelector.jsx
 
 import React from "react";
+import clsx from "clsx";
 
 /**
- * TabSelector
+ * TabSelector organism
  * Props:
- *   tabs: string[] | { label, value }[]     // Array of tab labels or objects
- *   value: string | number                  // Currently selected value
- *   onChange: (value) => void               // Callback when tab changes
- *   className: string (optional)
+ * - tabs: Array<string | { label: string, value: any }> (tab definitions)
+ * - value: current selected value
+ * - onChange: function(newValue)
+ * - className: additional Tailwind utility classes
  */
-export default function TabSelector({
-  tabs = [],
-  value,
-  onChange,
-  className = "",
-}) {
-  // Support both string and object array
-  const getTabProps = (tab) =>
-    typeof tab === "object"
-      ? { label: tab.label, value: tab.value }
-      : { label: tab, value: tab };
+export default function TabSelector({ tabs = [], value, onChange, className = "" }) {
+  // Normalize tabs to objects with label and value
+  const items = tabs.map((t) =>
+    typeof t === "object" ? { label: t.label, value: t.value } : { label: t, value: t }
+  );
 
   return (
-    <div
-      className={`flex gap-2 overflow-x-auto pb-1 ${className}`}
-      role="tablist"
-    >
-      {tabs.map((tab, idx) => {
-        const { label, value: tabValue } = getTabProps(tab);
+    <div className={clsx("flex gap-2 overflow-x-auto pb-1", className)} role="tablist">
+      {items.map(({ label, value: tabValue }) => {
         const selected = value === tabValue;
         return (
           <button
-            key={tabValue ?? idx}
+            key={tabValue}
             type="button"
-            className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition
-              ${
-                selected
-                  ? "bg-primary text-white shadow"
-                  : "bg-background-soft text-text-primary border border-divider"
-              }
-              focus:outline-none focus:ring-2 focus:ring-primary/60`}
+            className={clsx(
+              "px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition focus:outline-none",
+              selected
+                ? "bg-primary text-white shadow-card"
+                : "bg-background-soft text-text-primary border border-divider"
+            )}
             aria-selected={selected}
             aria-current={selected ? "page" : undefined}
             onClick={() => onChange?.(tabValue)}
@@ -1924,18 +2039,19 @@ export default function TabSelector({
   );
 }
 
-
 ===== FILE: src/main.jsx =====
 
-// src/main.jsx
-import React from "react";
-import ReactDOM from "react-dom/client";
-import App from "./App";
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App';
 
-// Import global Tailwind styles (and your custom CSS if any)
-import "./styles/index.css";
+// Import global styles including Tailwind base, components, and utilities
+import './styles/index.css';
 
-ReactDOM.createRoot(document.getElementById("root")).render(
+/**
+ * Entry point: renders the App into the root DOM node
+ */
+ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <App />
   </React.StrictMode>
@@ -4869,49 +4985,49 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import MobileLayout from '../components/layout/MobileLayout';
 import ScreenContainer from '../components/layout/ScreenContainer';
+import { Heading, BodyText } from '../components/atoms/Typography';
+import Button from '../components/atoms/Button';
 
 export default function TitleScreen() {
   const navigate = useNavigate();
 
   return (
     <MobileLayout>
-      <ScreenContainer className="flex flex-col items-center justify-center h-full">
+      <ScreenContainer className="flex flex-col items-center justify-center h-full space-y-6">
         {/* Logo */}
         <div
           className="
             flex items-center justify-center
-            mb-6 w-20 h-20
-            rounded-2xl shadow-lg
+            w-24 h-24
+            rounded-2xl shadow-card
             bg-gradient-to-r from-primary to-primary-dark
           "
         >
-          <span className="text-4xl text-onPrimary">🏘️</span>
+          <span className="text-4xl text-white">🏘️</span>
         </div>
 
         {/* Title & Subtitle */}
-        <h1 className="text-2xl font-bold mb-2 text-text-primary">
+        <Heading level={1} className="text-2xl text-text-primary text-center">
           Welcome to Habrio
-        </h1>
-        <p className="text-sm text-text-secondary mb-8 text-center">
+        </Heading>
+        <BodyText size="md" color="secondary" className="text-center max-w-xs">
           Your society’s very own super app
-        </p>
+        </BodyText>
 
         {/* Call to Action */}
-        <button
+        <Button
+          fullWidth
+          size="lg"
+          variant="primary"
           onClick={() => navigate('/login')}
-          className="
-            w-full py-4 mb-6
-            rounded-lg
-            bg-primary text-onPrimary font-medium
-          "
         >
           Get Started
-        </button>
+        </Button>
 
         {/* Footer Note */}
-        <p className="text-xs text-text-secondary text-center">
+        <BodyText size="xs" color="secondary" className="text-center">
           Built with <span className="text-error">❤️</span> for your neighbourhood
-        </p>
+        </BodyText>
       </ScreenContainer>
     </MobileLayout>
   );
@@ -5297,10 +5413,10 @@ export default function WalletHistory() {
 
 ===== FILE: src/router.jsx =====
 
-// src/router.jsx
+// File: src/router.jsx
 import { Routes, Route, Navigate } from "react-router-dom";
 
-// Pages (auto-imported as per your src/pages)
+// Pages (auto‐imported as per your src/pages)
 import TitleScreen from "./pages/TitleScreen";
 import Login from "./pages/Login";
 import Otp from "./pages/Otp";
@@ -5372,52 +5488,49 @@ export default function AppRoutes() {
 @tailwind components;
 @tailwind utilities;
 
-
 ===== FILE: src/utils/api.js =====
 
+// File: src/utils/api.js
 const baseUrl = import.meta.env.VITE_BACKEND_URL;
 
-// Main API request utility with error handling
-export async function apiRequest(path, options = {}) {
+/**
+ * Core API request utility with standardized error handling
+ */
+export async function apiRequest(path, { method = 'GET', body, headers = {} } = {}) {
   const token = localStorage.getItem('auth_token');
-  const headers = { 'Content-Type': 'application/json', ...(options.headers || {}) };
-  if (token) headers['Authorization'] = token;
+  const commonHeaders = { 'Content-Type': 'application/json', ...headers };
+  if (token) commonHeaders['Authorization'] = token;
 
-  let res;
+  let response;
   try {
-    res = await fetch(`${baseUrl}${path}`, { ...options, headers });
-  } catch (err) {
-    // Network/connection error
-    return { status: 'error', message: 'Network error', error: err };
+    response = await fetch(`${baseUrl}${path}`, {
+      method,
+      headers: commonHeaders,
+      body,
+    });
+  } catch (error) {
+    return { ok: false, status: 'error', message: 'Network error', error };
   }
 
   let data;
   try {
-    data = await res.json();
+    data = await response.json();
   } catch {
-    // Response not JSON
-    return { status: 'error', message: 'Invalid server response', code: res.status };
+    return { ok: false, status: 'error', message: 'Invalid JSON response', httpStatus: response.status };
   }
 
-  // Optional: Attach HTTP status
-  data.httpStatus = res.status;
-  // Attach raw ok/fail
-  data.ok = res.ok;
+  data.httpStatus = response.status;
+  data.ok = response.ok;
 
-  // Standardize error shape
-  if (!res.ok && !data.status) {
+  if (!response.ok) {
     data.status = 'error';
     data.message = data.message || 'Something went wrong';
   }
+
   return data;
 }
 
-// Simple GET/POST wrappers
-export const get = (path) => apiRequest(path);
-
-export const post = (path, body) =>
-  apiRequest(path, { method: 'POST', body: JSON.stringify(body) });
-
-export const del = (path) =>
-  apiRequest(path, { method: 'DELETE' });
+export const get = (path, opts) => apiRequest(path, { ...opts, method: 'GET' });
+export const post = (path, body, opts) => apiRequest(path, { ...opts, method: 'POST', body: JSON.stringify(body) });
+export const del = (path, opts) => apiRequest(path, { ...opts, method: 'DELETE' });
 
