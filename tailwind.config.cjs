@@ -5,7 +5,7 @@ module.exports = {
     "./index.html",
     "./src/**/*.{js,jsx,ts,tsx}",
   ],
-  darkMode: false, // 'media' or 'class' if dark mode support is added later
+  // darkMode: false, // 'media' or 'class' if dark mode support is added later
   theme: {
     screens: {
       sm: '640px',   // mobile landscape
