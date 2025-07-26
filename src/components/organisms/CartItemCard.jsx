@@ -3,6 +3,10 @@ import React from 'react';
 import clsx from 'clsx';
 import Button from '../atoms/Button';
 import { Heading, BodyText } from '../atoms/Typography';
+import Badge from '../atoms/Badge';
+
+// Default currency symbol used for price display
+const currencySymbol = '₹';
 
 /**
  * CartItemCard organism
