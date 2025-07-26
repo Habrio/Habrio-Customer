@@ -47,7 +47,7 @@ export default function ShopList() {
     : 'All Shops';
 
   return (
-    <MobileLayout>
+    <MobileLayout showNav activeTab="shops">
       <PageHeader back={() => navigate(-1)} title={title} />
       <ScreenContainer>
         {loading ? (

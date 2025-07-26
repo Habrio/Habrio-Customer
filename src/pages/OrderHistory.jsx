@@ -54,7 +54,7 @@ export default function OrderHistory() {
 
   if (loading) {
     return (
-      <MobileLayout>
+      <MobileLayout showNav activeTab="orders">
         <PageHeader title="My Orders" />
         <ScreenContainer className="flex-center">
           <Spinner size={40} className="text-primary" />
@@ -65,7 +65,7 @@ export default function OrderHistory() {
 
   if (filtered.length === 0) {
     return (
-      <MobileLayout>
+      <MobileLayout showNav activeTab="orders">
         <PageHeader title="My Orders" />
         <ScreenContainer>
           <EmptyState
@@ -85,7 +85,7 @@ export default function OrderHistory() {
   }
 
   return (
-    <MobileLayout>
+    <MobileLayout showNav activeTab="orders">
       <PageHeader title="My Orders" />
       <ScreenContainer className="space-y-4">
         <TabSelector

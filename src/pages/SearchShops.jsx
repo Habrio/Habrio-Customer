@@ -61,7 +61,7 @@ export default function SearchShops() {
   }
 
   return (
-    <MobileLayout>
+    <MobileLayout showNav activeTab="shops">
       <PageHeader title="Search Shops" />
       <ScreenContainer className="space-y-6">
         {/* Search Bar */}
