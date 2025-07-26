@@ -80,7 +80,7 @@ export default function ShopDetails() {
 
   if (loading) {
     return (
-      <MobileLayout>
+      <MobileLayout showNav activeTab="shops">
         <ScreenContainer>
           <div className="flex flex-col items-center justify-center h-64">
             <div className="animate-spin border-4 border-divider border-t-primary rounded-full w-10 h-10 mb-6" />
@@ -92,7 +92,7 @@ export default function ShopDetails() {
   }
 
   return (
-    <MobileLayout>
+    <MobileLayout showNav activeTab="shops">
       <ScreenContainer>
         {/* Header */}
         <div className="flex items-center justify-between mb-4">

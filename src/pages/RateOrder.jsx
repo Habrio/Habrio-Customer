@@ -75,7 +75,7 @@ export default function RateOrder() {
 
   if (loading) {
     return (
-      <MobileLayout>
+      <MobileLayout showNav activeTab="orders">
         <PageHeader title="Rate Your Order" />
         <ScreenContainer className="flex items-center justify-center">
           <Spinner size={40} className="text-primary" />
@@ -86,7 +86,7 @@ export default function RateOrder() {
 
   if (!order) {
     return (
-      <MobileLayout>
+      <MobileLayout showNav activeTab="orders">
         <PageHeader title="Rate Your Order" />
         <ScreenContainer>
           <EmptyState
@@ -102,7 +102,7 @@ export default function RateOrder() {
   }
 
   return (
-    <MobileLayout>
+    <MobileLayout showNav activeTab="orders">
       <PageHeader title="Rate Your Order" />
       <ScreenContainer className="space-y-6">
         {/* Prompt */}

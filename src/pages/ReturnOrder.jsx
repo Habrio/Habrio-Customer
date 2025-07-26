@@ -98,7 +98,7 @@ export default function ReturnOrder() {
 
   if (loading) {
     return (
-      <MobileLayout>
+      <MobileLayout showNav activeTab="orders">
         <PageHeader title="Return Order" />
         <ScreenContainer className="flex justify-center items-center h-full">
           <Spinner size={48} className="text-primary" />
@@ -109,7 +109,7 @@ export default function ReturnOrder() {
 
   if (!order) {
     return (
-      <MobileLayout>
+      <MobileLayout showNav activeTab="orders">
         <PageHeader title="Return Order" />
         <ScreenContainer className="pt-10">
           <EmptyState
@@ -124,7 +124,7 @@ export default function ReturnOrder() {
 
   if (order.status !== 'delivered') {
     return (
-      <MobileLayout>
+      <MobileLayout showNav activeTab="orders">
         <PageHeader title="Return Order" />
         <ScreenContainer className="pt-10">
           <EmptyState
@@ -138,7 +138,7 @@ export default function ReturnOrder() {
   }
 
   return (
-    <MobileLayout>
+    <MobileLayout showNav activeTab="orders">
       <PageHeader title="Return Order" />
       <ScreenContainer className="space-y-6">
         {/* Order Items */}

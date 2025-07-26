@@ -16,6 +16,7 @@ export default function Cart() {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [clearing, setClearing] = useState(false);
+  const [totals, setTotals] = useState({ total_price: 0, total_savings: 0 });
 
   useEffect(() => {
     const token = localStorage.getItem('auth_token');
