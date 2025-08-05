@@ -29,7 +29,7 @@ export default function ShopDetails() {
 
   async function fetchShopItems() {
     try {
-      const res = await fetch(`${backendUrl}/items/shop/${shopId}`, {
+      const res = await fetch(`${backendUrl}/shop/${shopId}/items`, {
         headers: { Authorization: token },
       });
       const data = await res.json();
@@ -39,7 +39,7 @@ export default function ShopDetails() {
       } else {
         alert('Failed to load shop items');
       }
-    } catch (error) {
+    } catch {
       alert('Something went wrong. Please try again.');
     }
     setLoading(false);
@@ -47,19 +47,19 @@ export default function ShopDetails() {
 
   async function fetchCartCount() {
     try {
-      const res = await fetch(`${backendUrl}/cart/view`, {
+      const res = await fetch(`${backendUrl}/consumer/cart/view`, {
         headers: { Authorization: token },
       });
       const data = await res.json();
       if (data.status === 'success') {
         setCartCount(data.cart.length);
       }
-    } catch {}
+    } catch { /* ignore */ }
   }
 
   async function addToCart(itemId) {
     try {
-      const res = await fetch(`${backendUrl}/cart/add`, {
+      const res = await fetch(`${backendUrl}/consumer/cart/add`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -25,7 +25,7 @@ export default function Profile() {
 
   async function fetchProfile() {
     try {
-      const { status, data } = await get('/profile/me', { token: localStorage.getItem('auth_token') });
+      const { status, data } = await get('/consumer/profile/me', { token: localStorage.getItem('auth_token') });
       if (status === 'success') {
         setProfile(data);
         setEditData(data);
@@ -49,7 +49,7 @@ export default function Profile() {
 
   async function saveEdit() {
     try {
-      const { status, message } = await post('/profile/edit', editData, { token: localStorage.getItem('auth_token') });
+      const { status, message } = await post('/consumer/profile/edit', editData, { token: localStorage.getItem('auth_token') });
       if (status === 'success') {
         setProfile(editData);
         setEditing(false);
@@ -66,8 +66,9 @@ export default function Profile() {
     if (!window.confirm('Logout?')) return;
     try {
       await post('/logout', {}, { token: localStorage.getItem('auth_token') });
-    } catch {}
+    } catch { /* ignore */ }
     localStorage.removeItem('auth_token');
+    localStorage.removeItem('refresh_token');
     navigate('/login');
   }
 

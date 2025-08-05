@@ -24,7 +24,7 @@ export default function OrderMessages() {
     if (!token) return navigate('/login');
 
     // fetch current user phone
-    get('/profile/me', { token }).then(({ status, data }) => {
+    get('/consumer/profile/me', { token }).then(({ status, data }) => {
       if (status === 'success') setUserPhone(data.phone);
     });
 
@@ -37,7 +37,7 @@ export default function OrderMessages() {
     const token = localStorage.getItem('auth_token');
     try {
       const { status, messages } = await get(
-        `/order/consumer/messages/${orderId}`,
+        `/consumer/orders/${orderId}/messages`,
         { token }
       );
       if (status === 'success') setMessages(messages);
@@ -54,7 +54,7 @@ export default function OrderMessages() {
     const token = localStorage.getItem('auth_token');
     try {
       const { status } = await post(
-        `/order/consumer/message/send/${orderId}`,
+        `/consumer/orders/${orderId}/message`,
         { message: newMessage.trim() },
         { token }
       );

@@ -44,7 +44,7 @@ export default function Wallet() {
 
   async function fetchWallet(token) {
     try {
-      const { status, balance } = await get('/wallet', { token });
+      const { status, balance } = await get('/consumer/wallet', { token });
       if (status === 'success') setBalance(balance);
     } catch {
       // fail silent
@@ -53,7 +53,7 @@ export default function Wallet() {
 
   async function fetchTransactions(token) {
     try {
-      const { status, transactions } = await get('/wallet/history', { token });
+      const { status, transactions } = await get('/consumer/wallet/history', { token });
       if (status === 'success') setTransactions(transactions.slice(0, 5));
     } catch {
       // fail silent

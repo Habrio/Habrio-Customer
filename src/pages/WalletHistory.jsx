@@ -43,7 +43,7 @@ export default function WalletHistory() {
 
   async function fetchTransactions(token) {
     try {
-      const { status, transactions } = await get('/wallet/history', { token });
+      const { status, transactions } = await get('/consumer/wallet/history', { token });
       if (status === 'success') setTransactions(transactions);
     } catch {
       // fail silent

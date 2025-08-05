@@ -27,7 +27,7 @@ export default function RateOrder() {
 
   async function fetchOrder(token) {
     try {
-      const { status, orders } = await get('/order/history', { token });
+      const { status, orders } = await get('/consumer/order/history', { token });
       if (status === 'success') {
         const o = orders.find(o => o.order_id === +orderId);
         if (o) {
@@ -52,7 +52,7 @@ export default function RateOrder() {
     setSubmitting(true);
     const token = localStorage.getItem('auth_token');
     try {
-      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/order/rate/${orderId}`, {
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/consumer/orders/${orderId}/rate`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
