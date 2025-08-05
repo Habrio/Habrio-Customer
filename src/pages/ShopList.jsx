@@ -31,8 +31,8 @@ export default function ShopList() {
     setLoading(true);
     try {
       const url = filterType
-        ? `/shops?type=${filterType}`
-        : '/shops';
+        ? `/consumer/shops?type=${filterType}`
+        : '/consumer/shops';
       const { status, shops: data } = await get(url, { token });
       setShops(status === 'success' ? data : []);
     } catch {

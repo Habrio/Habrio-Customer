@@ -28,8 +28,11 @@ export default function Otp() {
         body: JSON.stringify({ phone: '+91' + phone, otp }),
       });
       const data = await res.json();
-      if (data.status === 'success' && data.auth_token) {
-        localStorage.setItem('auth_token', data.auth_token);
+      if (data.status === 'success' && data.access_token) {
+        localStorage.setItem('auth_token', `Bearer ${data.access_token}`);
+        if (data.refresh_token) {
+          localStorage.setItem('refresh_token', data.refresh_token);
+        }
         if (data.basic_onboarding_done) {
           navigate('/home');
         } else {

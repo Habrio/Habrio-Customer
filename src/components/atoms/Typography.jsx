@@ -40,11 +40,12 @@ export function Heading({ level = 1, children, className = "", ...rest }) {
 export function BodyText({
   size = "md",
   color = "primary",
-  as: Component = "p",
+  as = "p",
   className = "",
   children,
   ...rest
 }) {
+  const Tag = as;
   const sizeMap = {
     sm: "text-sm",
     md: "text-base",
@@ -58,12 +59,12 @@ export function BodyText({
     muted: "text-text-secondary opacity-80",
   };
   return (
-    <Component
+    <Tag
       className={clsx(sizeMap[size], colorMap[color], className)}
       {...rest}
     >
       {children}
-    </Component>
+    </Tag>
   );
 }
 

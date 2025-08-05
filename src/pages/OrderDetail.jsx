@@ -35,27 +35,27 @@ export default function OrderDetail() {
   async function fetchOrder(token) {
     setLoading(true);
     try {
-      const res = await get('/order/history', { token });
+      const res = await get('/consumer/order/history', { token });
       if (res.status === 'success') {
         const found = res.orders.find(o => `${o.order_id}` === `${orderId}`);
         setOrder(found || null);
       }
-    } catch {}
+    } catch { /* ignore */ }
     setLoading(false);
   }
 
   async function fetchMsgs(token) {
     try {
-      const res = await get(`/order/consumer/messages/${orderId}`, { token });
+      const res = await get(`/consumer/orders/${orderId}/messages`, { token });
       if (res.status === 'success') setMessages(res.messages || []);
-    } catch {}
+    } catch { /* ignore */ }
   }
 
   async function cancelOrder() {
     if (!window.confirm('Are you sure you want to cancel this order?')) return;
     try {
       const token = localStorage.getItem('auth_token');
-      const res = await post(`/order/consumer/cancel/${orderId}`, {}, { token });
+      const res = await post(`/consumer/orders/${orderId}/cancel`, {}, { token });
       if (res.status === 'success') {
         alert('Order cancelled successfully');
         fetchOrder(token);

@@ -27,12 +27,12 @@ export default function Cart() {
   async function fetchCart(token) {
     setLoading(true);
     try {
-      const { status, cart, total_price, total_savings } = await get('/cart/view', { token });
+      const { status, cart, total_price, total_savings } = await get('/consumer/cart/view', { token });
       if (status === 'success') {
         setItems(cart);
         setTotals({ total_price, total_savings });
       }
-    } catch {}
+    } catch { /* ignore */ }
     setLoading(false);
   }
 
@@ -41,9 +41,9 @@ export default function Cart() {
     setClearing(true);
     try {
       const token = localStorage.getItem('auth_token');
-      await post('/cart/clear', null, { token });
+      await post('/consumer/cart/clear', null, { token });
       fetchCart(token);
-    } catch {}
+    } catch { /* ignore */ }
     setClearing(false);
   }
 
@@ -94,12 +94,12 @@ export default function Cart() {
 
         <div className="space-y-4 px-4">
           {items.map(item => (
-            <CartItemCard
-              key={item.id}
-              item={item}
-              onQuantityChange={(qty) => {/* call update API then refresh */}}
-              onRemove={() => {/* call remove API then refresh */}}
-            />
+              <CartItemCard
+                key={item.id}
+                item={item}
+                onQuantityChange={() => { /* call update API then refresh */ }}
+                onRemove={() => { /* call remove API then refresh */ }}
+              />
           ))}
         </div>
 

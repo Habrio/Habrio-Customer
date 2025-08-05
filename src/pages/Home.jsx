@@ -30,7 +30,7 @@ export default function Home() {
   const [nearbyShops, setNearbyShops] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
-  const [searching, setSearching] = useState(false);
+  const [searching] = useState(false);
 
   const shopCategories = [
     { name: 'Grocery', icon: <HiShoppingCart />, type: 'grocery' },
@@ -51,26 +51,26 @@ export default function Home() {
 
   async function fetchProfile() {
     try {
-      const { status, data } = await get('/profile/me');
+      const { status, data } = await get('/consumer/profile/me');
       if (status === 'success') setUser(data);
-    } catch {}
+    } catch { /* ignore */ }
   }
 
   async function fetchWallet() {
     try {
-      const { status, balance } = await get('/wallet');
+      const { status, balance } = await get('/consumer/wallet');
       if (status === 'success') setWalletBalance(balance);
-    } catch {}
+    } catch { /* ignore */ }
   }
 
   async function fetchShops() {
     try {
-      const { status, shops } = await get('/shops?status=open');
+      const { status, shops } = await get('/consumer/shops?status=open');
       if (status === 'success') {
         setFeaturedShops(shops.filter((s) => s.featured).slice(0, 3));
         setNearbyShops(shops.slice(0, 6));
       }
-    } catch {}
+    } catch { /* ignore */ }
   }
 
   function handleSearchSubmit(value) {

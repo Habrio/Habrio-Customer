@@ -29,7 +29,7 @@ export default function SearchShops() {
     setLoading(true);
     try {
       const token = localStorage.getItem('auth_token');
-      const { status, shops } = await get(`/shops/search?q=${encodeURIComponent(q)}`, { token });
+      const { status, shops } = await get(`/consumer/shops/search?q=${encodeURIComponent(q)}`, { token });
       if (status === 'success') {
         setShops(shops);
         const updated = [q, ...recent.filter(r => r !== q)].slice(0, 5);

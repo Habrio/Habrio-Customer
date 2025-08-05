@@ -31,7 +31,7 @@ export default function OrderHistory() {
 
   async function fetchOrders(token) {
     try {
-      const { status, orders } = await get('/order/history', { token });
+      const { status, orders } = await get('/consumer/order/history', { token });
       if (status === 'success') setOrders(orders);
     } catch {
       // handle error silently

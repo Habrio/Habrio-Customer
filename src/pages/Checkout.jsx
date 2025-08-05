@@ -32,7 +32,7 @@ export default function Checkout() {
 
   async function loadCart(token) {
     try {
-      const { status, cart, total_price, total_savings } = await get('/cart/view', { token });
+      const { status, cart, total_price, total_savings } = await get('/consumer/cart/view', { token });
       if (status === 'success') {
         if (cart.length === 0) navigate('/cart');
         setCartItems(cart);
@@ -42,14 +42,14 @@ export default function Checkout() {
           total: total_price,
         });
       }
-    } catch {}
+    } catch { /* ignore */ }
   }
 
   async function loadWallet(token) {
     try {
-      const { status, balance } = await get('/wallet', { token });
+      const { status, balance } = await get('/consumer/wallet', { token });
       if (status === 'success') setWalletBalance(balance);
-    } catch {}
+    } catch { /* ignore */ }
   }
 
   async function handlePlaceOrder() {
@@ -60,7 +60,7 @@ export default function Checkout() {
     try {
       const token = localStorage.getItem('auth_token');
       const body = { payment_mode: paymentMode, delivery_notes: deliveryNotes };
-      const { status, order_id, message } = await post('/order/confirm', body, { token });
+      const { status, order_id, message } = await post('/consumer/order/confirm', body, { token });
       if (status === 'success') {
         navigate(`/order/${order_id}`);
       } else {

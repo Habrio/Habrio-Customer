@@ -31,7 +31,7 @@ export default function ReturnOrder() {
 
   async function fetchOrder() {
     try {
-      const { status, orders } = await get('/order/history', {
+      const { status, orders } = await get('/consumer/order/history', {
         token: localStorage.getItem('auth_token')
       });
       if (status === 'success') {
@@ -79,10 +79,11 @@ export default function ReturnOrder() {
         item_id: Number(item_id),
         quantity
       }));
-      const { status, message } = await post(`/order/return/raise/${orderId}`, {
-        token: localStorage.getItem('auth_token'),
-        body: { items, reason: reason.trim() }
-      });
+      const { status, message } = await post(
+        `/consumer/orders/${orderId}/return/raise`,
+        { items, reason: reason.trim() },
+        { token: localStorage.getItem('auth_token') }
+      );
       if (status === 'success') {
         alert('Return request sent successfully.');
         navigate(`/order/${orderId}`);

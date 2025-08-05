@@ -30,7 +30,7 @@ export default function AddMoney() {
     setLoading(true);
     try {
       const token = localStorage.getItem('auth_token');
-      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/wallet/load`, {
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/consumer/wallet/load`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: token },
         body: JSON.stringify({ amount: value, reference: 'Manual wallet top-up' }),

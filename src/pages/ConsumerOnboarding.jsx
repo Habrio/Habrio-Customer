@@ -25,7 +25,7 @@ export default function ConsumerOnboarding() {
     }
     setSubmitting(true);
     try {
-      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/onboarding/consumer`, {
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/consumer/onboarding`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
